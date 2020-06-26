@@ -1,12 +1,9 @@
-#ifndef ATRIBUTES_TYPES_HPP_
-#define ATRIBUTES_TYPES_HPP_
+#pragma once
 
-enum Particle_attributes{
+enum class Attribute{
 	momentum,
-	coordinates,
 	weighting
 
 };
 
 
-#endif /* ATRIBUTES_TYPES_HPP_ */

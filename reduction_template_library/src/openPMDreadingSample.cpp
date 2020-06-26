@@ -8,6 +8,10 @@
 #include <vector>
 #include <typeinfo>
 #include "Attributes_getting.hpp"
+#include "Particle_type.hpp"
+#include "Thinning.hpp"
+#include <stdlib.h>
+
 using namespace std;
 using std::cout;
 using namespace openPMD;
@@ -56,12 +60,33 @@ struct Loader
 int main(){
 	Particle first_particle;
 
-	double current_momentum = get_attribute_momentum<Particle>(first_particle);
-	double current_coordinates = get_attribute_coordinates<Particle>(first_particle);
+	double current_momentum = get_momentum<Particle>(first_particle);
 
-	std::cout<<" current_momentum "<<current_momentum;
-	std::cout<<" current_coordinates "<<current_coordinates;
+	double ratioDeletedParticles = 0.2;
 
+	Thinning<Particle> testRandomThinning(ratioDeletedParticles);
+
+	std::vector<Particle> testParticles;
+	int startNumberParticles = 100;
+	for (int i=0; i< startNumberParticles; i++){
+		Particle currentParticle;
+		testParticles.push_back(currentParticle);
+
+	}
+
+	testRandomThinning(testParticles);
+
+	int numReducedParticles = 0;
+	for (int i=0; i< startNumberParticles; i++){
+
+		double& weihgting = get_weighting<Particle>(testParticles[i]);
+		if (testParticles[i].weighting < 1)
+			numReducedParticles++;
+
+
+	}
+	std::cout<<numReducedParticles<<std::endl;
+	std::cout<< "ratio reduced particles "<<(float)(numReducedParticles)/startNumberParticles;
 
 //	int input = 5;
 	//static A a;
