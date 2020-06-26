@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
 #include "IKernellThinning.hpp"
+#include "Particles.hpp"
 
-template<class T_particle>
+
 class Thinning{
 private:
 	double ratioDeletedPaticles;
@@ -10,7 +11,7 @@ public:
 	Thinning(double ratioDeletedPaticles):
 		ratioDeletedPaticles(ratioDeletedPaticles){}
 
-
+	template<class T_particle>
 	void operator()(std::vector<T_particle>& particles){
 		IKernaellThinning<T_particle> thinningKernell(ratioDeletedPaticles);
 		 for (T_particle& particle : particles){
@@ -22,5 +23,11 @@ public:
 			 thinningKernell.reduce(particle);
 		}
 	}
+	template<class T_particles>
+	void operator()(T_particles& particles){}
+
+
+
 };
+
 
