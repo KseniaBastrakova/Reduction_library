@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
-#include "IKernellThinning.hpp"
+#include "Particlest.hpp"
 
 
 template<class T_particle>
@@ -28,10 +28,9 @@ public:
 		double random_value = ((double) rand() / (RAND_MAX));
 		if (random_value < ratioDeletedPaticles)
 		{
-			double& weihgting = get_weighting<Particle>(particle);
+			double& weihgting = get_weighting<Particle_st>(particle);
 			weihgting = 0;
 		}
-
 	}
 };
 

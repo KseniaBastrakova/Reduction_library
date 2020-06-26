@@ -8,22 +8,22 @@
 #pragma once
 #include "Attributes_getting.hpp"
 
-struct Particle {
+struct Particle_st {
 	double weighting;
 	double momentum;
 
-	Particle(): weighting(42.), momentum(43.) {}
+	Particle_st(): weighting(42.), momentum(43.) {}
 };
 
 template <>
-double& get_attribute<Particle, Attribute::momentum>(Particle& particle)
+double& get_attribute<Particle_st, Attribute::momentum>(Particle_st& particle)
 {
 	return particle.momentum;
 }
 
 
 template <>
-double& get_attribute<Particle, Attribute::weighting>(Particle& particle)
+double& get_attribute<Particle_st, Attribute::weighting>(Particle_st& particle)
 {
 	return particle.weighting;
 }
