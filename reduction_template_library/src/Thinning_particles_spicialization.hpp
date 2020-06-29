@@ -9,7 +9,6 @@
 			thinningKernell.collect(particles.getParticle(i));
 		}
 		thinningKernell.process();
-		std::cout<<"here";
 		for(int i=0; i < particles.getSize(); i++){
 			thinningKernell.reduce(particles.getParticle(i));
 		}

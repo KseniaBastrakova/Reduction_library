@@ -12,9 +12,9 @@ class Particles{
 			 std::vector<double>& momentum):
 				weights(weights), momentum(momentum){}
 
-	Particle& getParticle(int idx){
+	Particle getParticle(int idx){
 
-		return new(Particle(idx, *this));
+		return Particle(idx, *this);
 	}
 	int getSize(){
 		return weights.size();

@@ -24,11 +24,11 @@ public:
 
 	}
 
-	void reduce(T_particle& particle){
+	void reduce(T_particle particle){
 		double random_value = ((double) rand() / (RAND_MAX));
 		if (random_value < ratioDeletedPaticles)
 		{
-			double& weihgting = get_weighting<Particle_st>(particle);
+			double& weihgting = get_weighting<T_particle>(particle);
 			weihgting = 0;
 		}
 	}

@@ -6,6 +6,7 @@
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
 #include <vector>
+#include <memory>
 #include <typeinfo>
 #include "Attributes_getting.hpp"
 #include "Thinning.hpp"
@@ -13,6 +14,8 @@
 #include "Particles_attributes.hpp"
 #include "Thinning_particles_spicialization.hpp"
 #include <stdlib.h>
+#include "Particle_reader.hpp"
+#include"Particle_writer.hpp"
 
 #include "Particlest.hpp"
 
@@ -62,47 +65,19 @@ struct Loader
 
 
 int main(){
-	Particle_st first_particle;
 
-	double current_momentum = get_momentum<Particle_st>(first_particle);
-
-	double ratioDeletedParticles = 0.2;
-
-	Thinning testRandomThinning(ratioDeletedParticles);
-
-	std::vector<Particle_st> testParticles;
-	int startNumberParticles = 100;
-	for (int i=0; i< startNumberParticles; i++){
-		Particle_st currentParticle;
-		testParticles.push_back(currentParticle);
-
-	}
-
-	testRandomThinning.operator()<Particle_st> (testParticles);
-
-	int numReducedParticles = 0;
-	for (int i=0; i < startNumberParticles; i++){
-
-		double& weighting = get_weighting<Particle_st>(testParticles[i]);
-		if (testParticles[i].weighting == 0)
-			numReducedParticles++;
-
-
-	}
-	std::cout<<numReducedParticles<<std::endl;
-	std::cout<< "ratio reduced particles "<<(float)(numReducedParticles)/startNumberParticles;
-
-	std::vector<double> momentums;
-	std::vector<double> weighting;
-
-	for (int i=0; i < startNumberParticles; i++){
-		 momentums.push_back(5.);
-		 weighting.push_back(7.);
-	}
-
-	Particles testP(momentums, weighting);
+	std::string file_path("/home/kseniia/Documents/example-3d/hdf5/data00000%T.h5");
+	int ratioDeletedParticles = 0.1;
+	Particle_reader reader(file_path);
+	std::shared_ptr<Particles> particles = reader.Read();
 	Thinning testRandomThinning_v2(ratioDeletedParticles);
-    testRandomThinning_v2.operator ()<Particles>(testP);
+	testRandomThinning_v2.operator ()<Particles>(*particles.get());
+
+	std::string file_path_result("/home/kseniia/Documents/example-3d/hdf5/result%T.h5");
+	Particle_writer writter(file_path_result);
+	writter.write(*particles.get());
+
+
 
  //   for (int i=0; i < startNumberParticles; i++){
 
