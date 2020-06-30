@@ -1,23 +1,27 @@
 #pragma once
 #include <vector>
+#include "AtrributeChunk.hpp"
 #include "Particle.hpp"
 
 
-class Particles{
-	public:
-	std::vector<double> weights;
-	std::vector<double> momentum;
+using Momentums = AtrributeChunk<Attribute::momentum, double>;
+using Weights = AtrributeChunk<Attribute::weighting, double>;
 
+
+template<class Particle_type> class Particle;
+
+
+class Particles: public Momentums, public Weights {
+
+	public:
+	using MyParticle = Particle<Particles>;
 	Particles(std::vector<double>& weights,
 			 std::vector<double>& momentum):
-				weights(weights), momentum(momentum){}
+				 Momentums(momentum), Weights(weights){}
 
-	Particle getParticle(int idx){
+	MyParticle getParticle(int idx){
 
-		return Particle(idx, *this);
-	}
-	int getSize(){
-		return weights.size();
+		return MyParticle(idx, *this);
 	}
 
 };
