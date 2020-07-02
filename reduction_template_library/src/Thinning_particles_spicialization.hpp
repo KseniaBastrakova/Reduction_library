@@ -4,7 +4,7 @@
 	template<>
 	void Thinning::operator()<Particles>(Particles& particles)
 	{
-		IKernaellThinning<Particle> thinningKernell(ratioDeletedPaticles);
+		IKernaellThinning<Particles::MyParticle> thinningKernell(ratioDeletedPaticles);
 		for(int i=0; i < particles.getSize(); i++){
 			thinningKernell.collect(particles.getParticle(i));
 		}

@@ -8,10 +8,8 @@
 #include <vector>
 #include <memory>
 #include <typeinfo>
-#include "Attributes_getting.hpp"
 #include "Thinning.hpp"
 #include "Particles.hpp"
-#include "Particles_attributes.hpp"
 #include "Thinning_particles_spicialization.hpp"
 #include <stdlib.h>
 #include "Particle_reader.hpp"

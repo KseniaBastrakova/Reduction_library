@@ -6,7 +6,7 @@
  */
 
 #pragma once
-#include "Attributes_getting.hpp"
+#include "Atributes_types.hpp"
 
 struct Particle_st {
 	double weighting;

@@ -16,9 +16,12 @@ public:
 
 	void write(Particles particles_to_write){
 
-		std::vector<double> momentum = particles_to_write.momentum;
-		std::vector<double> weights = particles_to_write.weights;
-		std::shared_ptr<double> type_ptr = std::make_shared<double>(momentum[0]);
+		Momentums momentum = static_cast<Momentums>(particles_to_write);
+		Weights weights = static_cast<Weights>(particles_to_write);
+
+		std::vector<double> momentum_values = momentum.get();
+		std::vector<double> weights_values  = weights.get();
+		std::shared_ptr<double> type_ptr = std::make_shared<double>(momentum_values[0]);
 
 		 Series series = Series(
 				 file_name,
@@ -28,11 +31,11 @@ public:
 		 e["momentum"]["x"].resetDataset(Dataset(determineDatatype(type_ptr), {1}));
 		 series.flush();
 
-		 e["momentum"]["x"].storeChunk(momentum,  {1});
+		 e["momentum"]["x"].storeChunk(momentum_values,  {1});
 		 series.flush();
 
 		 e["weighting"][openPMD::RecordComponent::SCALAR].resetDataset(Dataset(determineDatatype(type_ptr), {1}));
-		 e["weighting"][openPMD::RecordComponent::SCALAR].storeChunk(weights,  {1});
+		 e["weighting"][openPMD::RecordComponent::SCALAR].storeChunk(weights_values,  {1});
 		 series.flush();
 
 	}

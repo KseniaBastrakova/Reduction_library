@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "IKernellThinning.hpp"
-#include "Particles.hpp"
 
 
 class Thinning{

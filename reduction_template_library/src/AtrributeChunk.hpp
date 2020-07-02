@@ -8,4 +8,8 @@ class AtrributeChunk {
 public:
 	AtrributeChunk(std::vector<T_Value>& values):
 		values(values){}
+	std::vector<T_Value>& get(){
+		return values;
+	}
+
 };
