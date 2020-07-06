@@ -9,19 +9,19 @@ using Weights = AtrributeChunk<Attribute::weighting, double>;
 
 
 class Particles: public Momentums, public Weights {
-
+	int size;
 	public:
 	using MyParticle = Particle<Particles>;
 	Particles(std::vector<double>& weights,
 			 std::vector<double>& momentum):
-				 Momentums(momentum), Weights(weights){}
+				 Momentums(momentum), Weights(weights), size(weights.size()){}
 
 	MyParticle getParticle(int idx){
 
 		return MyParticle(idx, *this);
 	}
 	int getSize(){
-		return 0;
+		return size;
 	}
 
 };

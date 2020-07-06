@@ -12,7 +12,7 @@ public:
 	Particle_reader(std::string file_name):
 		file_name(file_name){}
 
-	std::shared_ptr<Particles> Read(){
+	Particles Read(){
 
 		Series series = Series(
 				file_name,
@@ -23,15 +23,20 @@ public:
 		std::shared_ptr<double> momentum_ptr = electrons["momentum"]["x"].loadChunk<double>();
 		std::vector<std::uint64_t> momentum_extent = electrons["momentum"]["x"].getExtent();
 		series.flush();
+		int size_of_series = momentum_extent[0];
+		std::shared_ptr<double> weights_ptr = electrons["weighting"]
+														[openPMD::RecordComponent::SCALAR].loadChunk<double>();
+		std::vector<std::uint64_t> weights_extent = electrons["weighting"]
+															  [openPMD::RecordComponent::SCALAR].getExtent();
 
-		std::shared_ptr<double> weights_ptr = electrons["momentum"]["x"].loadChunk<double>();
-				std::vector<std::uint64_t> weights_extent = electrons["momentum"]["x"].getExtent();
 		series.flush();
+		std::vector<double> weights;
+				weights.assign(weights_ptr.get(),  weights_ptr.get() + size_of_series);
 
-		std::vector<double> momentum = std::vector<double>(momentum_ptr.get()[0], momentum_ptr.get()[momentum_extent[0]]);
-		std::vector<double> weights = std::vector<double>(weights_ptr.get()[0], weights_ptr.get()[weights_extent[0]]);
+		std::vector<double> momentum;
+		momentum.assign(momentum_ptr.get(),  momentum_ptr.get() + size_of_series);
 
-		std::shared_ptr<Particles> result_particles = std::make_shared<Particles>(momentum, weights);
+		Particles result_particles(weights, momentum);
 
 		return result_particles;
 

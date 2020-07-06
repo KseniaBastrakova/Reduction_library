@@ -6,6 +6,9 @@ enum class Attribute{
 
 };
 
+template<typename T_particle, Attribute attribute>
+double& get_attribute(T_particle & particle);
+
 template<typename T_particle>
 double& get_momentum(T_particle& particle)
 {
@@ -18,7 +21,6 @@ double& get_weighting(T_particle& particle)
 	return get_attribute<T_particle, Attribute::weighting>(particle);
 }
 
-template<typename T_particle, Attribute attribute>
-double& get_attribute(T_particle & particle);
+
 
 

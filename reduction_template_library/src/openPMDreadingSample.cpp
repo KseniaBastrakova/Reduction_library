@@ -13,7 +13,7 @@
 #include "Thinning_particles_spicialization.hpp"
 #include <stdlib.h>
 #include "Particle_reader.hpp"
-#include"Particle_writer.hpp"
+#include "Particle_writer.hpp"
 
 #include "Particlest.hpp"
 
@@ -63,40 +63,21 @@ struct Loader
 
 
 int main(){
-
 	std::string file_path("/home/kseniia/Documents/example-3d/hdf5/data00000%T.h5");
 	int ratioDeletedParticles = 0.1;
 	Particle_reader reader(file_path);
-	std::shared_ptr<Particles> particles = reader.Read();
+	Particles particles = reader.Read();
+
+	Weights weights = static_cast<Weights>(particles);
+	std::vector<double> values = weights.get();
 	Thinning testRandomThinning_v2(ratioDeletedParticles);
-	testRandomThinning_v2.operator ()<Particles>(*particles.get());
+
+	testRandomThinning_v2.operator ()<Particles>(particles);
 
 	std::string file_path_result("/home/kseniia/Documents/example-3d/hdf5/result%T.h5");
 	Particle_writer writter(file_path_result);
-	writter.write(*particles.get());
+	writter.write(particles);
 
-
-
- //   for (int i=0; i < startNumberParticles; i++){
-
-   // 		 std::cout<<weighting[i]<<std::endl;
-    //	}
-
-//	int input = 5;
-	//static A a;
-	//auto ret = switchType< int >(Datatype::INT, a, input);
-	//std::cout << ret;
-
-
-	//std::vector<std::string> names;
-	//names.push_back("name1");
-	//names.push_back("name2");
-	//names.push_back("name3");
-//Loader loader;
-//	switchType< void >(Datatype::INT, loader, names);
-
-	 //   ParticleSpecies electrons = particles[0];
-	   // auto chargeRecord = electrons["charge"][openPMD::RecordComponent::SCALAR];
 
 	return 0;
 }

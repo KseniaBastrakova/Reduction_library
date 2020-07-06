@@ -27,15 +27,20 @@ public:
 				 file_name,
 		        Access::CREATE
 		    );
+
+		 unsigned int series_size = momentum_values.size();
 		 ParticleSpecies& e = series.iterations[100].particles["e"];
-		 e["momentum"]["x"].resetDataset(Dataset(determineDatatype(type_ptr), {1}));
+		 Extent dims{series_size};
+		 Datatype dtype = determineDatatype(type_ptr);
+		 Dataset d = Dataset(dtype, dims);
+		 e["momentum"]["x"].resetDataset(d);
 		 series.flush();
 
-		 e["momentum"]["x"].storeChunk(momentum_values,  {1});
+		 e["momentum"]["x"].storeChunk(momentum_values);
 		 series.flush();
 
-		 e["weighting"][openPMD::RecordComponent::SCALAR].resetDataset(Dataset(determineDatatype(type_ptr), {1}));
-		 e["weighting"][openPMD::RecordComponent::SCALAR].storeChunk(weights_values,  {1});
+		 e["weighting"][openPMD::RecordComponent::SCALAR].resetDataset(d);
+		 e["weighting"][openPMD::RecordComponent::SCALAR].storeChunk(weights_values);
 		 series.flush();
 
 	}

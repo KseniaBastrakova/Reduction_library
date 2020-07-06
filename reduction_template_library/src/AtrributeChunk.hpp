@@ -1,6 +1,7 @@
 #pragma once
 #include "Atributes_types.hpp"
 #include <vector>
+#include <iostream>
 
 template<Attribute T_attribute , class T_Value>
 class AtrributeChunk {

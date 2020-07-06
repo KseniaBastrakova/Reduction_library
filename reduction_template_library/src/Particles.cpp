@@ -1,6 +1,3 @@
-#include "Particles.hpp"
-
-#include "Atributes_types.hpp"
 
 
 //template<class Particle_type, Attribute T_Attribute>

@@ -9,18 +9,11 @@ struct Particle_st {
 	Particle_st(): weighting(42.), momentum(43.) {}
 };
 
-template <>
-double& get_attribute<Particle_st, Attribute::momentum>(Particle_st& particle)
-{
-	return particle.momentum;
-}
+//template <>
+//double& get_attribute<Particle_st, Attribute::momentum>(Particle_st& particle);
 
 
-template <>
-double& get_attribute<Particle_st, Attribute::weighting>(Particle_st& particle)
-{
-	return particle.weighting;
-}
-
+//template <>
+//double& get_attribute<Particle_st, Attribute::weighting>(Particle_st& particle);
 
 
