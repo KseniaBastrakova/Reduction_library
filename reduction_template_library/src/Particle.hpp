@@ -1,4 +1,5 @@
 #pragma once
+#include "Atributes_types.hpp"
 
 template<class Particle_type>
 class Particle{
@@ -10,15 +11,20 @@ public:
 };
 
 
-//template <>
-//double& get_attribute<Particle, Attribute::momentum>(Particle& particle)
-//{
-	//return 0; //particle.momentum;
-//}
+template<typename Particle_type>
+double& get_momentum(Particle<Particle_type>& particle)
+{
+	return 0; //get_attribute<T_particle, Attribute::momentum>(particle);
+}
 
+template<typename Particle_type>
+double& get_weighting(Particle<Particle_type>& particle)
+{
+	return 0; // get_attribute<T_particle, Attribute::weighting>(particle);
+}
 
-//template <>
-//double& get_attribute<Particle, Attribute::weighting>(Particle& particle)
-//{
-//	return 0; //particle.weighting;
-//}
+template<typename Particle_type, Attribute attribute>
+double& get_attribute(Particle<Particle_type>& particle){
+	return 0;
+
+}

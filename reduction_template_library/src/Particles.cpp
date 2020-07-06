@@ -6,7 +6,7 @@
 //template<class Particle_type, Attribute T_Attribute>
 //double& get_attribute<Particle<Particle_type> , T_Attribute>(Particle<Particle_type>& particle)
 //{
-//	return 0;
+	//return 0;
 //};
 
 //template <class Particle_type>

@@ -1,11 +1,5 @@
-/*
- * particle_type.hpp
- *
- *  Created on: Jun 25, 2020
- *      Author: kseniia
- */
-
 #pragma once
+
 #include "Atributes_types.hpp"
 
 struct Particle_st {
