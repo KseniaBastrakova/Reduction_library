@@ -1,45 +1,50 @@
 #pragma once
 #include <string>
+#include <vector>
+#include <memory>
+#include <utility>
 #include "Particles.hpp"
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
 
-using namespace openPMD;
-class Particle_reader{
-	std::string file_name;
+namespace reduction_library{
 
-public:
-	Particle_reader(std::string file_name):
-		file_name(file_name){}
+    class Particle_reader{
+        std::string file_name;
+        openPMD::Series& series;
 
-	Particles Read(){
+    public:
+        Particle_reader(std::string file_name, openPMD::Series& series):
+            file_name(file_name), series(series){}
 
-		Series series = Series(
-				file_name,
-		        Access::READ_ONLY
-		    );
-		Iteration i = series.iterations[100];
-		openPMD::ParticleSpecies electrons = i.particles["electrons"];
-		std::shared_ptr<double> momentum_ptr = electrons["momentum"]["x"].loadChunk<double>();
-		std::vector<std::uint64_t> momentum_extent = electrons["momentum"]["x"].getExtent();
-		series.flush();
-		int size_of_series = momentum_extent[0];
-		std::shared_ptr<double> weights_ptr = electrons["weighting"]
-														[openPMD::RecordComponent::SCALAR].loadChunk<double>();
-		std::vector<std::uint64_t> weights_extent = electrons["weighting"]
-															  [openPMD::RecordComponent::SCALAR].getExtent();
+        template<Attribute T_attribute, class T_Value>
+        std::vector<double> Read_attribute(Attribute attribute, openPMD::ParticleSpecies particle_species){
 
-		series.flush();
-		std::vector<double> weights;
-				weights.assign(weights_ptr.get(),  weights_ptr.get() + size_of_series);
+            std::pair<std::string, std::string> attribute_name = state.at(attribute);
+            openPMD::RecordComponent current_record = particle_species[attribute_name.first][attribute_name.second];
 
-		std::vector<double> momentum;
-		momentum.assign(momentum_ptr.get(),  momentum_ptr.get() + size_of_series);
+            std::shared_ptr<double> values_ptr = current_record.loadChunk<double>();
+            series.flush();
 
-		Particles result_particles(weights, momentum);
+            std::vector<std::uint64_t> values_extent = current_record.getExtent();
+            int size_of_series = values_extent[0];
+            series.flush();
 
-		return result_particles;
+            std::vector<T_Value> record_component_values;
+            record_component_values.assign(values_ptr.get(), values_ptr.get() + size_of_series);
 
-	}
+            return record_component_values;
+        }
 
-};
+
+        Particles Read()
+        {
+
+
+        }
+
+
+
+    };
+
+}

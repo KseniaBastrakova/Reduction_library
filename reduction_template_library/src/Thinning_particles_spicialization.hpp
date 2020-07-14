@@ -1,6 +1,8 @@
 #pragma once
 #include "Thinning.hpp"
 
+namespace reduction_library{
+
 	template<>
 	void Thinning::operator()<Particles>(Particles& particles)
 	{
@@ -15,3 +17,4 @@
 		}
 
 	}
+}

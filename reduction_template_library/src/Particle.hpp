@@ -2,22 +2,26 @@
 #include "Atributes_types.hpp"
 #include "AtrributeChunk.hpp"
 
-template<class Particle_type>
-class Particle{
-public:
-	int idx;
-	Particle_type &baseParticles;
-	Particle(int idx, Particle_type &baseParticles):
-		idx(idx), baseParticles(baseParticles){}
-};
-class Particles;
+namespace reduction_library{
 
-template <>
-double& get_attribute<Particle<Particles>, Attribute::momentum>(Particle<Particles>& particle);
+    template<class Particle_type>
+    class Particle{
+    public:
+        int idx;
+        Particle_type &baseParticles;
+        Particle(int idx, Particle_type &baseParticles):
+            idx(idx), baseParticles(baseParticles){}
+    };
+    class Particles;
+
+    template <>
+    double& get_attribute<Particle<Particles>, Attribute::momentum_x>(Particle<Particles>& particle);
 
 
-template <>
-double& get_attribute<Particle<Particles>, Attribute::weighting>(Particle<Particles>& particle);
+    template <>
+    double& get_attribute<Particle<Particles>, Attribute::weighting>(Particle<Particles>& particle);
+
+}
 
 
 //template<typename Particle_type>
