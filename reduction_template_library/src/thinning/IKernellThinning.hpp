@@ -3,6 +3,7 @@
 #include <time.h>
 #include <vector>
 #include "particles/Particle.hpp"
+#include "particles/Particlest.hpp"
 
 namespace reduction_library{
 
@@ -29,7 +30,7 @@ namespace reduction_library{
             double random_value = ((double) rand() / (RAND_MAX));
             if (random_value < ratioDeletedPaticles)
             {
-                double& weihgting = get_weighting<T_particle>(particle);
+                auto& weihgting = set_attribute<T_particle, Attribute::momentum_x>(particle);
                 weihgting = 0;
             }
         }
