@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include <utility>
-#include "Particles.hpp"
+#include "particles/Particles.hpp"
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
 

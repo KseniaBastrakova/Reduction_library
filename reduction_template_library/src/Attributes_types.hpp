@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include "attribute/Type.hpp"
 
 namespace reduction_library{
 
@@ -17,20 +18,7 @@ namespace reduction_library{
         { Attribute::momentum_x, std::pair<std::string, std::string>{"momentum", "x"} },
         { Attribute::weighting,  std::pair<std::string, std::string>{"weighting", "SCALAR"}}
     };
-    template<typename T_particle, Attribute attribute>
-    double& get_attribute(T_particle & particle);
 
-    template<typename T_particle>
-    double& get_momentum(T_particle& particle)
-    {
-    return get_attribute<T_particle, Attribute::momentum_x>(particle);
-    }
-
-    template<typename T_particle>
-    double& get_weighting(T_particle& particle)
-    {
-    return get_attribute<T_particle, Attribute::weighting>(particle);
-    }
 
 }
 

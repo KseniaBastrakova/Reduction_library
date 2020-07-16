@@ -1,7 +1,7 @@
 #pragma once
-#include "Atributes_types.hpp"
 #include <vector>
 #include <iostream>
+#include "Attributes_types.hpp"
 
 namespace reduction_library{
 

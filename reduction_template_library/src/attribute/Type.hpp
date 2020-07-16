@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Atributes_types.hpp"
-#include "attribute/Traits.hpp"
+#include "../Attributes_types.hpp"
+#include "Traits.hpp"
 
 namespace reduction_library{
 namespace attribute{
@@ -11,5 +11,5 @@ using Type = typename traits::Type<T_Particle, T_attribute>::type;
 
 
 
-}
+    }
 }

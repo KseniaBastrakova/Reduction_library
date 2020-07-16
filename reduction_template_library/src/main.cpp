@@ -8,15 +8,15 @@
 #include <vector>
 #include <memory>
 #include <typeinfo>
-#include "Thinning.hpp"
-#include "Particles.hpp"
-#include "Thinning_particles_spicialization.hpp"
+#include "thinning/Thinning.hpp"
+#include "particles/Particles.hpp"
+#include "thinning/Thinning_particles_spicialization.hpp"
 #include <stdlib.h>
-#include "Particle_reader.hpp"
-#include "Particle_writer.hpp"
-#include "Atributes_types.hpp"
 
-#include "Particlest.hpp"
+#include "Attributes_types.hpp"
+#include "IO/Particle_reader.hpp"
+#include "IO/Particle_writer.hpp"
+#include "particles/Particlest.hpp"
 
 using namespace std;
 using std::cout;
