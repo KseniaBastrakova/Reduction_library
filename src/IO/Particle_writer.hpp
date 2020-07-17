@@ -1,10 +1,10 @@
 #pragma once
 
 #include <string>
-#include "AOS/Particles.hpp"
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
 #include <algorithm>
+#include "reduction_library/AOS/Particle_spicies.hpp"
 
 namespace reduction_library{
 namespace IO{
@@ -18,7 +18,7 @@ using namespace attribute;
         Particle_writer(std::string file_name):
             file_name(file_name){}
 
-        void write(AOS::Particles particles_to_write){
+        void write(AOS::Particle_spicies particles_to_write){
 
             AOS::Momentums momentum = static_cast<AOS::Momentums>(particles_to_write);
             AOS::Weights weights = static_cast<AOS::Weights>(particles_to_write);

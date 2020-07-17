@@ -1,12 +1,12 @@
 #pragma once
 
-#include "reduction_library/attribute/Attributes_types.hpp"
+#include "reduction_library/attribute/Scalar_records_names.hpp"
 
 namespace reduction_library{
 namespace attribute{
 namespace traits{
 
-    template<typename T_Particle, Attribute T_attribute>
+    template<typename T_Particle, Scalar_records_names T_attribute>
     struct Type{
         using type = double;
 

@@ -4,20 +4,20 @@
 #include <time.h>
 #include <vector>
 
-#include "particles/Particle.hpp"
-#include "SOA/Particlest.hpp"
+#include "reduction_library/AOS/Particle.hpp"
+#include "reduction_library/SOA/Particlest.hpp"
 
 namespace reduction_library{
 namespace thinning{
 
     template<class T_particle>
-    class IKernaellThinning{
+    class KernelThinning{
     private:
         double ratioDeletedPaticles;
         int numOfParticles;
 
     public:
-        IKernaellThinning(double ratioDeletedPaticles):
+        KernelThinning(double ratioDeletedPaticles):
             ratioDeletedPaticles(ratioDeletedPaticles),
             numOfParticles(0){}
 

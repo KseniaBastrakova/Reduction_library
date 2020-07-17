@@ -8,15 +8,15 @@
 #include <vector>
 #include <memory>
 #include <typeinfo>
-#include "thinning/Thinning.hpp"
-#include "AOS/Particles.hpp"
-#include "thinning/Thinning_particles_spicialization.hpp"
+#include "reduction_library/thinning/Thinning.hpp"
+#include "reduction_library/thinning/Thinning_particles_spicialization.hpp"
 #include <stdlib.h>
 
-#include "reduction_library/attribute/Attributes_types.hpp"
+#include "../include/reduction_library/AOS/Particle_spicies.hpp"
+#include "reduction_library/attribute/Scalar_records_names.hpp"
 #include "IO/Particle_reader.hpp"
 #include "IO/Particle_writer.hpp"
-#include "SOA/Particlest.hpp"
+#include "reduction_library/SOA/Particlest.hpp"
 
 using namespace std;
 using std::cout;

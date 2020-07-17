@@ -3,9 +3,9 @@
 #include <vector>
 #include <memory>
 #include <utility>
-#include "AOS/Particles.hpp"
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
+#include "reduction_library/AOS/Particle_spicies.hpp"
 
 namespace reduction_library{
 namespace IO{
@@ -20,8 +20,8 @@ using namespace attribute;
         Particle_reader(std::string file_name, openPMD::Series& series):
             file_name(file_name), series(series){}
 
-        template<Attribute T_attribute, class T_Value>
-        std::vector<double> Read_attribute(Attribute attribute, openPMD::ParticleSpecies particle_species){
+        template<Scalar_records_names T_attribute, class T_Value>
+        std::vector<double> Read_attribute(Scalar_records_names attribute, openPMD::ParticleSpecies particle_species){
 
             std::pair<std::string, std::string> attribute_name = state.at(attribute);
             openPMD::RecordComponent current_record = particle_species[attribute_name.first][attribute_name.second];

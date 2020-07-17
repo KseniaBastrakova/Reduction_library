@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "thinning/IKernellThinning.hpp"
+#include "reduction_library/thinning/KernelThinning.hpp"
 
 namespace reduction_library{
 namespace thinning{
@@ -16,7 +16,7 @@ namespace thinning{
 
         template<class T_particle>
         void operator()(std::vector<T_particle>& particles){
-            IKernaellThinning<T_particle> thinningKernell(ratioDeletedPaticles);
+            KernelThinning<T_particle> thinningKernell(ratioDeletedPaticles);
              for (T_particle& particle : particles){
                  thinningKernell.collect(particle);
              }
