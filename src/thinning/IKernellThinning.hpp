@@ -1,11 +1,14 @@
 #pragma once
+
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
+
 #include "particles/Particle.hpp"
-#include "particles/Particlest.hpp"
+#include "SOA/Particlest.hpp"
 
 namespace reduction_library{
+namespace thinning{
 
     template<class T_particle>
     class IKernaellThinning{
@@ -30,12 +33,14 @@ namespace reduction_library{
             double random_value = ((double) rand() / (RAND_MAX));
             if (random_value < ratioDeletedPaticles)
             {
-                auto& weihgting = set_attribute<T_particle, Attribute::momentum_x>(particle);
-                weihgting = 0;
+               // auto& weihgting = set_attribute<T_particle, Attribute::momentum_x>(particle);
+                int weihgting = 0;
             }
         }
     };
-}
+
+} //thinning
+} //reduction_library
 
 
 

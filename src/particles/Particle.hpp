@@ -1,7 +1,8 @@
 #pragma once
-#include "attribute/Type.hpp"
-#include "Attributes_types.hpp"
-#include "Base_attributes_getters.hpp"
+
+#include "reduction_library/attribute/Type.hpp"
+#include "reduction_library/attribute/Attributes_types.hpp"
+#include "reduction_library/attribute/Base_attributes_getters.hpp"
 
 namespace reduction_library{
 
@@ -15,17 +16,21 @@ namespace reduction_library{
     };
     class Particles;
 
-    template <>
-    attribute::Type<Particle<Particles>, Attribute::momentum_x>& set_attribute<Particle<Particles>, Attribute::momentum_x>(Particle<Particles>& particle);
-
 
     template <>
-    attribute::Type<Particle<Particles>, Attribute::weighting>& set_attribute<Particle<Particles>, Attribute::weighting>(Particle<Particles>& particle);
-
-    template <>
-    attribute::Type<Particle<Particles>, Attribute::momentum_x> get_attribute<Particle<Particles>, Attribute::momentum_x>(Particle<Particles>& particle);
+    attribute::traits::Type<Particle<Particles>, attribute::Attribute::momentum_x>
+        attribute::get_attribute<Particle<Particles>, attribute::Attribute::momentum_x>(Particle<Particles>& particle);
 
 
     template <>
-    attribute::Type<Particle<Particles>, Attribute::weighting> get_attribute<Particle<Particles>, Attribute::weighting>(Particle<Particles>& particle);
+    attribute::traits::Type<Particle<Particles>, attribute::Attribute::weighting>
+        attribute::get_attribute<Particle<Particles>, attribute::Attribute::weighting>(Particle<Particles>& particle);
+
+    template <>
+    void attribute::set_attribute<Particle<Particles>, attribute::Attribute::momentum_x>(Particle<Particles>& particle,
+            attribute::traits::Type<Particle<Particles>, attribute::Attribute::momentum_x> value);
+
+    template <>
+    void attribute::set_attribute<Particle<Particles>, attribute::Attribute::weighting>(Particle<Particles>& particle,
+            attribute::traits::Type<Particle<Particles>, attribute::Attribute::weighting> value);
 }

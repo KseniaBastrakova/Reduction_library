@@ -1,12 +1,15 @@
 #pragma once
+
 #include <vector>
-#include "AtrributeChunk.hpp"
-#include "Particle.hpp"
+
+#include "reduction_library/attribute/AtrributeChunk.hpp"
+#include "particles/Particle.hpp"
 
 namespace reduction_library{
+namespace AOS{
 
-    using Momentums = AtrributeChunk<Attribute::momentum_x, double>;
-    using Weights = AtrributeChunk<Attribute::weighting, double>;
+    using Momentums = attribute::AtrributeChunk<attribute::Attribute::momentum_x, double>;
+    using Weights = attribute::AtrributeChunk<attribute::Attribute::weighting, double>;
 
 
     class Particles: public Momentums, public Weights {
@@ -27,5 +30,6 @@ namespace reduction_library{
 
     };
 
-}
+} // AOS
+} // reduction_library
 

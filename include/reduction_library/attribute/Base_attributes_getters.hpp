@@ -1,19 +1,18 @@
 #pragma once
-#include "Attributes_types.hpp"
-#include "attribute/Type.hpp"
 
-#define DINLINE inline
+#include "reduction_library/HDNLINE.hpp"
+#include "reduction_library/attribute/Attributes_types.hpp"
+#include "reduction_library/attribute/Type.hpp"
 
 namespace reduction_library{
-
-
-    template<typename T_particle, Attribute T_attribute>
-    DINLINE
-    attribute::Type<T_particle, T_attribute>& set_attribute(T_particle & particle);
+namespace attribute{
 
     template<typename T_particle, Attribute T_attribute>
-    DINLINE
-    attribute::Type<T_particle, T_attribute> get_attribute(T_particle & particle);
+    HDNLINE void set_attribute(T_particle & particle, attribute::traits::Type<T_particle, T_attribute> value );
+
+    template<typename T_particle, Attribute T_attribute>
+    HDNLINE
+    attribute::traits::Type<T_particle, T_attribute> get_attribute(T_particle & particle);
 
 //    template<typename T_particle>
   //  double& get_momentum(T_particle& particle)
@@ -26,4 +25,6 @@ namespace reduction_library{
    // {
    // return get_attribute<T_particle, Attribute::weighting>(particle);
    // }
-}
+
+} //attribute
+} //reduction_library

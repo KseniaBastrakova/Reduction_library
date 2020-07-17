@@ -1,16 +1,17 @@
 #pragma once
 
-#include "attribute/Type.hpp"
-#include "Attributes_types.hpp"
-#include "Base_attributes_getters.hpp"
+#include "reduction_library/attribute/Type.hpp"
+#include "reduction_library/attribute/Attributes_types.hpp"
+#include "reduction_library/attribute/Base_attributes_getters.hpp"
 
 namespace reduction_library{
+namespace SOA{
 
-struct Particle_st {
+struct Particle {
 	double weighting;
 	double momentum;
 
-	Particle_st(): weighting(42.), momentum(43.) {}
+	Particle(): weighting(42.), momentum(43.) {}
 };
 
 //template <>
@@ -20,5 +21,5 @@ struct Particle_st {
 //template <>
 //attribute::Type<Particle_st<Particles>, Attribute::momentum_x>& get_attribute<Particle_st, Attribute::weighting>(Particle_st& particle);
 
-
+}
 }

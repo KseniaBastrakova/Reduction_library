@@ -1,9 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <iostream>
-#include "Attributes_types.hpp"
 
 namespace reduction_library{
+namespace attribute{
 
     template<Attribute T_attribute, class T_Value>
     class AtrributeChunk {
@@ -12,10 +13,12 @@ namespace reduction_library{
         double weightingPower;
     public:
         AtrributeChunk(std::vector<T_Value>& values):
-            values(values){}
+            values(values), macroWeighted(42){}
         std::vector<T_Value>& get(){
             return values;
         }
 
     };
-}
+
+} //attribute
+} //reduction_library

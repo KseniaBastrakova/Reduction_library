@@ -1,8 +1,11 @@
 #pragma once
+
 #include <vector>
-#include "IKernellThinning.hpp"
+
+#include "thinning/IKernellThinning.hpp"
 
 namespace reduction_library{
+namespace thinning{
 
     class Thinning{
     private:
@@ -27,4 +30,5 @@ namespace reduction_library{
         void operator()(T_particles& particles){}
 
     };
-}
+} //thinning
+} //reduction_library

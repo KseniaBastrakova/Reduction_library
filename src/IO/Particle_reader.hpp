@@ -3,11 +3,14 @@
 #include <vector>
 #include <memory>
 #include <utility>
-#include "particles/Particles.hpp"
+#include "AOS/Particles.hpp"
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
 
 namespace reduction_library{
+namespace IO{
+
+using namespace attribute;
 
     class Particle_reader{
         std::string file_name;
@@ -37,14 +40,11 @@ namespace reduction_library{
         }
 
 
-        Particles Read()
+        AOS::Particles Read()
         {
-
 
         }
 
-
-
     };
-
-}
+} //IO
+} //reduction_library{

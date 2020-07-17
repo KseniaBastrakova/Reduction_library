@@ -9,14 +9,14 @@
 #include <memory>
 #include <typeinfo>
 #include "thinning/Thinning.hpp"
-#include "particles/Particles.hpp"
+#include "AOS/Particles.hpp"
 #include "thinning/Thinning_particles_spicialization.hpp"
 #include <stdlib.h>
 
-#include "Attributes_types.hpp"
+#include "reduction_library/attribute/Attributes_types.hpp"
 #include "IO/Particle_reader.hpp"
 #include "IO/Particle_writer.hpp"
-#include "particles/Particlest.hpp"
+#include "SOA/Particlest.hpp"
 
 using namespace std;
 using std::cout;
@@ -100,8 +100,8 @@ int main(){
      for (int i=0; i<10; i++)
          std::cout<<record_component_values[i]<<"  ";
 
-    Particle_reader reader(file_path, series);
-    std::vector<double> momentum_x = reader.Read_attribute<reduction_library::Attribute::momentum_x, double>(reduction_library::Attribute::momentum_x, electrons);
+     IO::Particle_reader reader(file_path, series);
+ //   std::vector<double> momentum_x = reader.Read_attribute<reduction_library::Attribute::momentum_x, double>(reduction_library::Attribute::momentum_x, electrons);
 
 //	Weights weights = static_cast<Weights>(particles);
 //	std::vector<double> values = weights.get();

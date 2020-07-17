@@ -1,38 +1,42 @@
-#include "Particle.hpp"
-#include "Particles.hpp"
-#include "attribute/Type.hpp"
-#include "Attributes_types.hpp"
+
+#include "particles/Particle.hpp"
+#include "AOS/Particles.hpp"
+#include "reduction_library/attribute/Type.hpp"
+#include "reduction_library/attribute/Attributes_types.hpp"
 
 namespace reduction_library{
 
     template <>
-    attribute::Type<Particle<Particles>, Attribute::momentum_x> get_attribute<Particle<Particles>, Attribute::momentum_x>(Particle<Particles>& particle)
+    attribute::traits::Type<Particle<Particles>, attribute::Attribute::momentum_x>
+        attribute::get_attribute<Particle<Particles>, attribute::Attribute::momentum_x>(Particle<Particles>& particle)
     {
-        Momentums& momentum = static_cast<Momentums&>(particle.baseParticles);
+        AOS::Momentums& momentum = static_cast<AOS::Momentums&>(particle.baseParticles);
         return momentum.get()[particle.idx];
     }
 
 
     template <>
-     attribute::Type<Particle<Particles>, Attribute::weighting> get_attribute<Particle<Particles>, Attribute::weighting>(Particle<Particles>& particle)
+    attribute::traits::Type<Particle<Particles>, attribute::Attribute::weighting>
+        attribute::get_attribute<Particle<Particles>, attribute::Attribute::weighting>(Particle<Particles>& particle)
     {
-        Weights& weights = static_cast<Weights&>(particle.baseParticles);
+        AOS::Weights& weights = static_cast<AOS::Weights&>(particle.baseParticles);
         return weights.get()[particle.idx];
     }
 
     template <>
-     attribute::Type<Particle<Particles>, Attribute::momentum_x>& set_attribute<Particle<Particles>, Attribute::momentum_x>(Particle<Particles>& particle)
+    void attribute::set_attribute<Particle<Particles>, attribute::Attribute::momentum_x>(Particle<Particles>& particle,
+            attribute::traits::Type<Particle<Particles>, attribute::Attribute::momentum_x> value)
     {
-        Momentums& momentum = static_cast<Momentums&>(particle.baseParticles);
-        return momentum.get()[particle.idx];
+        AOS::Momentums& momentum = static_cast<AOS::Momentums&>(particle.baseParticles);
+        momentum = value;
     }
 
-
     template <>
-    attribute::Type<Particle<Particles>, Attribute::weighting>& set_attribute<Particle<Particles>, Attribute::weighting>(Particle<Particles>& particle)
+    void attribute::set_attribute<Particle<Particles>, attribute::Attribute::weighting>(Particle<Particles>& particle,
+            attribute::traits::Type<Particle<Particles>, attribute::Attribute::weighting> value)
     {
-        Weights& weights = static_cast<Weights&>(particle.baseParticles);
-        return weights.get()[particle.idx];
+        AOS::Weights& weights = static_cast<AOS::Weights&>(particle.baseParticles);
+        weights = value;
     }
 
 }
