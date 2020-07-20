@@ -33,4 +33,6 @@ namespace reduction_library{
     template <>
     void attribute::set_attribute<Particle<Particle_spicies>, attribute::Scalar_records_names::weighting>(Particle<Particle_spicies>& particle,
             attribute::traits::Type<Particle<Particle_spicies>, attribute::Scalar_records_names::weighting> value);
+
+
 }

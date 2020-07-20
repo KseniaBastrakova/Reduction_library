@@ -17,10 +17,15 @@ namespace attribute{
         std::vector<T_Value>& get(){
             return values;
         }
+        double get_weighting_power(){
+            return weightingPower;
+        }
+        int get_macro_weighted(){
+            return weightingPower;
+        }
 
     };
- //   template<scalar record T_scalar record, class T_particle_spicies>
-  //  double get_weighting_power(Attribute attribute, T_particle_spicies particle_spicies);
+
 
 } //attribute
 } //reduction_library
