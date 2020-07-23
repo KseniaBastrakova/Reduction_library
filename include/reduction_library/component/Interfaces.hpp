@@ -19,11 +19,11 @@ namespace component{
 	template<Name T_component>
 	class Geting_unit_SI;
 
-    template<typename T_particles, Name T_component>
-    double get_unit_SI(T_particles particles){
+    template<typename T_component>
+    double get_unit_SI(T_component&& component){
 
     	Geting_unit_SI<T_component> si_get_functor;
-		return si_get_functor.operator ()(particles);
+		return si_get_functor.operator ()(component);
     }
 
 }//component
