@@ -2,15 +2,15 @@
 
 #include <vector>
 
-#include "reduction_library/attribute/Scalar_record.hpp"
+#include "reduction_library/objects/Base_attributes_getters.hpp"
 #include "reduction_library/AOS/Particle.hpp"
-#include "reduction_library/attribute/Base_attributes_getters.hpp"
+#include "Record_component.hpp"
 
 namespace reduction_library{
 namespace AOS{
 
-    using Momentums = attribute::Scalar_record<attribute::Scalar_records_names::momentum_x, double>;
-    using Weights = attribute::Scalar_record<attribute::Scalar_records_names::weighting, double>;
+    using Momentums = attribute::Record_component<attribute::Scalar_records_names::momentum_x, double>;
+    using Weights = attribute::Record_component<attribute::Scalar_records_names::weighting, double>;
 
 
     class Particle_spicies: public Momentums, public Weights {

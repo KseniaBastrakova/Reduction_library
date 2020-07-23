@@ -1,8 +1,8 @@
 #pragma once
 
-#include "reduction_library/attribute/Scalar_records_names.hpp"
-#include "reduction_library/attribute/Type.hpp"
-#include "reduction_library/attribute/Base_attributes_getters.hpp"
+#include "../objects/Base_attributes_getters.hpp"
+#include "../objects/Scalar_records_names.hpp"
+#include "../objects/Type.hpp"
 
 namespace reduction_library{
 namespace SOA{

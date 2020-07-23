@@ -1,6 +1,7 @@
 #pragma once
 
-#include "reduction_library/attribute/Scalar_records_names.hpp"
+
+#include "../objects/Scalar_records_names.hpp"
 
 namespace reduction_library{
 namespace attribute{
@@ -10,8 +11,8 @@ namespace traits{
     struct Type{
         using type = double;
 
-
     };
+
 
 } //traits
 } //attribute

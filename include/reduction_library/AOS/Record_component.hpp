@@ -1,5 +1,8 @@
 #pragma once
 
+#include "reduction_library/objects/record_component/Record_component_names.hpp"
+#include "reduction_library/HDNLINE.hpp"
+#include "reduction_library/objects/record_component/Traits.hpp"
 #include <vector>
 #include <iostream>
 
@@ -7,12 +10,12 @@ namespace reduction_library{
 namespace attribute{
 
     template<Scalar_records_names T_scalar_record, class T_Value>
-    class Scalar_record {
+    class Record_component {
         std::vector<T_Value> values;
         int macroWeighted;
         double weightingPower;
     public:
-        Scalar_record(std::vector<T_Value>& values):
+        Record_component(std::vector<T_Value>& values):
             values(values), weightingPower(42), macroWeighted(1){}
         std::vector<T_Value>& get(){
             return values;
@@ -25,6 +28,13 @@ namespace attribute{
         }
 
     };
+
+   // Particle_spicies, attribute::Scalar_records_names::weighting
+    template<>
+    DNLINE std::vector<traits::Type<Record_component, Record_component_names::x>> storeChunk()
+	{
+
+	}
 
 
 } //attribute

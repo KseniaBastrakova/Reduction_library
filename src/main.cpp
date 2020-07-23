@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 #include "../include/reduction_library/AOS/Particle_spicies.hpp"
-#include "reduction_library/attribute/Scalar_records_names.hpp"
+#include "../include/reduction_library/objects/Scalar_records_names.hpp"
 #include "IO/Particle_reader.hpp"
 #include "IO/Particle_writer.hpp"
 #include "reduction_library/SOA/Particlest.hpp"

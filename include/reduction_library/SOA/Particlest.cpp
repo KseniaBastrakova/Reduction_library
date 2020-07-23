@@ -1,6 +1,7 @@
 
 #include "reduction_library/SOA/Particlest.hpp"
-#include "reduction_library/attribute/Base_attributes_getters.hpp"
+
+#include "../objects/Base_attributes_getters.hpp"
 
 namespace reduction_library{
 

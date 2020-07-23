@@ -1,9 +1,9 @@
 
 #include "reduction_library/AOS/Particle.hpp"
 
+#include "../objects/Scalar_records_names.hpp"
+#include "../objects/Type.hpp"
 #include "reduction_library/AOS/Particle_spicies.hpp"
-#include "reduction_library/attribute/Scalar_records_names.hpp"
-#include "reduction_library/attribute/Type.hpp"
 
 namespace reduction_library{
 

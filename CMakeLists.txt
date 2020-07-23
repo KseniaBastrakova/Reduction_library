@@ -6,6 +6,7 @@ find_package(openPMD 0.9.0 CONFIG)
 
 add_executable(Reduction src/main.cpp)
 if(openPMD_FOUND)
+	message("openPMD found")
     target_link_libraries(Reduction PRIVATE openPMD::openPMD)
 endif()
 target_include_directories(Reduction PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/)

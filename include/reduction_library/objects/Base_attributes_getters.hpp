@@ -1,8 +1,8 @@
 #pragma once
 
+#include "reduction_library/objects/Scalar_records_names.hpp"
+#include "reduction_library/objects/Type.hpp"
 #include "reduction_library/HDNLINE.hpp"
-#include "reduction_library/attribute/Type.hpp"
-#include "reduction_library/attribute/Scalar_records_names.hpp"
 
 namespace reduction_library{
 namespace attribute{

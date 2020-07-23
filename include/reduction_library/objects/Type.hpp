@@ -1,6 +1,6 @@
 #pragma once
 
-#include "reduction_library/attribute/Traits.hpp"
+#include "../objects/Traits.hpp"
 
 namespace reduction_library{
 namespace attribute{
