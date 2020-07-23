@@ -1,8 +1,8 @@
 #pragma once
 
-#include "reduction_library/objects/record_component/Record_component_names.hpp"
+#include "reduction_library/Scalar_records_names.hpp"
 #include "reduction_library/HDNLINE.hpp"
-#include "reduction_library/objects/record_component/Traits.hpp"
+#include "reduction_library/record_component/Traits.hpp"
 #include <vector>
 #include <iostream>
 
@@ -29,12 +29,7 @@ namespace attribute{
 
     };
 
-   // Particle_spicies, attribute::Scalar_records_names::weighting
-    template<>
-    DNLINE std::vector<traits::Type<Record_component, Record_component_names::x>> storeChunk()
-	{
 
-	}
 
 
 } //attribute

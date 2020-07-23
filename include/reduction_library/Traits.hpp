@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "../objects/Scalar_records_names.hpp"
+#include "reduction_library/Scalar_records_names.hpp"
 
 namespace reduction_library{
 namespace attribute{

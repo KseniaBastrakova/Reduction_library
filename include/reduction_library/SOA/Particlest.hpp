@@ -1,5 +1,5 @@
 #pragma once
-
+ /*
 #include "../objects/Base_attributes_getters.hpp"
 #include "../objects/Scalar_records_names.hpp"
 #include "../objects/Type.hpp"
@@ -23,3 +23,4 @@ struct Particle {
 
 }
 }
+*/

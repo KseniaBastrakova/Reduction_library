@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../objects/Base_attributes_getters.hpp"
-#include "../objects/Scalar_records_names.hpp"
-#include "../objects/Type.hpp"
+#include "reduction_library/component/Interfaces.hpp"
+#include "reduction_library/component/Name.hpp"
+#include "reduction_library/component/Type.hpp"
 
 namespace reduction_library{
 
@@ -18,21 +18,17 @@ namespace reduction_library{
 
 
     template <>
-    attribute::traits::Type<Particle<Particle_spicies>, attribute::Scalar_records_names::momentum_x>
-        attribute::get_attribute<Particle<Particle_spicies>, attribute::Scalar_records_names::momentum_x>(Particle<Particle_spicies>& particle);
-
-
-    template <>
-    attribute::traits::Type<Particle<Particle_spicies>, attribute::Scalar_records_names::weighting>
-        attribute::get_attribute<Particle<Particle_spicies>, attribute::Scalar_records_names::weighting>(Particle<Particle_spicies>& particle);
+    record_component::traits::Type<record_component::Name::x>
+    record_component::get_attribute<Particle<Particle_spicies>, record_component::Name::x>(Particle<Particle_spicies>& particle);
 
     template <>
-    void attribute::set_attribute<Particle<Particle_spicies>, attribute::Scalar_records_names::momentum_x>(Particle<Particle_spicies>& particle,
-            attribute::traits::Type<Particle<Particle_spicies>, attribute::Scalar_records_names::momentum_x> value);
+    record_component::traits::Type<record_component::Name::y>
+    record_component::get_attribute<Particle<Particle_spicies>, record_component::Name::y>(Particle<Particle_spicies>& particle);
 
-    template <>
-    void attribute::set_attribute<Particle<Particle_spicies>, attribute::Scalar_records_names::weighting>(Particle<Particle_spicies>& particle,
-            attribute::traits::Type<Particle<Particle_spicies>, attribute::Scalar_records_names::weighting> value);
+
+    };
+
+
 
 
 }

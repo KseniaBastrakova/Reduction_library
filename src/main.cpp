@@ -12,8 +12,8 @@
 #include "reduction_library/thinning/Thinning_particles_spicialization.hpp"
 #include <stdlib.h>
 
-#include "../include/reduction_library/AOS/Particle_spicies.hpp"
-#include "../include/reduction_library/objects/Scalar_records_names.hpp"
+#include "reduction_library/AOS/Particle_spicies.hpp"
+#include "reduction_library/Scalar_records_names.hpp"
 #include "IO/Particle_reader.hpp"
 #include "IO/Particle_writer.hpp"
 #include "reduction_library/SOA/Particlest.hpp"
@@ -71,6 +71,16 @@ openPMD::ParticleSpecies get_test_electrons(std::string file_path)
     openPMD::ParticleSpecies electrons = i.particles["electrons"];
     return electrons;
 }
+
+typedef std::map<Record_component_names, std::string> records_names;
+
+const records_names state = {
+    { Record_component_names::x, "x" },
+	{ Record_component_names::y, "y" },
+	{ Record_component_names::z, "z" },
+	{ Record_component_names::SCALAR, "SCALAR" }
+
+};
 
 int main(){
     std::string file_path("/home/kseniia/Documents/example-3d/hdf5/data00000%T.h5");
