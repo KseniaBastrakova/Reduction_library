@@ -4,8 +4,8 @@
 #include <time.h>
 #include <vector>
 
-#include "reduction_library/AOS/Particle.hpp"
-#include "reduction_library/SOA/Particlest.hpp"
+#include "../AOS/Particlest.hpp"
+#include "../SOA/Particle.hpp"
 
 namespace reduction_library{
 namespace thinning{

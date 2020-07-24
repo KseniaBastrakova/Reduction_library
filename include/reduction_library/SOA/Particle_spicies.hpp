@@ -2,9 +2,9 @@
 
 #include <vector>
 
+#include "../AOS_f/Particle.hpp"
+#include "../SOA/Record_component.hpp"
 #include "reduction_library/Base_attributes_getters.hpp"
-#include "reduction_library/AOS/Particle.hpp"
-#include "Record_component.hpp"
 
 namespace reduction_library{
 namespace AOS{
@@ -68,6 +68,7 @@ private:
 //template<typename T_particles, Name T_scalar_record>
   //  double get_unit_SI(T_particles particles){
 
+/*
 template<>
 class record_component::Geting_unit_SI<AOS::Particle_spicies, record_component::Name::x>
 {
@@ -83,7 +84,7 @@ private:
 
 };
 
-
+*/
 
 } // reduction_library
 
