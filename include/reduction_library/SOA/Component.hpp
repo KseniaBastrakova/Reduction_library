@@ -1,21 +1,23 @@
 #pragma once
 
-#include "reduction_library/component/Name.hpp"
+#include "reduction_library/component/Type.hpp"
 #include "reduction_library/component/Interfaces.hpp"
+#include "reduction_library/component/Name.hpp"
+
 #include <vector>
 
 namespace reduction_library{
 namespace SOA{
 
-    template<component::Name T_scalar_record, class T_Value>
+    template<component::Name T_component, class T_Value>
     struct Component {
     private:
         std::vector<T_Value> values;
         double unit_SI;
-        double dt;
+        component::Name component_name;
     public:
         Component(const std::vector<T_Value>& values):
-            unit_SI(42.), dt(50.){}
+            unit_SI(42.), component_name(T_component){}
 
         std::vector<T_Value>& get()
         {
@@ -25,27 +27,50 @@ namespace SOA{
         {
             return unit_SI;
         }
-        double get_dt()
+        component::Name get_component_name()
         {
-            return dt;
+            return T_component;
         }
+
 
     };
 
-    template<>
-    class attribute::Geting_weighting_power<Particle_spicies, attribute::Scalar_records_names::momentum_x>
+
+}//SOA
+
+    template<component::Name T_component, class T_Value>
+    struct component::Geting_unit_SI<SOA::Component<T_component, T_Value>>
     {
     public:
-        Geting_weighting_power (){}
-        double operator() (AOS::Particle_spicies particles)
+        double operator() (SOA::Component<T_component, T_Value>&& component)
         {
-            AOS::Momentums& momentums = static_cast<AOS::Momentums&>(particles);
-            double weighting_power = momentums.get_weighting_power();
+            double weighting_power = component.get_unit_SI();
             return weighting_power;
         }
-    private:
 
     };
-}//SOA
+
+    template <>
+    component::traits::Type<SOA::Component<component::Name::x, double>>
+        component::get<SOA::Component<component::Name::x, double>, Particle<Particle_spicies>>
+    (Particle<Particle_spicies>& particle)
+    {
+        int component_idx = particle.idx;
+        auto value = component.get()[component_idx];
+        return value;
+    };
+
+    template <>
+    void component::set<SOA::Component<component::Name::x, double>, Particle<Particle_spicies>>
+    (SOA::Component<component::Name::x, double>& component, component::traits::Type<SOA::Component<component::Name::x,
+            double>> value, Particle<Particle_spicies>& particle)
+    {
+        int component_idx = particle.idx;
+        component.get()[component_idx] = value;
+
+    };
+
+
+
 }// reduction_library
 

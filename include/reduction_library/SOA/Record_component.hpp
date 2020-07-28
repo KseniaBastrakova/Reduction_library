@@ -2,7 +2,7 @@
 
 #include "reduction_library/Scalar_records_names.hpp"
 #include "reduction_library/HDNLINE.hpp"
-//#include "reduction_library/record_component/Traits.hpp"
+
 #include <vector>
 #include <iostream>
 

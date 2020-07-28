@@ -24,8 +24,6 @@ namespace attribute{
 
         Geting_weighting_power<T_particles, T_scalar_record> wp_functor;
         return wp_functor.operator ()(particles);
-
-
     }
 
 
