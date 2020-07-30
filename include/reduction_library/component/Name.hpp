@@ -10,8 +10,8 @@ namespace component{
     enum class Name{
         x,
         y,
-		z,
-        SCALAR
+        z,
+       SCALAR
     };
 
 

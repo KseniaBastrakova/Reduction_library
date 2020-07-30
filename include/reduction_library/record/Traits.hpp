@@ -1,16 +1,19 @@
 #pragma once
 
+#include "reduction_library/component/Name.hpp"
+
 namespace reduction_library{
-namespace component{
+namespace record{
 namespace traits{
 
-    template<typename T_component>
+    template<component::Name Component_name, typename T_record>
     struct Type{
         using type = double;
 
     };
 
 } //traits
-} //component
+} //record
 } //reduction_library
+
 

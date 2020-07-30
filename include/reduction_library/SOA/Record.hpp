@@ -1,8 +1,8 @@
 #pragma once
 
-#include "reduction_library/component/Type.hpp"
-#include "reduction_library/component/Interfaces.hpp"
-#include "reduction_library/component/Name.hpp"
+#include "reduction_library/record/Type.hpp"
+#include "reduction_library/record/Interfaces.hpp"
+#include "reduction_library/record/Name.hpp"
 
 #include <vector>
 
