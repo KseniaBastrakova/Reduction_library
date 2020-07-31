@@ -19,6 +19,7 @@
 #include "IO/Particle_writer.hpp"
 #include "reduction_library/SOA/Component.hpp"
 #include "reduction_library/record/Interfaces.hpp"
+#include "reduction_library/SOA/Record.hpp"
 
 using namespace std;
 using std::cout;

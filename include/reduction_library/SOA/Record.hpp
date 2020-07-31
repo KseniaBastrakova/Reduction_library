@@ -3,74 +3,93 @@
 #include "reduction_library/record/Type.hpp"
 #include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/record/Name.hpp"
+#include "reduction_library/component/Name.hpp"
+#include "reduction_library/SOA/Component.hpp"
+#include "reduction_library/HDNLINE.hpp"
 
 #include <vector>
 
 namespace reduction_library{
 namespace SOA{
 
-    template<component::Name T_component, class T_Value>
-    struct Component {
+    using X_component = Component<component::Name::x, double>;
+    using Y_component = Component<component::Name::y, double>;
+    using Z_component = Component<component::Name::z, double>;
+
+
+    struct Record : public X_component, public Y_component, public Z_component{
     private:
-        std::vector<T_Value> values;
-        double unit_SI;
-        component::Name component_name;
+        int macroWeighted;
+        double weightingPower;
+        std::vector<component::Name> component_names;
+
     public:
-        Component(const std::vector<T_Value>& values):
-            unit_SI(42.), component_name(T_component){}
-
-        std::vector<T_Value>& get()
-        {
-            return values;
-        }
-        double get_unit_SI()
-        {
-            return unit_SI;
-        }
-        component::Name get_component_name()
-        {
-            return T_component;
+        Record(const std::vector<double>& x_values,
+               const std::vector<double>& y_values,
+               const std::vector<double>& z_values):
+               X_component(x_values),
+               Y_component(y_values),
+               Z_component(z_values),
+               macroWeighted(7),
+               weightingPower(42.){
+               component_names.push_back(component::Name::x);
+               component_names.push_back(component::Name::y);
+               component_names.push_back(component::Name::z);
         }
 
+        double get_weighting_power(){
+            return weightingPower;
+        }
+        int get_macro_weighted(){
+            return weightingPower;
+        }
+        std::vector<component::Name> get_component_names() const{
+            return component_names;
+        }
 
     };
 
 
 }//SOA
 
-    template<component::Name T_component, class T_Value>
-    struct component::Geting_unit_SI<SOA::Component<T_component, T_Value>>
+    template<>
+    HDNLINE std::vector<component::Name> record::get_names(const SOA::Record& record)
+    {
+        return record.get_component_names();
+
+    }
+
+    template<>
+    HDNLINE record::traits::Type<component::Name::x, SOA::Record>::type
+    record::get<component::Name::x, SOA::Record>(SOA::Record&& record)
+    {
+        double result = 0.0;
+        return result;
+    }
+
+    template<>
+    struct record::Geting_weighting_power<SOA::Record>
     {
     public:
-        double operator() (SOA::Component<T_component, T_Value>&& component)
-        {
-            double weighting_power = component.get_unit_SI();
-            return weighting_power;
-        }
+      double operator() (SOA::Record&& record)
+      {
+          double weighting_power = record.get_weighting_power();
+          return weighting_power;
+      }
 
     };
 
-    template <>
-    component::traits::Type<SOA::Component<component::Name::x, double>>::type
-        component::get<SOA::Component<component::Name::x, double>, Particle<Particle_spicies>>
-    (Particle<Particle_spicies>& particle)
+    template<>
+    struct record::Geting_macro_weighted<SOA::Record>
     {
-        double component_idx = particle.idx;
-        //auto value = component.get()[component_idx];
-        return component_idx;
-    };
-
-
-    template <>
-    void component::set<SOA::Component<component::Name::x, double>, Particle<Particle_spicies>>
-    (component::traits::Type<SOA::Component<component::Name::x,
-            double>>::type value, Particle<Particle_spicies>& particle)
-    {
-        int component_idx = particle.idx;
-       // component.get()[component_idx] = value;
+    public:
+      double operator() (SOA::Record&& record)
+      {
+          double weighting_power = record.get_macro_weighted();
+          return weighting_power;
+      }
 
     };
-
 
 
 }// reduction_library
