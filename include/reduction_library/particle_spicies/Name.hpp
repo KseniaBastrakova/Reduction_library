@@ -12,8 +12,6 @@ namespace particle_spicies{
         test_particles
     };
 
-
-
 } // namespace particle_spicies
 } // namespace reduction_library
 
