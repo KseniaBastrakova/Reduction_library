@@ -11,6 +11,3 @@ namespace record{
 
 }//component
 }//reduction_library
-
-
-
