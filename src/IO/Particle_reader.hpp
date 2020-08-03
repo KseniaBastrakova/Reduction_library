@@ -6,7 +6,7 @@
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
 
-#include "reduction_library/SOA/Particle_spicies.hpp"
+#include "reduction_library/SOA/Particle_spicies_old.hpp"
 
 namespace reduction_library{
 namespace IO{
@@ -41,7 +41,7 @@ using namespace attribute;
         }
 
 
-        SOA::Particle_spicies Read()
+        SOA::Particle_spicies_old Read()
         {
 
         }

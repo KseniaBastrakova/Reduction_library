@@ -17,7 +17,7 @@ namespace SOA{
     using Z_component = Component<component::Name::z, double>;
 
     template<record::Name T_record>
-    struct Record : public X_component, public Y_component, public Z_component{
+    struct Record_3d : public X_component, public Y_component, public Z_component{
     private:
         int macroWeighted;
         double weightingPower;
@@ -25,7 +25,7 @@ namespace SOA{
         component::Name record_name;
 
     public:
-        Record(const std::vector<double>& x_values,
+        Record_3d(const std::vector<double>& x_values,
                const std::vector<double>& y_values,
                const std::vector<double>& z_values):
                X_component(x_values),
@@ -54,32 +54,34 @@ namespace SOA{
 
 }//SOA
 
-    template<>
-    HDNLINE std::vector<component::Name> record::get_names(const SOA::Record& record)
+    template<record::Name T_record>
+    HDNLINE std::vector<component::Name> record::get_names(const SOA::Record_3d<T_record>& record)
     {
         return record.get_component_names();
 
     }
 
-    template<>
-    HDNLINE record::traits::Type<component::Name::x, SOA::Record>::type
-    record::get<component::Name::x, SOA::Record>(SOA::Record&& record)
-    {
-        double result = 0.0;
-        return result;
-    }
+//    template<record::Name T_record>
+//    HDNLINE record::traits::Type<component::Name::x, SOA::Record<T_record>>::type
+ //   record::get<component::Name::x, SOA::Record<T_record>>(SOA::Record<T_record>&& record)
+  //  {
+   //     double result = 0.0;
+    //    return result;
+   // }
 
-    template<>
-    struct record::Geting_weighting_power<SOA::Record>
-    {
-    public:
-      double operator() (SOA::Record&& record)
-      {
-          double weighting_power = record.get_weighting_power();
-          return weighting_power;
-      }
+   // template<>
+  //  struct record::Geting_weighting_power<SOA::Record>
+  //  {
+  //  public:
+   //   double operator() (SOA::Record&& record)
+    //  {
+     //     double weighting_power = record.get_weighting_power();
+      //    return weighting_power;
+     // }
 
-    };
+   // };
+
+    /*
 
     template<>
     struct record::Geting_macro_weighted<SOA::Record>
@@ -92,7 +94,7 @@ namespace SOA{
       }
 
     };
-
+*/
 
 }// reduction_library
 

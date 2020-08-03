@@ -16,7 +16,7 @@ namespace component{
 	struct Geting_unit_SI;
 
     template<typename T_component>
-    double get_unit_SI(T_component&& component)
+    double get_unit_SI(T_component& component)
     {
     	Geting_unit_SI<T_component> si_get_functor;
 		return si_get_functor.operator ()(component);
