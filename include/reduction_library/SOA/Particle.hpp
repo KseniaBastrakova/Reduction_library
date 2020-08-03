@@ -15,7 +15,4 @@ namespace reduction_library{
             idx(idx), baseParticles(baseParticles){}
     };
 
-    class Particle_spicies;
-
-
 }

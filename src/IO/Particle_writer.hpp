@@ -19,10 +19,10 @@ using namespace attribute;
         Particle_writer(std::string file_name):
             file_name(file_name){}
 
-        void write(AOS::Particle_spicies particles_to_write){
+        void write(SOA::Particle_spicies particles_to_write){
 
-            AOS::Momentums momentum = static_cast<AOS::Momentums>(particles_to_write);
-            AOS::Weights weights = static_cast<AOS::Weights>(particles_to_write);
+            SOA::Momentums momentum = static_cast<SOA::Momentums>(particles_to_write);
+            SOA::Weights weights = static_cast<SOA::Weights>(particles_to_write);
 
             std::vector<double> momentum_values = momentum.get();
             std::vector<double> weights_values  = weights.get();

@@ -16,12 +16,13 @@ namespace SOA{
     using Y_component = Component<component::Name::y, double>;
     using Z_component = Component<component::Name::z, double>;
 
-
+    template<record::Name T_record>
     struct Record : public X_component, public Y_component, public Z_component{
     private:
         int macroWeighted;
         double weightingPower;
         std::vector<component::Name> component_names;
+        component::Name record_name;
 
     public:
         Record(const std::vector<double>& x_values,
@@ -30,6 +31,7 @@ namespace SOA{
                X_component(x_values),
                Y_component(y_values),
                Z_component(z_values),
+               record_name(T_record),
                macroWeighted(7),
                weightingPower(42.){
                component_names.push_back(component::Name::x);

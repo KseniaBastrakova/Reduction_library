@@ -30,6 +30,7 @@ using namespace reduction_library;
 
 
 int main(){
+    std::cout<<"start of reduction"<<std::endl;
 
     std::vector<double> x_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
     std::vector<double> y_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
@@ -38,6 +39,8 @@ int main(){
     reduction_library::SOA::Component<reduction_library::component::Name::x, double> component_x(x_values);
     reduction_library::SOA::Component<reduction_library::component::Name::y, double> component_y(y_values);
     reduction_library::SOA::Component<reduction_library::component::Name::z, double> component_z(z_values);
+
+
 
 	return 0;
 }

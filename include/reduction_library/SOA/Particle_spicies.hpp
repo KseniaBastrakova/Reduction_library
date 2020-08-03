@@ -6,7 +6,7 @@
 #include "reduction_library/Base_attributes_getters.hpp"
 
 namespace reduction_library{
-namespace AOS{
+namespace SOA{
 
     using Momentums = attribute::Record_component<attribute::Scalar_records_names::momentum_x, double>;
     using Weights = attribute::Record_component<attribute::Scalar_records_names::weighting, double>;
@@ -33,13 +33,13 @@ namespace AOS{
 } // AOS
 
 template<>
-class attribute::Geting_weighting_power<AOS::Particle_spicies, attribute::Scalar_records_names::weighting>
+class attribute::Geting_weighting_power<SOA::Particle_spicies, attribute::Scalar_records_names::weighting>
 {
 public:
     Geting_weighting_power(){}
-    double operator() (AOS::Particle_spicies particles)
+    double operator() (SOA::Particle_spicies particles)
     {
-        AOS::Weights& weights = static_cast<AOS::Weights&>(particles);
+        SOA::Weights& weights = static_cast<SOA::Weights&>(particles);
         double weighting_power = weights.get_weighting_power();
         return weighting_power;
     }
@@ -48,13 +48,13 @@ private:
 };
 
 template<>
-class attribute::Geting_weighting_power<AOS::Particle_spicies, attribute::Scalar_records_names::momentum_x>
+class attribute::Geting_weighting_power<SOA::Particle_spicies, attribute::Scalar_records_names::momentum_x>
 {
 public:
     Geting_weighting_power (){}
-    double operator() (AOS::Particle_spicies particles)
+    double operator() (SOA::Particle_spicies particles)
     {
-        AOS::Momentums& momentums = static_cast<AOS::Momentums&>(particles);
+        SOA::Momentums& momentums = static_cast<SOA::Momentums&>(particles);
         double weighting_power = momentums.get_weighting_power();
         return weighting_power;
     }

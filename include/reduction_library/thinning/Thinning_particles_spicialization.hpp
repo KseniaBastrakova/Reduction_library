@@ -7,7 +7,7 @@ namespace reduction_library{
 namespace thinning{
 
 	template<>
-	void Thinning::operator()<AOS::Particle_spicies>(AOS::Particle_spicies& particles)
+	void Thinning::operator()<SOA::Particle_spicies>(SOA::Particle_spicies& particles)
 	{
 	    //KernelThinning<AOS::Particle_spicies::MyParticle> thinningKernell(ratioDeletedPaticles);
 	//	std::cout<<" particles.getSize() "<<particles.getSize()<<std::endl;

@@ -41,7 +41,7 @@ using namespace attribute;
         }
 
 
-        AOS::Particle_spicies Read()
+        SOA::Particle_spicies Read()
         {
 
         }
