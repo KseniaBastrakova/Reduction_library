@@ -11,15 +11,16 @@
 namespace reduction_library{
 namespace SOA{
 
-    template<component::Name T_component, class T_Value>
+    template<class T_Value>
     struct Component {
     private:
         std::vector<T_Value> values;
         double unit_SI;
         component::Name component_name;
     public:
-        Component(const std::vector<T_Value>& values):
-            unit_SI(42.), component_name(T_component){}
+        Component(const std::vector<T_Value>& values, component::Name component_name):
+                unit_SI(42.),
+                component_name(component_name){}
 
         std::vector<T_Value>& get()
         {
@@ -31,20 +32,19 @@ namespace SOA{
         }
         component::Name get_component_name()
         {
-            return T_component;
+            return component_name;
         }
-
 
     };
 
 
 }//SOA
 
-    template<component::Name T_component, class T_Value>
-    struct component::Geting_unit_SI<SOA::Component<T_component, T_Value>>
+    template<class T_Value>
+    struct component::Geting_unit_SI<SOA::Component<T_Value>>
     {
     public:
-        double operator() (SOA::Component<T_component, T_Value>& component)
+        double operator() (SOA::Component<T_Value>& component)
         {
             double weighting_power = component.get_unit_SI();
             return weighting_power;
@@ -52,23 +52,23 @@ namespace SOA{
 
     };
 
-    template<component::Name T_component, class T_Value>
-    double get_unit_SI(SOA::Component<T_component, T_Value>& component)
+    template<class T_Value>
+    double get_unit_SI(SOA::Component<T_Value>& component)
     {
-      component::Geting_unit_SI<SOA::Component<T_component, T_Value>> si_get_functor;
+      component::Geting_unit_SI<SOA::Component<T_Value>> si_get_functor;
       return si_get_functor.operator ()(component);
     }
 
     class Particle_spicies;
     template <>
-    component::traits::Type<SOA::Component<component::Name::x, double>>::type
-        component::get<SOA::Component<component::Name::x, double>, Particle<Particle_spicies>>
+    component::traits::Type<SOA::Component<double>>::type
+        component::get<SOA::Component<double>, Particle<Particle_spicies>>
     (Particle<Particle_spicies>& particle);
 
 
     template <>
-    void component::set<SOA::Component<component::Name::x, double>, Particle<Particle_spicies>>
-    (component::traits::Type<SOA::Component<component::Name::x, double>>::type value,
+    void component::set<SOA::Component<double>, Particle<Particle_spicies>>
+    (component::traits::Type<SOA::Component<double>>::type value,
             Particle<Particle_spicies>& particle);
 
 

@@ -11,7 +11,6 @@
 namespace reduction_library{
 namespace IO{
 
-using namespace attribute;
 
     class Particle_reader{
         std::string file_name;
@@ -21,7 +20,7 @@ using namespace attribute;
         Particle_reader(std::string file_name, openPMD::Series& series):
             file_name(file_name), series(series){}
 
-        template<Scalar_records_names T_attribute, class T_Value>
+   /*     template<Scalar_records_names T_attribute, class T_Value>
         std::vector<double> Read_attribute(Scalar_records_names attribute, openPMD::ParticleSpecies particle_species){
 
             std::pair<std::string, std::string> attribute_name = state.at(attribute);
@@ -39,7 +38,7 @@ using namespace attribute;
 
             return record_component_values;
         }
-
+    */
 
         SOA::Particle_spicies Read()
         {

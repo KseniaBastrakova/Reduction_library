@@ -12,12 +12,12 @@
 namespace reduction_library{
 namespace SOA{
 
-    using X_component = Component<component::Name::x, double>;
-    using Y_component = Component<component::Name::y, double>;
-    using Z_component = Component<component::Name::z, double>;
+    using X_component = Component<double>;
+    using Y_component = Component<double>;
+    using Z_component = Component<double>;
 
     template<record::Name T_record>
-    struct Record_3d : public X_component, public Y_component, public Z_component{
+    struct Record_3d {
     private:
         int macroWeighted;
         double weightingPower;
@@ -28,9 +28,9 @@ namespace SOA{
         Record_3d(const std::vector<double>& x_values,
                const std::vector<double>& y_values,
                const std::vector<double>& z_values):
-               X_component(x_values),
-               Y_component(y_values),
-               Z_component(z_values),
+               X_component(x_values, component::Name::x),
+               Y_component(y_values, component::Name::y),
+               Z_component(z_values, component::Name::z),
                record_name(T_record),
                macroWeighted(7),
                weightingPower(42.){
@@ -62,8 +62,8 @@ namespace SOA{
     }
 
     template<>
-    HDNLINE typename record::traits::Type<component::Name::x, SOA::Record_3d<record::Name::momentum>>::type
-    record::get<component::Name::x, SOA::Record_3d<record::Name::momentum>>(SOA::Record_3d<record::Name::momentum>& record)
+    HDNLINE typename record::traits::Type<SOA::Record_3d<record::Name::momentum>>::type
+    record::get<SOA::Record_3d<record::Name::momentum>>(SOA::Record_3d<record::Name::momentum>& record)
     {
         double result = 777.0;
         return result;

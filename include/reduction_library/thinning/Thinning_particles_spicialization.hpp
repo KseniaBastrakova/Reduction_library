@@ -9,6 +9,7 @@ namespace thinning{
 	template<>
 	void Thinning::operator()<SOA::Particle_spicies>(SOA::Particle_spicies& particles)
 	{
+	    /*
 	    KernelThinning<AOS::Particle_spicies::MyParticle> thinningKernell(ratioDeletedPaticles);
 		std::cout<<" particles.getSize() "<<particles.getSize()<<std::endl;
 		for(int i=0; i < particles.getSize(); i++){
@@ -18,7 +19,7 @@ namespace thinning{
 		for(int i=0; i < particles.getSize(); i++){
 			thinningKernell.reduce(particles.getParticle(i));
 		}
-
+        */
 	}
 
 } //thinning

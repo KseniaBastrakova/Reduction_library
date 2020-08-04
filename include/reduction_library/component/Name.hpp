@@ -1,9 +1,5 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <map>
-
 namespace reduction_library{
 namespace component{
 
@@ -18,4 +14,3 @@ namespace component{
 
 } //component
 } //reduction_library
-

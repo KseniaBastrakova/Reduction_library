@@ -10,7 +10,7 @@
 namespace reduction_library{
 namespace IO{
 
-using namespace attribute;
+
 
     class Particle_writer{
         std::string file_name;
@@ -20,7 +20,7 @@ using namespace attribute;
             file_name(file_name){}
 
         void write(SOA::Particle_spicies particles_to_write){
-
+            /*
             SOA::Momentums momentum = static_cast<SOA::Momentums>(particles_to_write);
             SOA::Weights weights = static_cast<SOA::Weights>(particles_to_write);
 
@@ -47,7 +47,7 @@ using namespace attribute;
              e["weighting"][openPMD::RecordComponent::SCALAR].resetDataset(d);
              e["weighting"][openPMD::RecordComponent::SCALAR].storeChunk(weights_values);
              series.flush();
-
+    */
         }
 
     };

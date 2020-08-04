@@ -12,7 +12,7 @@
 namespace reduction_library{
 namespace SOA{
 
-    using SCALAR = Component<component::Name::SCALAR, double>;
+    using SCALAR = Component<double>;
 
     template<record::Name T_record>
     struct Scalar_record : public SCALAR{
@@ -23,8 +23,8 @@ namespace SOA{
         record::Name record_name;
 
     public:
-        Scalar_record(const std::vector<double>& scalar_values):
-               SCALAR(scalar_values),
+        Scalar_record(const std::vector<double>& scalar_values, component::Name component_name):
+               SCALAR(scalar_values, component_name),
                record_name(T_record),
                macroWeighted(7),
                weightingPower(42.),

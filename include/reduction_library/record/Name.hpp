@@ -1,9 +1,5 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <map>
-
 namespace reduction_library{
 namespace record{
 
@@ -14,8 +10,5 @@ namespace record{
         charge
     };
 
-
-
 } // namespace record
 } //namespace reduction_library
-

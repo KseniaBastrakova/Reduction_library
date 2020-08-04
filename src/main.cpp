@@ -12,10 +12,8 @@
 #include "reduction_library/thinning/Thinning_particles_spicialization.hpp"
 #include <stdlib.h>
 
-#include "../include/reduction_library/SOA/Particle_spicies_old.hpp"
 #include "../include/reduction_library/SOA/Record_3d.hpp"
 #include "reduction_library/AOS/Particlest.hpp"
-#include "reduction_library/Scalar_records_names.hpp"
 #include "IO/Particle_reader.hpp"
 #include "IO/Particle_writer.hpp"
 #include "reduction_library/record/Interfaces.hpp"

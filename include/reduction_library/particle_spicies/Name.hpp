@@ -1,9 +1,5 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <map>
-
 namespace reduction_library{
 namespace particle_spicies{
 
