@@ -22,7 +22,7 @@ namespace SOA{
         int macroWeighted;
         double weightingPower;
         std::vector<component::Name> component_names;
-        component::Name record_name;
+        record::Name record_name;
 
     public:
         Record_3d(const std::vector<double>& x_values,
@@ -61,40 +61,38 @@ namespace SOA{
 
     }
 
-//    template<record::Name T_record>
-//    HDNLINE record::traits::Type<component::Name::x, SOA::Record<T_record>>::type
- //   record::get<component::Name::x, SOA::Record<T_record>>(SOA::Record<T_record>&& record)
-  //  {
-   //     double result = 0.0;
-    //    return result;
-   // }
-
-   // template<>
-  //  struct record::Geting_weighting_power<SOA::Record>
-  //  {
-  //  public:
-   //   double operator() (SOA::Record&& record)
-    //  {
-     //     double weighting_power = record.get_weighting_power();
-      //    return weighting_power;
-     // }
-
-   // };
-
-    /*
-
     template<>
-    struct record::Geting_macro_weighted<SOA::Record>
+    HDNLINE typename record::traits::Type<component::Name::x, SOA::Record_3d<record::Name::momentum>>::type
+    record::get<component::Name::x, SOA::Record_3d<record::Name::momentum>>(SOA::Record_3d<record::Name::momentum>& record)
+    {
+        double result = 777.0;
+        return result;
+    }
+
+    template<record::Name T_record>
+    struct record::Geting_weighting_power<SOA::Record_3d<T_record>>
     {
     public:
-      double operator() (SOA::Record&& record)
+      double operator() (SOA::Record_3d<T_record>& record)
+      {
+          double weighting_power = record.get_weighting_power();
+          return weighting_power;
+      }
+
+    };
+
+
+    template<record::Name T_record>
+    struct record::Geting_macro_weighted<SOA::Record_3d<T_record>>
+    {
+    public:
+      double operator() (SOA::Record_3d<T_record>&& record)
       {
           double weighting_power = record.get_macro_weighted();
           return weighting_power;
       }
 
     };
-*/
 
 }// reduction_library
 

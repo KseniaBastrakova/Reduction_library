@@ -1,23 +1,23 @@
 #pragma once
 
-#include "../SOA/Particle_spicies_old.hpp"
+#include "reduction_library/SOA/Particle_spicies.hpp"
 #include "reduction_library/thinning/Thinning.hpp"
 
 namespace reduction_library{
 namespace thinning{
 
 	template<>
-	void Thinning::operator()<SOA::Particle_spicies_old>(SOA::Particle_spicies_old& particles)
+	void Thinning::operator()<SOA::Particle_spicies>(SOA::Particle_spicies& particles)
 	{
-	    //KernelThinning<AOS::Particle_spicies::MyParticle> thinningKernell(ratioDeletedPaticles);
-	//	std::cout<<" particles.getSize() "<<particles.getSize()<<std::endl;
-	//	for(int i=0; i < particles.getSize(); i++){
-	//		thinningKernell.collect(particles.getParticle(i));
-	//	}
-	//	thinningKernell.process();
-	//	for(int i=0; i < particles.getSize(); i++){
-	//		thinningKernell.reduce(particles.getParticle(i));
-	//	}
+	    KernelThinning<AOS::Particle_spicies::MyParticle> thinningKernell(ratioDeletedPaticles);
+		std::cout<<" particles.getSize() "<<particles.getSize()<<std::endl;
+		for(int i=0; i < particles.getSize(); i++){
+			thinningKernell.collect(particles.getParticle(i));
+		}
+		thinningKernell.process();
+		for(int i=0; i < particles.getSize(); i++){
+			thinningKernell.reduce(particles.getParticle(i));
+		}
 
 	}
 

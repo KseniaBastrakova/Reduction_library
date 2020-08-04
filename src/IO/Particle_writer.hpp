@@ -5,7 +5,7 @@
 #include <openPMD/Datatype.hpp>
 #include <algorithm>
 
-#include "reduction_library/SOA/Particle_spicies_old.hpp"
+#include "reduction_library/SOA/Particle_spicies.hpp"
 
 namespace reduction_library{
 namespace IO{
@@ -19,7 +19,7 @@ using namespace attribute;
         Particle_writer(std::string file_name):
             file_name(file_name){}
 
-        void write(SOA::Particle_spicies_old particles_to_write){
+        void write(SOA::Particle_spicies particles_to_write){
 
             SOA::Momentums momentum = static_cast<SOA::Momentums>(particles_to_write);
             SOA::Weights weights = static_cast<SOA::Weights>(particles_to_write);

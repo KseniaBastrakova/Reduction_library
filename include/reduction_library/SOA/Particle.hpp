@@ -1,9 +1,5 @@
 #pragma once
 
-//#include "reduction_library/component/Interfaces.hpp"
-//#include "reduction_library/Scalar_records_names.hpp"
-//#include "reduction_library/component/Type.hpp"
-
 namespace reduction_library{
 
     template<class Particle_type>

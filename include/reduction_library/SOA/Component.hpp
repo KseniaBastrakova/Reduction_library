@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 
-#include "Particle_spicies_old.hpp"
+
 
 namespace reduction_library{
 namespace SOA{
@@ -59,29 +59,17 @@ namespace SOA{
       return si_get_functor.operator ()(component);
     }
 
+    class Particle_spicies;
     template <>
     component::traits::Type<SOA::Component<component::Name::x, double>>::type
-        component::get<SOA::Component<component::Name::x, double>, Particle<SOA::Particle_spicies_old>>
-    (Particle<SOA::Particle_spicies_old>& particle)
-    {
-        double component_idx = particle.idx;
-        std::cout<<"component::get<SOA::Component<component::Name::x, double>"<<std::endl;
-        //auto value = component.get()[component_idx];
-        return component_idx;
-    };
+        component::get<SOA::Component<component::Name::x, double>, Particle<Particle_spicies>>
+    (Particle<Particle_spicies>& particle);
 
 
     template <>
-    void component::set<SOA::Component<component::Name::x, double>, Particle<SOA::Particle_spicies_old>>
-    (component::traits::Type<SOA::Component<component::Name::x,
-            double>>::type value, Particle<SOA::Particle_spicies_old>& particle)
-    {
-        int component_idx = particle.idx;
-        std::cout<<"component::set<SOA::Component<component::Name::x, double>"<<std::endl;
-       // component.get()[component_idx] = value;
-
-    };
-
+    void component::set<SOA::Component<component::Name::x, double>, Particle<Particle_spicies>>
+    (component::traits::Type<SOA::Component<component::Name::x, double>>::type value,
+            Particle<Particle_spicies>& particle);
 
 
 }// reduction_library
