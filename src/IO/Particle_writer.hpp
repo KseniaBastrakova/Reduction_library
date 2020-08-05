@@ -19,7 +19,7 @@ namespace IO{
         Particle_writer(std::string file_name):
             file_name(file_name){}
 
-        void write(SOA::Particle_spicies particles_to_write){
+      //  void write(SOA::Particle_spicies particles_to_write){
             /*
             SOA::Momentums momentum = static_cast<SOA::Momentums>(particles_to_write);
             SOA::Weights weights = static_cast<SOA::Weights>(particles_to_write);
@@ -48,7 +48,7 @@ namespace IO{
              e["weighting"][openPMD::RecordComponent::SCALAR].storeChunk(weights_values);
              series.flush();
     */
-        }
+   //     }
 
     };
 } //IO

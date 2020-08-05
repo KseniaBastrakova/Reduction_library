@@ -46,9 +46,9 @@ int main(){
     std::vector<double> z_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
 
 
-    reduction_library::SOA::Component<reduction_library::component::Name::x, double> component_x(x_values);
-    reduction_library::SOA::Component<reduction_library::component::Name::y, double> component_y(y_values);
-    reduction_library::SOA::Component<reduction_library::component::Name::z, double> component_z(z_values);
+    reduction_library::SOA::Component<double> component_x(x_values, reduction_library::component::Name::x);
+    reduction_library::SOA::Component<double> component_y(y_values, reduction_library::component::Name::y);
+    reduction_library::SOA::Component<double> component_z(z_values, reduction_library::component::Name::z);
 
     double get_unit_si_x = reduction_library::get_unit_SI (component_x);
     std::cout<<"get_unit_si x "<<get_unit_si_x<<std::endl;
@@ -61,6 +61,16 @@ int main(){
 
     std::vector<double> weights = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
     std::vector<double> momentums = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
+    using double_component = reduction_library::SOA::Component<double>;
+
+    reduction_library::SOA::Record_3d<reduction_library::record::Name::momentum, double_component, double_component, double_component>
+        momentum(component_x, component_y, component_z);
+
+    reduction_library::SOA::Component<double> component_scalar(weights, reduction_library::component::Name::SCALAR);
+
+    reduction_library::SOA::Scalar_record<reduction_library::record::Name::weighting, double_component> weighting_record(component_scalar);
+
+  //  reduction_library::SOA::Scalar_record<reduction_library::record::Name::weighting> weighting_record(weights);
   //  SOA::Particle_spicies_old test_particles_spieces(momentums, weights);
    // reduction_library::Particle<SOA::Particle_spicies_old> test_particles(1, test_particles_spieces);
 

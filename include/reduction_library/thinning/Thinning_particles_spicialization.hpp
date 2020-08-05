@@ -6,7 +6,7 @@
 namespace reduction_library{
 namespace thinning{
 
-	template<>
+/*	template<>
 	void Thinning::operator()<SOA::Particle_spicies>(SOA::Particle_spicies& particles)
 	{
 	    /*
@@ -19,8 +19,8 @@ namespace thinning{
 		for(int i=0; i < particles.getSize(); i++){
 			thinningKernell.reduce(particles.getParticle(i));
 		}
-        */
-	}
 
+	}
+*/
 } //thinning
 } //reduction_library
