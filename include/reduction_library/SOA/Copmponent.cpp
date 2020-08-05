@@ -1,11 +1,10 @@
-
 #include "reduction_library/SOA/Component.hpp"
 #include "reduction_library/component/Type.hpp"
 #include "reduction_library/component/Interfaces.hpp"
 #include "reduction_library/component/Name.hpp"
-#include "reduction_library/SOA/Particle_spicies.hpp"
 #include <vector>
 #include <iostream>
+#include "Particle_species.hpp"
 
 
 namespace reduction_library{

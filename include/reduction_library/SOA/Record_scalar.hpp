@@ -6,6 +6,7 @@
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Component.hpp"
 #include "reduction_library/HDNLINE.hpp"
+#include "reduction_library/HINLINE.hpp"
 
 #include <vector>
 
@@ -39,12 +40,17 @@ namespace SOA{
         component::Name get_component_name() const{
             return component_name;
         }
+        int get_size(){
+            int size = 777;
+            return size;
+        }
+
     };
 
 }//SOA
 
     template<record::Name T_record, typename T_Scalar_component>
-    HDNLINE std::vector<component::Name> record::get_names(const SOA::Scalar_record<T_record, T_Scalar_component>& record)
+    HINLINE std::vector<component::Name> record::get_names(const SOA::Scalar_record<T_record, T_Scalar_component>& record)
     {
         std::vector<component::Name> component_names = {record.get_component_name()};
         return component_names;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "reduction_library/SOA/Particle_spicies.hpp"
+#include "../SOA/Particle_species.hpp"
 #include "reduction_library/thinning/Thinning.hpp"
 
 namespace reduction_library{

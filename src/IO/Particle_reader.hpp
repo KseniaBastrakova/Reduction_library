@@ -6,7 +6,7 @@
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
 
-#include "reduction_library/SOA/Particle_spicies.hpp"
+#include "../../include/reduction_library/SOA/Particle_species.hpp"
 
 namespace reduction_library{
 namespace IO{

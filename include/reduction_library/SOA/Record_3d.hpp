@@ -47,6 +47,10 @@ namespace SOA{
         std::vector<component::Name> get_component_names() const{
             return component_names;
         }
+        int get_size(){
+            int size = 777;
+            return size;
+        }
 
     };
 
