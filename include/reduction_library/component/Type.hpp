@@ -5,7 +5,7 @@
 
 namespace reduction_library{
 namespace component{
-    template<typename T_component>
+    template<component::Name T_component>
     using Type = typename traits::Type<T_component>::type;
 
 }//component

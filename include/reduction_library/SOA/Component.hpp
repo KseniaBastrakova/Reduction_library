@@ -59,18 +59,30 @@ namespace SOA{
       return si_get_functor.operator ()(component);
     }
 
-    class Particle_spicies;
-    template <>
-    component::traits::Type<SOA::Component<double>>::type
-        component::get<SOA::Component<double>, Particle<Particle_spicies>>
-    (Particle<Particle_spicies>& particle);
 
+    template<class T_Particle_spicies>
+    struct component::Getting_value<component::Name::x, Particle<T_Particle_spicies>>
+    {
+    public:
+        typename traits::Type<component::Name::x>::type operator() (Particle<T_Particle_spicies>& particle)
+        {
+            auto current_value = particle.baseParticles[particle.idx];
+            return current_value;
+        }
 
-    template <>
-    void component::set<SOA::Component<double>, Particle<Particle_spicies>>
-    (component::traits::Type<SOA::Component<double>>::type value,
-            Particle<Particle_spicies>& particle);
+    };
 
+    template<class T_Particle_spicies>
+    struct component::Setting_value<component::Name::x, Particle<T_Particle_spicies>>
+    {
+    public:
+        void operator() (typename traits::Type<component::Name::x>::type value,
+                Particle<T_Particle_spicies>& particle)
+        {
+            auto current_value = particle.baseParticles[particle.idx];
+        }
+
+    };
 
 }// reduction_library
 
