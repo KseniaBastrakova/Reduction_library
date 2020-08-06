@@ -63,8 +63,9 @@ int main(){
     std::vector<double> momentums = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
     using double_component = reduction_library::SOA::Component<double>;
 
+    reduction_library::record::unit_dimension_type momentum_dimension = {0, 1, 0, 0, 1, 0, 1};
     reduction_library::SOA::Record_3d<reduction_library::record::Name::momentum, double_component, double_component, double_component>
-        momentum(component_x, component_y, component_z);
+        momentum(component_x, component_y, component_z, momentum_dimension);
 
     reduction_library::SOA::Component<double> component_scalar(weights, reduction_library::component::Name::SCALAR);
 

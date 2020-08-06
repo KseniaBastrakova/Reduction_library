@@ -22,17 +22,20 @@ namespace SOA{
         T_X_component x_component;
         T_Y_component y_component;
         T_Z_component z_component;
+        record::unit_dimension_type unit_dimension;
 
     public:
         Record_3d(T_X_component x_component,
                   T_Y_component y_component,
-                  T_Z_component z_component):
+                  T_Z_component z_component,
+                  record::unit_dimension_type unit_dimension):
                   x_component(x_component),
                   y_component(y_component),
                   z_component(z_component),
                   record_name(T_record),
                   macroWeighted(7),
-                  weightingPower(42.){
+                  weightingPower(42.),
+                  unit_dimension(unit_dimension){
                   component_names.push_back(component::Name::x);
                   component_names.push_back(component::Name::y);
                   component_names.push_back(component::Name::z);
@@ -50,6 +53,9 @@ namespace SOA{
         int get_size(){
             int size = 777;
             return size;
+        }
+        record::unit_dimension_type get_unit_dimension() const{
+
         }
 
     };
@@ -93,6 +99,19 @@ namespace SOA{
       {
           double weighting_power = record.get_macro_weighted();
           return weighting_power;
+      }
+
+    };
+
+
+    template<record::Name T_record, typename T_X_component, typename T_Y_component, typename T_Z_component>
+    struct record::Geting_unit_dimension<SOA::Record_3d<T_record, T_X_component, T_Y_component, T_Z_component>>
+    {
+    public:
+      unit_dimension_type operator() (SOA::Record_3d<T_record, T_X_component, T_Y_component, T_Z_component>& record)
+      {
+          unit_dimension_type unit_dimension = record.get_unit_dimension();
+          return unit_dimension;
       }
 
     };
