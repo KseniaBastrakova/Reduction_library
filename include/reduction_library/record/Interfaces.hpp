@@ -1,11 +1,11 @@
 #pragma once
 
-#include "reduction_library/HDNLINE.hpp"
-#include "reduction_library/component/Name.hpp"
-#include "reduction_library/record/Type.hpp"
 #include <vector>
 #include <array>
 
+#include "reduction_library/HDNLINE.hpp"
+#include "reduction_library/component/Name.hpp"
+#include "reduction_library/record/Type.hpp"
 
 namespace reduction_library{
 namespace record{
@@ -42,8 +42,15 @@ namespace record{
         return ud_get_functor.operator ()(component);
     }
 
-    template<component::Name name_component, typename T_record>
-    HDNLINE typename traits::Type<name_component, T_record>::type get(T_record& record);
+    template<component::Name T_name_component, typename T_record>
+    struct Getting_value;
+
+    template<component::Name T_name_component, typename T_record>
+    HDNLINE typename traits::Type<T_name_component, T_record> get(T_record& record){
+        Getting_value<T_name_component, T_record> v_get_functor;
+        return v_get_functor.operator() (record);
+
+    }
 
     template<typename T_record>
     HDNLINE std::vector<component::Name> get_names(const T_record& record);
@@ -51,4 +58,3 @@ namespace record{
 
 } // namespace record
 } //namespace reduction_library
-

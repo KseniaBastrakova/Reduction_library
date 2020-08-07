@@ -18,27 +18,34 @@ namespace SOA{
         double unit_SI;
         component::Name component_name;
     public:
-        Component(const std::vector<T_Value>& values, component::Name component_name):
-                unit_SI(42.),
-                component_name(component_name){}
+    Component(const std::vector<T_Value>& values, component::Name component_name):
+            unit_SI(42.),
+            component_name(component_name){}
 
-        std::vector<T_Value>& get()
-        {
-            return values;
-        }
-        double get_unit_SI()
-        {
-            return unit_SI;
-        }
-        component::Name get_component_name()
-        {
-            return component_name;
-        }
+    std::vector<T_Value>& get()
+    {
+        return values;
+    }
+    double get_unit_SI()
+    {
+        return unit_SI;
+    }
+    component::Name get_component_name()
+    {
+        return component_name;
+    }
+
+};
+
+}//SOA
+
+
+    template<class T_Value>
+    struct component::traits::Type<SOA::Component<T_Value>>{
+        using type = double;  //T_Value;
 
     };
 
-
-}//SOA
 
     template<class T_Value>
     struct component::Geting_unit_SI<SOA::Component<T_Value>>
@@ -60,11 +67,11 @@ namespace SOA{
     }
 
 
-    template<class T_Particle_spicies>
-    struct component::Getting_value<component::Name::x, Particle<T_Particle_spicies>>
+    template<class T_Particle_spicies, class T_Value>
+    struct component::Getting_value<SOA::Component<T_Value>, Particle<T_Particle_spicies>>
     {
     public:
-        typename traits::Type<component::Name::x>::type operator() (Particle<T_Particle_spicies>& particle)
+        typename traits::Type<SOA::Component<T_Value>>::type operator() (Particle<T_Particle_spicies>& particle)
         {
             auto current_value = particle.baseParticles[particle.idx];
             return current_value;
@@ -72,17 +79,16 @@ namespace SOA{
 
     };
 
-    template<class T_Particle_spicies>
-    struct component::Setting_value<component::Name::x, Particle<T_Particle_spicies>>
+    template<class T_Particle_spicies, class T_Value>
+    struct component::Setting_value<SOA::Component<T_Value>, Particle<T_Particle_spicies>>
     {
     public:
-        void operator() (typename traits::Type<component::Name::x>::type value,
+        void operator() (typename traits::Type<SOA::Component<T_Value>>::type value,
                 Particle<T_Particle_spicies>& particle)
         {
-            auto current_value = particle.baseParticles[particle.idx];
+            particle.baseParticles[particle.idx] = value;
         }
 
     };
 
 }// reduction_library
-

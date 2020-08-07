@@ -1,6 +1,5 @@
 #pragma once
 
-#include "reduction_library/record/Type.hpp"
 #include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/record/Name.hpp"
 #include "reduction_library/component/Name.hpp"
@@ -14,7 +13,7 @@ namespace reduction_library{
 namespace SOA{
 
 
-    template<record::Name T_record, typename T_Scalar_component>
+    template<typename T_Scalar_component>
     struct Scalar_record{
     private:
         int macroWeighted;
@@ -24,9 +23,10 @@ namespace SOA{
         T_Scalar_component scalar_component;
 
     public:
-        Scalar_record(T_Scalar_component scalar_component):
+        Scalar_record(T_Scalar_component scalar_component,
+                record::Name record_name):
                scalar_component(scalar_component),
-               record_name(T_record),
+               record_name(record_name),
                macroWeighted(7),
                weightingPower(42.),
                component_name(component::Name::SCALAR){}
@@ -49,19 +49,25 @@ namespace SOA{
 
 }//SOA
 
-    template<record::Name T_record, typename T_Scalar_component>
-    HINLINE std::vector<component::Name> record::get_names(const SOA::Scalar_record<T_record, T_Scalar_component>& record)
+    template<class T_Scalar_component>
+    struct record::traits::Type<component::Name::SCALAR, SOA::Scalar_record<T_Scalar_component>>
+    {
+       using type = T_Scalar_component;
+    };
+
+    template<class T_Scalar_component>
+    HINLINE std::vector<component::Name> record::get_names(const SOA::Scalar_record<T_Scalar_component>& record)
     {
         std::vector<component::Name> component_names = {record.get_component_name()};
         return component_names;
 
     }
 
-    template<record::Name T_record, typename T_Scalar_component>
-    struct record::Geting_weighting_power<SOA::Scalar_record<T_record, T_Scalar_component>>
+    template<class T_Scalar_component>
+    struct record::Geting_weighting_power<SOA::Scalar_record<T_Scalar_component>>
     {
     public:
-      double operator() (SOA::Scalar_record<T_record, T_Scalar_component>& record)
+      double operator() (SOA::Scalar_record<T_Scalar_component>& record)
       {
           double weighting_power = record.get_weighting_power();
           return weighting_power;
@@ -70,11 +76,11 @@ namespace SOA{
     };
 
 
-    template<record::Name T_record, typename T_Scalar_component>
-    struct record::Geting_macro_weighted<SOA::Scalar_record<T_record, T_Scalar_component>>
+    template<class T_Scalar_component>
+    struct record::Geting_macro_weighted<SOA::Scalar_record<T_Scalar_component>>
     {
     public:
-      double operator() (SOA::Scalar_record<T_record, T_Scalar_component>&& record)
+      double operator() (SOA::Scalar_record<T_Scalar_component>&& record)
       {
           double weighting_power = record.get_macro_weighted();
           return weighting_power;

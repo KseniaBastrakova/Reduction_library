@@ -64,12 +64,13 @@ int main(){
     using double_component = reduction_library::SOA::Component<double>;
 
     reduction_library::record::unit_dimension_type momentum_dimension = {0, 1, 0, 0, 1, 0, 1};
-    reduction_library::SOA::Record_3d<reduction_library::record::Name::momentum, double_component, double_component, double_component>
-        momentum(component_x, component_y, component_z, momentum_dimension);
+    reduction_library::SOA::Record_3d<double_component, double_component, double_component>
+        momentum(component_x, component_y, component_z, momentum_dimension, reduction_library::record::Name::momentum);
 
     reduction_library::SOA::Component<double> component_scalar(weights, reduction_library::component::Name::SCALAR);
 
-    reduction_library::SOA::Scalar_record<reduction_library::record::Name::weighting, double_component> weighting_record(component_scalar);
+    reduction_library::SOA::Scalar_record<double_component> weighting_record(component_scalar,
+            reduction_library::record::Name::weighting);
 
   //  reduction_library::SOA::Scalar_record<reduction_library::record::Name::weighting> weighting_record(weights);
   //  SOA::Particle_spicies_old test_particles_spieces(momentums, weights);
