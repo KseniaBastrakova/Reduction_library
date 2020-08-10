@@ -1,7 +1,6 @@
 #pragma once
 
 #include "reduction_library/component/Type.hpp"
-#include "reduction_library/component/Type.hpp"
 #include "reduction_library/HDNLINE.hpp"
 
 namespace reduction_library{

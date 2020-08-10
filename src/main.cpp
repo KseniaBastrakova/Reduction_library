@@ -1,6 +1,3 @@
-//============================================================================
-
-//============================================================================
 
 #include <iostream>
 #include <openPMD/openPMD.hpp>
@@ -8,21 +5,15 @@
 #include <vector>
 #include <memory>
 #include <typeinfo>
-#include "reduction_library/thinning/Thinning.hpp"
-#include "reduction_library/thinning/Thinning_particles_spicialization.hpp"
-#include <stdlib.h>
 
-#include "../include/reduction_library/SOA/Record_3d.hpp"
-#include "reduction_library/AOS/Particlest.hpp"
-#include "IO/Particle_reader.hpp"
-#include "IO/Particle_writer.hpp"
-#include "reduction_library/record/Interfaces.hpp"
-#include "reduction_library/SOA/Component.hpp"
-#include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Particle.hpp"
-#include "reduction_library/SOA/Record_3d.hpp"
-#include "reduction_library/SOA/Record_scalar.hpp"
+
 #include "reduction_library/record/Name.hpp"
+#include "reduction_library/SOA/Record_scalar.hpp"
+#include "reduction_library/SOA/Component.hpp"
+#include "reduction_library/SOA/Dataset.hpp"
+
+
 
 using namespace std;
 using std::cout;
@@ -44,57 +35,13 @@ int main(){
     std::vector<double> x_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
     std::vector<double> y_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
     std::vector<double> z_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
-
-
-    reduction_library::SOA::Component<double> component_x(x_values, reduction_library::component::Name::x);
-    reduction_library::SOA::Component<double> component_y(y_values, reduction_library::component::Name::y);
-    reduction_library::SOA::Component<double> component_z(z_values, reduction_library::component::Name::z);
-
-    double get_unit_si_x = reduction_library::get_unit_SI (component_x);
-    std::cout<<"get_unit_si x "<<get_unit_si_x<<std::endl;
-
-    double get_unit_si_y = reduction_library::get_unit_SI (component_y);
-    std::cout<<"get_unit_si  y "<<get_unit_si_y<<std::endl;
-
-    double get_unit_si_z = reduction_library::get_unit_SI (component_z);
-    std::cout<<"get_unit_si  z "<<get_unit_si_z<<std::endl;
-
-    std::vector<double> weights = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
-    std::vector<double> momentums = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
-    using double_component = reduction_library::SOA::Component<double>;
-
-    reduction_library::record::unit_dimension_type momentum_dimension = {0, 1, 0, 0, 1, 0, 1};
-    reduction_library::SOA::Record_3d<double_component, double_component, double_component>
-        momentum(component_x, component_y, component_z, momentum_dimension, reduction_library::record::Name::momentum);
-
-    reduction_library::SOA::Component<double> component_scalar(weights, reduction_library::component::Name::SCALAR);
-
-    reduction_library::SOA::Scalar_record<double_component> weighting_record(component_scalar,
-            reduction_library::record::Name::weighting);
-
-  //  reduction_library::SOA::Scalar_record<reduction_library::record::Name::weighting> weighting_record(weights);
-  //  SOA::Particle_spicies_old test_particles_spieces(momentums, weights);
-   // reduction_library::Particle<SOA::Particle_spicies_old> test_particles(1, test_particles_spieces);
-
-    //auto get_component = reduction_library::component::get<SOA::Component<component::Name::x, double>,
-      //      Particle<SOA::Particle_spicies_old>>(test_particles);
-/*
-    std::cout<<"get_component "<<get_component<<std::endl;
-
-    reduction_library::SOA::Scalar_record<reduction_library::record::Name::weighting> weighting_record(weights);
-    reduction_library::SOA::Record_3d<reduction_library::record::Name::momentum> momentum(x_values, y_values, z_values);
-
-    std::vector<component::Name>component_names = record::get_names(momentum);
-    component::Name current_coponent = component_names[0];
-    std::cout<<as_integer(current_coponent)<<std::endl;
-
-    auto result = reduction_library::record::get<reduction_library::component::Name::x,
-            reduction_library::SOA::Record_3d<record::Name::momentum>>(momentum);
-
-    std::cout<<" result "<<result<<std::endl; */
-
-
-
+    reduction_library::SOA::Dataset<double> values_x;
+    using test_Scalar_record = reduction_library::SOA::Scalar_record<double>;
+    reduction_library::SOA::Scalar_record<double> weighting_record;
+    auto & component = weighting_record.get_component();
+   // reduction_library::SOA::Component<double, test_Scalar_record> component;
+//
+  //
 
 	return 0;
 }

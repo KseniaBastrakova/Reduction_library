@@ -4,7 +4,7 @@
 #include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/record/Name.hpp"
 #include "reduction_library/component/Name.hpp"
-#include "reduction_library/SOA/Component.hpp"
+//#include "reduction_library/SOA/Component.hpp"
 #include "reduction_library/record/Type.hpp"
 #include "reduction_library/HDNLINE.hpp"
 
@@ -64,37 +64,40 @@ namespace SOA{
 
 }//SOA
 
+namespace record{
+namespace traits{
+
     template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct record::traits::Type<component::Name::x, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Type<component::Name::x, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
        using type = T_X_component;
     };
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct record::traits::Type<component::Name::y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Type<component::Name::y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
        using type = T_Y_component;
     };
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct record::traits::Type<component::Name::z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Type<component::Name::z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
        using type = T_Z_component;
     };
-
+} //namespace traits
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
-    HDNLINE std::vector<component::Name> record::get_names(const SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
+    HDNLINE std::vector<component::Name> get_names(const SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
     {
         return record.get_component_names();
 
     }
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct record::Getting_value<component::Name::x, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Getting_value<component::Name::x, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
     public:
-        typename record::traits::Type<component::Name::x,
+        typename traits::Type<component::Name::x,
         SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
@@ -105,10 +108,10 @@ namespace SOA{
     };
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct record::Getting_value<component::Name::y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Getting_value<component::Name::y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
     public:
-        typename record::traits::Type<component::Name::y,
+        typename traits::Type<component::Name::y,
         SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
@@ -119,10 +122,10 @@ namespace SOA{
     };
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct record::Getting_value<component::Name::z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Getting_value<component::Name::z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
     public:
-        typename record::traits::Type<component::Name::z,
+        typename traits::Type<component::Name::z,
         SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
@@ -133,7 +136,7 @@ namespace SOA{
     };
 
     template<typename T_X_component, typename T_Y_component, typename T_Z_component>
-    struct record::Geting_weighting_power<SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Geting_weighting_power<SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
     public:
       double operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
@@ -146,7 +149,7 @@ namespace SOA{
 
 
     template<typename T_X_component, typename T_Y_component, typename T_Z_component>
-    struct record::Geting_macro_weighted<SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Geting_macro_weighted<SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
     public:
       double operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>&& record)
@@ -159,7 +162,7 @@ namespace SOA{
 
 
     template<typename T_X_component, typename T_Y_component, typename T_Z_component>
-    struct record::Geting_unit_dimension<SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    struct Geting_unit_dimension<SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
     public:
       unit_dimension_type operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
@@ -170,5 +173,6 @@ namespace SOA{
 
     };
 
+} // namespace record
 }// reduction_library
 
