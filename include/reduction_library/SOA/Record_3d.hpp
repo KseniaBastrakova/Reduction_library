@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 //#include "reduction_library/record/Type.hpp"
 #include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/record/Name.hpp"
@@ -175,4 +175,4 @@ namespace traits{
 
 } // namespace record
 }// reduction_library
-
+*/

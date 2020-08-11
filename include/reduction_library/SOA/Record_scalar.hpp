@@ -16,7 +16,7 @@ namespace SOA{
     public:
         using This = Scalar_record<T_Value_type>;
         using Dataset_current = Dataset<T_Value_type>;
-        using Component_current = Component<Dataset_current, This>;
+        using Component_current = Component<Dataset_current>;
 
     private:
         int macroWeighted;
@@ -32,7 +32,7 @@ namespace SOA{
                macroWeighted(7),
                weightingPower(42.),
                component_name(component::Name::SCALAR),
-               component(component::Name::SCALAR, values, *this) {}
+               component(component::Name::SCALAR, values) {}
 
         double get_weighting_power(){
             return weightingPower;

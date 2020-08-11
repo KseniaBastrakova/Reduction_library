@@ -12,6 +12,7 @@
 #include "reduction_library/SOA/Record_scalar.hpp"
 #include "reduction_library/SOA/Component.hpp"
 #include "reduction_library/SOA/Dataset.hpp"
+#include "reduction_library/SOA/Record_creation.hpp"
 
 
 
@@ -39,6 +40,12 @@ int main(){
     using test_Scalar_record = reduction_library::SOA::Scalar_record<double>;
     reduction_library::SOA::Scalar_record<double> weighting_record;
     auto & component = weighting_record.get_component();
+
+    reduction_library::SOA::Component<std::vector<double>> new_component;
+    using type_component = reduction_library::SOA::Component<std::vector<double>>;
+
+
+    auto record = reduction_library::SOA::Record_creation<type_component>::create(new_component);
    // reduction_library::SOA::Component<double, test_Scalar_record> component;
 //
   //
