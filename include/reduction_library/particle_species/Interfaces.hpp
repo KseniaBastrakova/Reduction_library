@@ -16,8 +16,6 @@ namespace particle_species{
     get(T_Particle_species& particle_species){
         Getting_value<T_record_name, T_Particle_species> v_get_functor;
         return v_get_functor.operator() (record);
-
-
     }
 
     template<typename T_particle_species>
@@ -26,4 +24,3 @@ namespace particle_species{
 
 } // namespace particle_species
 } // namespace reduction_library
-

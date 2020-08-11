@@ -3,6 +3,7 @@
 #include "reduction_library/component/Type.hpp"
 #include "reduction_library/component/Interfaces.hpp"
 #include "reduction_library/component/Name.hpp"
+#include "reduction_library/record/Name.hpp"
 #include <vector>
 #include <iostream>
 
@@ -66,6 +67,36 @@ namespace traits{
       return si_get_functor.operator ()(component);
     }
 
+    template<component::Name T_component, record::Name T_record, class T_Dataset>
+    struct Getting_value<SOA::Component<T_Dataset>, Particle<T_record>>
+    {
+    public:
+        typename traits::Type<SOA::Component<T_Dataset>>::type operator() (Particle<T_record>& particle)
+        {
+          // реализация тут
+        }
+
+    };
+}
+}
+/*
+    template<class T_Particle_spicies, typename T_Dataset>
+    struct Getting_value<SOA::Component<T_Dataset>, Particle<T_Particle_spicies>>
+    {
+    public:
+        typename traits::Type<SOA::Component<T_Dataset>>::type operator() (Particle<T_Particle_spicies>& particle)
+        {
+            //auto & record = std::get< T_Record >(particle.baseParticles);
+
+          //   auto & component = record::get< ComponentName >( record );
+            //   return component[ idx ];
+            auto current_value = particle.baseParticles[particle.idx];
+            return current_value;
+        }
+
+    };
+
+
 
     template<class T_Particle_spicies, typename T_Dataset>
     struct Getting_value<SOA::Component<T_Dataset>, Particle<T_Particle_spicies>>
@@ -97,3 +128,4 @@ namespace traits{
 
 }// namespace component
 }// reduction_library
+*/
