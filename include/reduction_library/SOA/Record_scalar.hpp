@@ -60,6 +60,21 @@ namespace SOA{
 
     };
 
+
+
+    template< typename T_Component >
+    inline auto makeScalarRecord( T_Component & component )
+    {
+        using Dataset = typename T_Component::datasetType;
+        using ValueType = Dataset::ValueType;
+
+        /// Later it will probably just a constructor, but it is already hidden, so can change later
+        using Result = Scalar_record< ValueType >;
+        Result result;
+        result.set_component( component );
+        return result;
+    }
+
 }//SOA
 
 namespace record{

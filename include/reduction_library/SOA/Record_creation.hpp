@@ -22,5 +22,8 @@ class Record_creation
  }
 };
 
+
+
+
 } // namespace SOA
 } // namespace reduction_library

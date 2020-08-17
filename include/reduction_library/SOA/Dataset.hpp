@@ -10,6 +10,9 @@ struct Dataset{
 private:
     std::vector<T_Value> values;
 public:
+
+    using ValueType = T_Value;
+
     Dataset(){}
     Dataset(std::vector<T_Value> values):
         values(values){}
