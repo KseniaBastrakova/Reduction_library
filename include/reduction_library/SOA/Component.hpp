@@ -3,6 +3,7 @@
 #include "reduction_library/component/Type.hpp"
 #include "reduction_library/component/Interfaces.hpp"
 #include "reduction_library/component/Name.hpp"
+#include "reduction_library/SOA/Dataset.hpp"
 #include "reduction_library/record/Name.hpp"
 #include <vector>
 #include <iostream>
@@ -12,26 +13,48 @@ namespace SOA{
 
     template<typename T_Dataset>
     struct Component {
+    public:
+        using datasetType = Dataset<T_Dataset>;
     private:
-        T_Dataset dataset;
+        datasetType dataset;
         double unit_SI;
 
     public:
-        using datasetType = T_Dataset;
         component::Name component_name;
         Component(){}
-        Component(component::Name component_name, T_Dataset dataset):
+        Component(component::Name component_name, datasetType dataset):
                 unit_SI(42.),
                 component_name(component_name),
                 dataset(dataset){}
+
+    T_Dataset& operator[](int idx)
+    {
+        return dataset[idx];
+    }
 
     double get_unit_SI()
     {
         return unit_SI;
     }
+    void set_unit_SI(double new_unit_SI)
+    {
+        unit_SI = new_unit_SI;
+    }
     component::Name get_component_name()
     {
         return component_name;
+    }
+    void set_dataset(datasetType new_dataset){
+        dataset = new_dataset;
+    }
+
+    /// We use this functions only for test
+
+    void print_component_name(){
+        std::cout<<dataset<<std::endl;
+    }
+    void print_dataset(){
+        dataset.print();
     }
 
 };
@@ -54,78 +77,52 @@ namespace traits{
     public:
         double operator() (SOA::Component<T_Dataset>& component)
         {
-            double weighting_power = component.get_unit_SI();
-            return weighting_power;
+            double unit_si = component.get_unit_SI();
+            return unit_si;
         }
 
     };
 
     template<typename T_Dataset>
-    double get_unit_SI(SOA::Component<T_Dataset>& component)
-    {
-      Geting_unit_SI<SOA::Component<T_Dataset>> si_get_functor;
-      return si_get_functor.operator ()(component);
-    }
-
-    template<component::Name T_component, record::Name T_record, class T_Dataset>
-    struct Getting_value<SOA::Component<T_Dataset>, Particle<T_record>>
+    struct Setting_unit_SI<SOA::Component<T_Dataset>>
     {
     public:
-        typename traits::Type<SOA::Component<T_Dataset>>::type operator() (Particle<T_record>& particle)
+        void operator() (SOA::Component<T_Dataset>& component, double unit_si)
         {
-          // реализация тут
-        }
-
-    };
-}
-}
-/*
-    template<class T_Particle_spicies, typename T_Dataset>
-    struct Getting_value<SOA::Component<T_Dataset>, Particle<T_Particle_spicies>>
-    {
-    public:
-        typename traits::Type<SOA::Component<T_Dataset>>::type operator() (Particle<T_Particle_spicies>& particle)
-        {
-            //auto & record = std::get< T_Record >(particle.baseParticles);
-
-          //   auto & component = record::get< ComponentName >( record );
-            //   return component[ idx ];
-            auto current_value = particle.baseParticles[particle.idx];
-            return current_value;
+            component.set_unit_SI(unit_si);
         }
 
     };
 
-
-
-    template<class T_Particle_spicies, typename T_Dataset>
-    struct Getting_value<SOA::Component<T_Dataset>, Particle<T_Particle_spicies>>
+    template<component::Name Component_name, record::Name Record_name, class T_Record>
+    struct Getting_value<Component_name, Record_name, Particle<T_Record>>
     {
     public:
-        typename traits::Type<SOA::Component<T_Dataset>>::type operator() (Particle<T_Particle_spicies>& particle)
+        auto operator() (Particle<T_Record>& particle)
         {
-            //auto & record = std::get< T_Record >(particle.baseParticles);
-
-          //   auto & component = record::get< ComponentName >( record );
-            //   return component[ idx ];
-            auto current_value = particle.baseParticles[particle.idx];
-            return current_value;
+            auto base_particles = particle.baseParticles;
+            auto component = record::get<Component_name, T_Record>(base_particles);
+            int idx = particle.idx;
+            double value = component[idx];
+            return value;
         }
 
     };
 
-    template<class T_Particle_spicies, typename T_Dataset>
-    struct Setting_value<SOA::Component<T_Dataset>, Particle<T_Particle_spicies>>
+    template<component::Name Component_name, record::Name Record_name, class T_Record, typename T_Dataset>
+    struct Setting_value<Component_name, Record_name, Particle<T_Record>, T_Dataset>
     {
     public:
-        void operator() (typename traits::Type<SOA::Component<T_Dataset>>::type value,
-                Particle<T_Particle_spicies>& particle)
+        void operator() (T_Dataset value, Particle<T_Record>& particle)
         {
-            particle.baseParticles[particle.idx] = value;
+            auto& base_particles = particle.baseParticles;
+            auto& component = record::get<Component_name, T_Record>(base_particles);
+            int idx = particle.idx;
+            component[idx] = value;
         }
 
     };
 
 }// namespace component
 }// reduction_library
-*/
+

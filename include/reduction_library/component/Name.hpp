@@ -7,10 +7,8 @@ namespace component{
         x,
         y,
         z,
-       SCALAR
+        SCALAR
     };
-
-
 
 } //component
 } //reduction_library

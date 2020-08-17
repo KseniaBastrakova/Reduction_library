@@ -7,22 +7,22 @@
 namespace reduction_library{
 namespace component{
 
-    template<component::Name T_component, record::Name T_record, typename T_particle>
+    template<component::Name Component_name, record::Name Record_name, typename T_particle, typename T_component>
     struct Setting_value;
 
-    template<component::Name T_component, record::Name T_record, typename T_particle>
-    HDNLINE void set(typename traits::Type<T_component>::type value, T_particle& particle){
-        Setting_value<T_component, T_record, T_particle> v_set_functor;
+    template<component::Name Component_name, record::Name Record_name, typename T_particle, typename T_dataset>
+    HDNLINE void set(T_dataset value, T_particle& particle){
+        Setting_value<Component_name, Record_name, T_particle, T_dataset> v_set_functor;
         v_set_functor.operator ()(value, particle);
 
     }
 
-    template<component::Name T_component, record::Name T_record, typename T_particle>
+    template<component::Name Component_name, record::Name Record_name, typename T_particle>
     struct Getting_value;
 
-    template<component::Name T_component, record::Name T_record, typename T_particle>
+    template<component::Name Component_name, record::Name Record_name, typename T_particle>
     HDNLINE auto get(T_particle& particle){
-        Getting_value<T_component, T_record, T_particle> v_get_functor;
+        Getting_value<Component_name, Record_name, T_particle> v_get_functor;
         return v_get_functor.operator() (particle);
 
     }
@@ -31,11 +31,22 @@ namespace component{
 	struct Geting_unit_SI;
 
     template<typename T_component>
-    double get_unit_SI(T_component& component)
+    HDNLINE double get_unit_SI(T_component& component)
     {
     	Geting_unit_SI<T_component> si_get_functor;
 		return si_get_functor.operator ()(component);
     }
 
-}//component
-}//reduction_library
+    template<typename T_component>
+    struct Setting_unit_SI;
+
+    template<typename T_component>
+    HDNLINE void set_unit_SI(T_component& component, double unit_si)
+    {
+        Setting_unit_SI<T_component> si_set_functor;
+        si_set_functor.operator ()(component, unit_si);
+    }
+
+
+}//namespace component
+}//namespace reduction_library
