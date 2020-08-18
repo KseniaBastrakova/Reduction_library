@@ -101,6 +101,7 @@ namespace traits{
         auto operator() (Particle<T_Record>& particle)
         {
             auto base_particles = particle.baseParticles;
+            auto record = record::get<Component_name, T_Record>(base_particles);
             auto component = record::get<Component_name, T_Record>(base_particles);
             int idx = particle.idx;
             double value = component[idx];

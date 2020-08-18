@@ -1,39 +1,33 @@
 #pragma once
-/*
-//#include "reduction_library/record/Type.hpp"
-#include "reduction_library/record/Interfaces.hpp"
-#include "reduction_library/record/Name.hpp"
-#include "reduction_library/component/Name.hpp"
-//#include "reduction_library/SOA/Component.hpp"
-#include "reduction_library/record/Type.hpp"
-#include "reduction_library/HDNLINE.hpp"
 
-#include <vector>
+#include "reduction_library/record/Interfaces.hpp"
+#include "reduction_library/component/Name.hpp"
+#include "reduction_library/SOA/Component.hpp"
+#include "reduction_library/SOA/Dataset.hpp"
+#include "reduction_library/HDNLINE.hpp"
+#include "reduction_library/HINLINE.hpp"
 
 namespace reduction_library{
 namespace SOA{
 
-    template<typename T_X_component, typename T_Y_component, typename T_Z_component>
-    struct Record_3d {
+    template<typename T_X_Value_type, typename T_Y_Value_type, typename T_Z_Value_type>
+    struct Record_3d{
+        using Component_X = Component<T_X_Value_type>;
+        using Component_Y = Component<T_Y_Value_type>;
+        using Component_Z = Component<T_Z_Value_type>;
+
     private:
         int macroWeighted;
         double weightingPower;
         std::vector<component::Name> component_names;
         record::Name record_name;
-        T_X_component x_component;
-        T_Y_component y_component;
-        T_Z_component z_component;
+        Component_X x_component;
+        Component_Y y_component;
+        Component_Z z_component;
         record::unit_dimension_type unit_dimension;
 
     public:
-        Record_3d(T_X_component x_component,
-                  T_Y_component y_component,
-                  T_Z_component z_component,
-                  record::unit_dimension_type unit_dimension,
-                  record::Name record_name):
-                  x_component(x_component),
-                  y_component(y_component),
-                  z_component(z_component),
+        Record_3d(record::Name record_name):
                   record_name(record_name),
                   macroWeighted(7),
                   weightingPower(42.),
@@ -52,10 +46,6 @@ namespace SOA{
         std::vector<component::Name> get_component_names() const{
             return component_names;
         }
-        int get_size(){
-            int size = 777;
-            return size;
-        }
         record::unit_dimension_type get_unit_dimension() const{
             return unit_dimension;
         }
@@ -64,27 +54,50 @@ namespace SOA{
 
 }//SOA
 
+//  typename SOA::Scalar_record<T_Value_type>::Component_current;
 namespace record{
 namespace traits{
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
     struct Type<component::Name::x, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
-       using type = T_X_component;
+       using type = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Component_X;
     };
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
     struct Type<component::Name::y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
-       using type = T_Y_component;
+       using type = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Component_Y;
     };
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
     struct Type<component::Name::z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
-       using type = T_Z_component;
+       using type = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Component_Z;
     };
+
 } //namespace traits
+
+    template<class T_X_component, class T_Y_component, class T_Z_component>
+    SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>
+        make_momentum_record(SOA::Component<T_X_component> x_component,
+                           SOA::Component<T_X_component> y_component,
+                           SOA::Component<T_X_component> z_component)
+    {
+        using Record_type = SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>;
+        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component> scalar_record(record::Name::momentum);
+
+        auto& value_x = get<component::Name::x, Record_type>(scalar_record);
+        value_x = x_component;
+
+        auto& value_y = get<component::Name::y, Record_type>(scalar_record);
+        value_y = y_component;
+
+        auto& value_z = get<component::Name::z, Record_type>(scalar_record);
+        value_z = z_component;
+
+        return scalar_record;
+    }
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
     HDNLINE std::vector<component::Name> get_names(const SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
@@ -101,7 +114,7 @@ namespace traits{
         SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
-            auto current_value = record.x_component;
+            auto& current_value = record.x_component;
             return current_value;
         }
 
@@ -115,7 +128,7 @@ namespace traits{
         SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
-            auto current_value = record.y_component;
+            auto& current_value = record.y_component;
             return current_value;
         }
 
@@ -129,7 +142,7 @@ namespace traits{
         SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
-            auto current_value = record.z_component;
+            auto& current_value = record.z_component;
             return current_value;
         }
 
@@ -174,5 +187,6 @@ namespace traits{
     };
 
 } // namespace record
+
 }// reduction_library
-*/
+

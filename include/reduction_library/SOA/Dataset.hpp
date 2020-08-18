@@ -29,7 +29,8 @@ public:
     /// We use this functions only for test
     void print(){
         for (int i=0; i<values.size(); i++)
-            std::cout<<values[i]<<std::endl;
+            std::cout<<values[i]<<"  ";
+        std::cout<<std::endl;
     }
 };
 

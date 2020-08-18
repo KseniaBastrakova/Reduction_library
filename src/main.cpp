@@ -10,6 +10,7 @@
 
 #include "reduction_library/record/Name.hpp"
 #include "reduction_library/SOA/Record_scalar.hpp"
+#include "reduction_library/SOA/Record_3d.hpp"
 #include "reduction_library/SOA/Component.hpp"
 #include "reduction_library/SOA/Dataset.hpp"
 #include "reduction_library/SOA/Record_creation.hpp"
@@ -28,59 +29,144 @@ auto as_integer(Enumeration const value)
     return static_cast<typename std::underlying_type<Enumeration>::type>(value);
 }
 
+void testRawVectorsUseCase()
+{
+    using namespace reduction_library;
+
+    // Use case: client app has data as raw arrays or vectors
+    // here we mark these as ..._raw variables
+    auto px_values_raw = std::vector<double>{1., 2., 5., 6., 77., 6., 17., 18., 59.};
+    auto py_values_raw = std::vector<double>{1., 22., 35., 4., 5., 61., 77., 8., 98.};
+    auto pz_values_raw = std::vector<double>{1., 23., 3., 4., 5., 64., 75., 81., 9.};
+    auto weights_raw = std::vector<double>{11., 12., 13., 14., 15., 16., 17., 18., 19.};
+
+    // make a data set out of a raw vector, later will be constructor/factory
+    auto weights_dataset = SOA::Dataset<double>{};
+    weights_dataset.set_values(weights_raw);
+
+    // make a component for weights
+    auto weights_component = SOA::Component<double>{};
+    weights_component.set_dataset(weights_dataset);
+
+    auto weights_record = record::make_scalar_record( weights_component );
+    // we print before:
+
+
+    auto & weights_component_again = record::get< component::Name::SCALAR >( weights_record );
+    // we check that:
+
+    // 1) weights_component_again is of correct type
+
+    std::cout<<" dataset before :"<<std::endl;
+    weights_component.print_dataset();
+    std::cout<<" dataset after (should be same) :"<<std::endl;
+    weights_component_again.print_dataset();
+
+    // make a data set out of a raw vector for 3d vector
+
+    auto px_dataset = SOA::Dataset<double>{};
+    px_dataset.set_values(px_values_raw);
+
+    auto py_dataset = SOA::Dataset<double>{};
+    py_dataset.set_values(py_values_raw);
+
+    auto pz_dataset = SOA::Dataset<double>{};
+    pz_dataset.set_values(pz_values_raw);
+
+    auto px_component = SOA::Component<double>{};
+    px_component.set_dataset(px_dataset);
+
+    auto py_component = SOA::Component<double>{};
+    py_component.set_dataset(py_dataset);
+
+    auto pz_component = SOA::Component<double>{};
+    pz_component.set_dataset(pz_dataset);
+
+    auto momentum_record = record::make_momentum_record<double, double, double>(px_component, py_component, pz_component);
+
+
+
+    // b) it allows accessing and changing data through component interface
+
+  //  auto value = get_weighting( particle );
+
+ //   auto value = component::get<component::Name::SCALAR, record::Name::weighting, test_particle_type>(test_particle_weighting);
+
+
+    // c) when you change values, the actual record data changes
+
+    /// TODO
+ //   auto momentum_record = SOA::makeVectorRecord( px_component, py_component, pz_component );
+
+  //  using type_double_scalar_record = reduction_library::SOA::Scalar_record<double>;
+   // reduction_library::SOA::Scalar_record<double> weighting_record;
+   // auto record = reduction_library::SOA::Record_creation<type_double_component>::create(scalar_component);
+   // record.print_component();
+}
+
+
 
 
 int main(){
     std::cout<<"start of reduction"<<std::endl;
 
-    std::vector<double> x_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
-    std::vector<double> y_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
-    std::vector<double> z_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
+    testRawVectorsUseCase();
 
-    // **** we build record for scalar component ****
-
-    std::vector<double> weights = {11., 12., 13., 14., 15., 16., 17., 18., 19.};
-    reduction_library::SOA::Dataset<double> scalar_dataset;
-    scalar_dataset.set_values(weights);
-    reduction_library::SOA::Component<double> scalar_component;
-    scalar_component.set_dataset(scalar_dataset);
-
-    using type_double_scalar_record = reduction_library::SOA::Scalar_record<double>;
-    using type_double_component = reduction_library::SOA::Component<double>;
-
-    reduction_library::SOA::Scalar_record<double> weighting_record;
-
-
-    auto record = reduction_library::SOA::Record_creation<type_double_component>::create(scalar_component);
-    record.print_component();
-    using test_particle_type = reduction_library::Particle<type_double_scalar_record>;
-    reduction_library::Particle<type_double_scalar_record> test_particle_weighting(1, record);
-
-
-    auto value = reduction_library::component::get<component::Name::SCALAR, record::Name::weighting, test_particle_type>(test_particle_weighting);
-    std::cout<<"getting first values in weighting dataset : should be 12  "<<value<<std::endl;
-
-    /// now, we change the value to 77.6
-    double new_value = 77.6;
-    reduction_library::component::set<component::Name::SCALAR, record::Name::weighting, test_particle_type, double>
-        (new_value, test_particle_weighting);
-
-    value = reduction_library::component::get<component::Name::SCALAR, record::Name::weighting, test_particle_type>(test_particle_weighting);
-    std::cout<<"getting first values in weighting dataset : should be 77.6  "<<value<<std::endl;
-
-    // we check attributes for component: unit_SI
-    double test_si = 42.;
-    reduction_library::component::set_unit_SI<type_double_component>(scalar_component, test_si);
-    auto unit_si_component = reduction_library::component::get_unit_SI<type_double_component>(scalar_component);
-    std::cout<<" getting unit si for scalar component : the value sould be 42.  " <<unit_si_component<<std::endl;
-
-    // we check attributes for scalar_record: macro weighted, weighting power
-
-    auto macro_weighted_record = reduction_library::record::get_macro_weighted<type_double_scalar_record>(std::move(record));
-    std::cout<<"getting macro weighted for record :: should be  "<<macro_weighted_record<< std::endl;
 
 
 
 
 	return 0;
 }
+
+/*
+
+
+std::vector<double> x_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
+std::vector<double> y_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
+std::vector<double> z_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
+
+// **** we build record for scalar component ****
+
+std::vector<double> weights = {11., 12., 13., 14., 15., 16., 17., 18., 19.};
+reduction_library::SOA::Dataset<double> scalar_dataset;
+scalar_dataset.set_values(weights);
+reduction_library::SOA::Component<double> scalar_component;
+scalar_component.set_dataset(scalar_dataset);
+
+using type_double_scalar_record = reduction_library::SOA::Scalar_record<double>;
+using type_double_component = reduction_library::SOA::Component<double>;
+
+reduction_library::SOA::Scalar_record<double> weighting_record;
+
+
+auto record = reduction_library::SOA::Record_creation<type_double_component>::create(scalar_component);
+record.print_component();
+using test_particle_type = reduction_library::Particle<type_double_scalar_record>;
+reduction_library::Particle<type_double_scalar_record> test_particle_weighting(1, record);
+
+
+auto value = reduction_library::component::get<component::Name::SCALAR, record::Name::weighting, test_particle_type>(test_particle_weighting);
+std::cout<<"getting first values in weighting dataset : should be 12  "<<value<<std::endl;
+
+/// now, we change the value to 77.6
+double new_value = 77.6;
+// template<component::Name Component_name, record::Name Record_name, typename T_particle, typename T_dataset>
+reduction_library::component::set<component::Name::SCALAR, record::Name::weighting, test_particle_type, double>
+    (new_value, test_particle_weighting);
+
+value = reduction_library::component::get<component::Name::SCALAR, record::Name::weighting, test_particle_type>(test_particle_weighting);
+std::cout<<"getting first values in weighting dataset : should be 77.6  "<<value<<std::endl;
+
+// we check attributes for component: unit_SI
+double test_si = 42.;
+reduction_library::component::set_unit_SI<type_double_component>(scalar_component, test_si);
+auto unit_si_component = reduction_library::component::get_unit_SI<type_double_component>(scalar_component);
+std::cout<<" getting unit si for scalar component : the value sould be 42.  " <<unit_si_component<<std::endl;
+
+// we check attributes for scalar_record: macro weighted, weighting power
+
+auto macro_weighted_record = reduction_library::record::get_macro_weighted<type_double_scalar_record>(std::move(record));
+std::cout<<"getting macro weighted for record :: should be  "<<macro_weighted_record<< std::endl;
+
+*/

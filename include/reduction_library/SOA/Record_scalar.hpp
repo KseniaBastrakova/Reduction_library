@@ -7,15 +7,13 @@
 #include "reduction_library/HDNLINE.hpp"
 #include "reduction_library/HINLINE.hpp"
 
-#include <vector>
 
 namespace reduction_library{
 namespace SOA{
     template<typename T_Value_type>
     struct Scalar_record{
     public:
-        using This = Scalar_record<T_Value_type>;
-        using Dataset_current = Dataset<T_Value_type>;
+       // using Dataset_current = Dataset<T_Value_type>;
         using Component_current = Component<T_Value_type>;
 
     private:
@@ -66,12 +64,21 @@ namespace record{
 namespace traits{
 
     template<class T_Value_type>
-
     struct Type<component::Name::SCALAR, SOA::Scalar_record<T_Value_type>>
     {
-       using type = typename SOA::Scalar_record<T_Value_type>::Component_current; // int; //SOA::Component<T_Value_type>; //
+       using type = typename SOA::Scalar_record<T_Value_type>::Component_current;
     };
+
 } //namespace traits
+
+
+    template<class T_Value_type>
+    SOA::Scalar_record<T_Value_type> make_scalar_record(SOA::Component<T_Value_type> input_component)
+    {
+        SOA::Scalar_record<T_Value_type> scalar_record;
+        scalar_record.set_component(input_component);
+        return scalar_record;
+    }
 
     template<class T_Value_type>
     struct Getting_value<component::Name::SCALAR, SOA::Scalar_record<T_Value_type>>

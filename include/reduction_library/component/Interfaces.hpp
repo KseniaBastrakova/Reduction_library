@@ -7,7 +7,7 @@
 namespace reduction_library{
 namespace component{
 
-    template<component::Name Component_name, record::Name Record_name, typename T_particle, typename T_component>
+    template<component::Name Component_name, record::Name Record_name, typename T_particle, typename T_dataset>
     struct Setting_value;
 
     template<component::Name Component_name, record::Name Record_name, typename T_particle, typename T_dataset>
