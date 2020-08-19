@@ -41,8 +41,12 @@ namespace SOA{
         int get_macro_weighted(){
             return weighting_power;
         }
-        component::Name get_component_name() const{
-            return component_name;
+        void set_component_name(component::Name new_component_name){
+            component_name = new_component_name;
+        }
+
+        void set_record_name(record::Name new_record_name){
+            record_name = new_record_name;
         }
 
         Component_current& get_component(){
@@ -72,11 +76,15 @@ namespace traits{
 } //namespace traits
 
 
+
+
     template<class T_Value_type>
-    SOA::Scalar_record<T_Value_type> make_scalar_record(SOA::Component<T_Value_type> input_component)
+    SOA::Scalar_record<T_Value_type> make_scalar_record(SOA::Component<T_Value_type> input_component, record::Name new_record_name)
     {
         SOA::Scalar_record<T_Value_type> scalar_record;
         scalar_record.set_component(input_component);
+        scalar_record.set_component_name(component::Name::SCALAR);
+        scalar_record.set_record_name(new_record_name);
         return scalar_record;
     }
 

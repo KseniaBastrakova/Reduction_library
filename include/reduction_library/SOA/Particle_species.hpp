@@ -12,17 +12,16 @@ namespace SOA{
 
     template <typename T_First_record, typename T_Second_record>
     class Particle_species{
+    public:
         int size;
         T_First_record first_record;
         T_Second_record second_record;
     public:
         using MyParticle = Particle<Particle_species>;
-  //      using Records = std::tuple<T_First_record, T_Second_record>;
-     //   Records records;
         Particle_species(T_First_record first_record, T_Second_record second_record):
             first_record(first_record), second_record(second_record)
         {
-           // size = first_record.get_size();
+            size = 5.;
         }
 
         MyParticle getParticle(int idx){
@@ -57,7 +56,7 @@ template<typename T_First_record, typename T_Second_record>
 struct Getting_value<record::Name::momentum, SOA::Particle_species<T_First_record,T_Second_record>>
 {
 public:
-    typename traits::Type<record::Name::momentum, SOA::Particle_species<T_First_record,T_Second_record>>::type
+    typename traits::Type<record::Name::momentum, SOA::Particle_species<T_First_record,T_Second_record>>::type &
         operator() (SOA::Particle_species<T_First_record,T_Second_record>& particle_species)
     {
         return particle_species.first_record;
@@ -70,7 +69,7 @@ template<typename T_First_record, typename T_Second_record>
 struct Getting_value<record::Name::weighting, SOA::Particle_species<T_First_record,T_Second_record>>
 {
 public:
-    typename traits::Type<record::Name::weighting, SOA::Particle_species<T_First_record,T_Second_record>>::type
+    typename traits::Type<record::Name::weighting, SOA::Particle_species<T_First_record,T_Second_record>>::type &
         operator() (SOA::Particle_species<T_First_record,T_Second_record>& particle_species)
     {
         return particle_species.second_record;

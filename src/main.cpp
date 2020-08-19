@@ -52,7 +52,7 @@ void testRawVectorsUseCase()
     /// Part with scalar record
     ////
     ///
-    auto weights_record = record::make_scalar_record( weights_component );
+    auto weights_record = record::make_scalar_record( weights_component, record::Name::weighting );
     // we print before:
 
 
@@ -109,8 +109,12 @@ void testRawVectorsUseCase()
 
     SOA::Particle_species<type_double_scalar_record, type_3d_vector> simple_species_two_records(weights_record, momentum_record);
 
-
     Particle<particle_species_type> test_particle(1, simple_species_two_records);
+
+    using particle_type = Particle<particle_species_type>;
+
+    auto value = component::get<component::Name::x, record::Name::momentum, particle_type>(test_particle);
+    std::cout<<"test first value : "<< value<<std::endl;
 
 
 

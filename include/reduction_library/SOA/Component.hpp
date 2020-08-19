@@ -5,6 +5,7 @@
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Dataset.hpp"
 #include "reduction_library/record/Name.hpp"
+#include "reduction_library/particle_species/Interfaces.hpp"
 #include <vector>
 #include <iostream>
 
@@ -103,18 +104,21 @@ namespace traits{
 
     };
 
-    template<component::Name Component_name, record::Name Record_name, class T_Record>
-    struct Getting_value<Component_name, Record_name, Particle<T_Record>>
+    template<component::Name Component_name, record::Name Record_name, class T_Particle_species>
+    struct Getting_value<Component_name, Record_name, Particle<T_Particle_species>>
     {
     public:
-        auto operator() (Particle<T_Record>& particle)
+        auto operator() (Particle<T_Particle_species>& particle)
         {
-            auto base_particles = particle.baseParticles;
-            auto record = record::get<Component_name, T_Record>(base_particles);
-            auto component = record::get<Component_name, T_Record>(base_particles);
-            int idx = particle.idx;
-            double value = component[idx];
-            return value;
+            auto& base_particles = particle.baseParticles; // record
+            auto& record = particle_species::get<Record_name, T_Particle_species>(base_particles);
+            auto component = record::get<Component_name>(record);
+
+         //   auto record = record::get<Component_name, T_Record>(base_particles);
+         //   auto component = record::get<Component_name, T_Record>(base_particles);
+        //    int idx = particle.idx;
+         //   double value = component[idx];
+            return 0; //value;
         }
 
     };
