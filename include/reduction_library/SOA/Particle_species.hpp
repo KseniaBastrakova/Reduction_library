@@ -17,12 +17,12 @@ namespace SOA{
         T_Second_record second_record;
     public:
         using MyParticle = Particle<Particle_species>;
-        using Records = std::tuple<T_First_record, T_Second_record>;
-        Records records;
+  //      using Records = std::tuple<T_First_record, T_Second_record>;
+     //   Records records;
         Particle_species(T_First_record first_record, T_Second_record second_record):
             first_record(first_record), second_record(second_record)
         {
-            size = first_record.get_size();
+           // size = first_record.get_size();
         }
 
         MyParticle getParticle(int idx){

@@ -12,10 +12,11 @@ namespace particle_species{
     struct Getting_value;
 
     template<record::Name T_record_name, typename T_Particle_species>
-    HDNLINE typename traits::Type<T_record_name, T_Particle_species>
-    get(T_Particle_species& particle_species){
+    HDNLINE typename traits::Type<T_record_name, T_Particle_species>::type
+        get(T_Particle_species& particle_species)
+    {
         Getting_value<T_record_name, T_Particle_species> v_get_functor;
-        return v_get_functor.operator() (record);
+        return v_get_functor.operator() (particle_species);
     }
 
     template<typename T_particle_species>

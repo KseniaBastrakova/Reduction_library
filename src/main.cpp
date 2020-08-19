@@ -14,6 +14,7 @@
 #include "reduction_library/SOA/Component.hpp"
 #include "reduction_library/SOA/Dataset.hpp"
 #include "reduction_library/SOA/Record_creation.hpp"
+#include "reduction_library/SOA/Particle_species.hpp"
 
 
 
@@ -48,6 +49,9 @@ void testRawVectorsUseCase()
     auto weights_component = SOA::Component<double>{};
     weights_component.set_dataset(weights_dataset);
 
+    /// Part with scalar record
+    ////
+    ///
     auto weights_record = record::make_scalar_record( weights_component );
     // we print before:
 
@@ -61,6 +65,24 @@ void testRawVectorsUseCase()
     weights_component.print_dataset();
     std::cout<<" dataset after (should be same) :"<<std::endl;
     weights_component_again.print_dataset();
+
+ //   b) it allows accessing and changing data through component interface
+
+    using type_double_scalar_record = SOA::Scalar_record<double>;
+    using type_3d_vector = SOA::Record_3d<double, double, double>;
+    using particle_species_type = SOA::Particle_species<type_double_scalar_record, type_3d_vector>;
+    using test_particle_type = Particle<type_double_scalar_record>;
+
+
+
+
+ //   auto value = component::get<component::Name::SCALAR, record::Name::weighting, particle_species_type>(test_particle_weighting);
+
+   // auto value = get_weighting( particle );
+
+
+    //// end of part with scalar record
+    ///
 
     // make a data set out of a raw vector for 3d vector
 
@@ -82,7 +104,13 @@ void testRawVectorsUseCase()
     auto pz_component = SOA::Component<double>{};
     pz_component.set_dataset(pz_dataset);
 
+    // we build momemntum record, with three components
     auto momentum_record = record::make_momentum_record<double, double, double>(px_component, py_component, pz_component);
+
+    SOA::Particle_species<type_double_scalar_record, type_3d_vector> simple_species_two_records(weights_record, momentum_record);
+
+
+    Particle<particle_species_type> test_particle(1, simple_species_two_records);
 
 
 

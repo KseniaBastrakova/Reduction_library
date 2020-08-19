@@ -47,6 +47,15 @@ namespace SOA{
     void set_dataset(datasetType new_dataset){
         dataset = new_dataset;
     }
+    datasetType get_dataset(){
+        return dataset;
+    }
+    component::Name get_name(){
+        return component_name;
+    }
+    void set_name(component::Name new_component_name){
+        component_name = new_component_name;
+    }
 
     /// We use this functions only for test
 

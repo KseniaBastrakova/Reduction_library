@@ -50,6 +50,19 @@ namespace SOA{
             return unit_dimension;
         }
 
+        // probaly, needs to be deleted:
+
+        Component_X& getting_x_component(){
+            return x_component;
+        }
+
+        Component_Y& getting_y_component(){
+            return y_component;
+        }
+
+        Component_Z& getting_z_component(){
+            return z_component;
+        }
     };
 
 }//SOA
@@ -87,14 +100,17 @@ namespace traits{
         using Record_type = SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>;
         SOA::Record_3d<T_X_component, T_Y_component, T_Z_component> scalar_record(record::Name::momentum);
 
-        auto& value_x = get<component::Name::x, Record_type>(scalar_record);
-        value_x = x_component;
+        auto& value_x = get<component::Name::x, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(scalar_record);
+        value_x.set_dataset(x_component.get_dataset());
+        value_x.set_name(x_component.get_name());
 
-        auto& value_y = get<component::Name::y, Record_type>(scalar_record);
-        value_y = y_component;
+        auto& value_y = get<component::Name::y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(scalar_record);
+        value_y.set_dataset(y_component.get_dataset());
+        value_y.set_name(y_component.get_name());
 
-        auto& value_z = get<component::Name::z, Record_type>(scalar_record);
-        value_z = z_component;
+        auto& value_z = get<component::Name::z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(scalar_record);
+        value_z.set_dataset(z_component.get_dataset());
+        value_z.set_name(z_component.get_name());
 
         return scalar_record;
     }
@@ -111,11 +127,10 @@ namespace traits{
     {
     public:
         typename traits::Type<component::Name::x,
-        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
+        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type &
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
-            auto& current_value = record.x_component;
-            return current_value;
+            return record.getting_x_component();
         }
 
     };
@@ -125,11 +140,10 @@ namespace traits{
     {
     public:
         typename traits::Type<component::Name::y,
-        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
+        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type &
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
-            auto& current_value = record.y_component;
-            return current_value;
+            return record.getting_y_component();
         }
 
     };
@@ -139,11 +153,10 @@ namespace traits{
     {
     public:
         typename traits::Type<component::Name::z,
-        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type
+        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type &
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
-            auto& current_value = record.z_component;
-            return current_value;
+            return record.getting_z_component();
         }
 
     };
