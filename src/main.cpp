@@ -6,14 +6,16 @@
 #include <memory>
 #include <typeinfo>
 
+#include "../include/reduction_library/SOA/Record_getters.hpp"
+#include "../include/reduction_library/SOA/Record_getters.hpp"
 #include "reduction_library/SOA/Particle.hpp"
 
 #include "reduction_library/record/Name.hpp"
 #include "reduction_library/SOA/Record_scalar.hpp"
 #include "reduction_library/SOA/Record_3d.hpp"
 #include "reduction_library/SOA/Component.hpp"
+#include "reduction_library/SOA/Record_getters.hpp"
 #include "reduction_library/SOA/Dataset.hpp"
-#include "reduction_library/SOA/Record_creation.hpp"
 #include "reduction_library/SOA/Particle_species.hpp"
 
 
@@ -66,11 +68,11 @@ void testRawVectorsUseCase()
     std::cout<<" dataset after (should be same) :"<<std::endl;
     weights_component_again.print_dataset();
 
- //   b) it allows accessing and changing data through component interface
+
 
     using type_double_scalar_record = SOA::Scalar_record<double>;
     using type_3d_vector = SOA::Record_3d<double, double, double>;
-    using particle_species_type = SOA::Particle_species<type_double_scalar_record, type_3d_vector>;
+    using particle_species_type = SOA::Particle_species<type_3d_vector, type_double_scalar_record>;
     using test_particle_type = Particle<type_double_scalar_record>;
 
 
@@ -107,33 +109,62 @@ void testRawVectorsUseCase()
     // we build momemntum record, with three components
     auto momentum_record = record::make_momentum_record<double, double, double>(px_component, py_component, pz_component);
 
-    SOA::Particle_species<type_double_scalar_record, type_3d_vector> simple_species_two_records(weights_record, momentum_record);
+    SOA::Particle_species<type_3d_vector, type_double_scalar_record> simple_species_two_records(momentum_record, weights_record);
 
     Particle<particle_species_type> test_particle(1, simple_species_two_records);
 
     using particle_type = Particle<particle_species_type>;
 
-    auto value = component::get<component::Name::x, record::Name::momentum, particle_type>(test_particle);
-    std::cout<<"test first value : "<< value<<std::endl;
+
+    // we check that we can get value form particle, for both records:
+    // record::Name::weighting
+    // TODO : make simple function for it
 
 
+    //   b) it allows accessing and changing data through component interface
 
-    // b) it allows accessing and changing data through component interface
+    // accessing
 
-  //  auto value = get_weighting( particle );
+    auto value_weighting = component::get<component::Name::SCALAR, record::Name::weighting, particle_type>(test_particle);
+    auto value_weighting_2 = SOA::get_weighting(test_particle);
+    std::cout<<"test weight value (should be 12)  : "<< value_weighting_2<<std::endl;
+    std::cout<<"test weight value (should be 12)  : "<< value_weighting<<std::endl;
+    auto value_x = component::get<component::Name::x, record::Name::momentum, particle_type>(test_particle);
+    std::cout<<" test momentum  x value (should be 2)  : "<<value_x<<std::endl;
 
- //   auto value = component::get<component::Name::SCALAR, record::Name::weighting, test_particle_type>(test_particle_weighting);
+    auto value_y = component::get<component::Name::y, record::Name::momentum, particle_type>(test_particle);
+    std::cout<<" test momentum  y value (should be 22)  : "<<value_y<<std::endl;
+
+    auto value_z = component::get<component::Name::z, record::Name::momentum, particle_type>(test_particle);
+    std::cout<<" test momentum  z value (should be 23)  : "<<value_z<<std::endl;
 
 
-    // c) when you change values, the actual record data changes
+    // when we change values, the actual record data changes
 
-    /// TODO
- //   auto momentum_record = SOA::makeVectorRecord( px_component, py_component, pz_component );
+    double new_weighting = 47.;
+    component::set<component::Name::SCALAR, record::Name::weighting, particle_type, double>(new_weighting, test_particle);
+    value_weighting = component::get<component::Name::SCALAR, record::Name::weighting, particle_type>(test_particle);
+    std::cout<<"test weight value (should be 47)  : "<< value_weighting<<std::endl;
 
-  //  using type_double_scalar_record = reduction_library::SOA::Scalar_record<double>;
-   // reduction_library::SOA::Scalar_record<double> weighting_record;
-   // auto record = reduction_library::SOA::Record_creation<type_double_component>::create(scalar_component);
-   // record.print_component();
+    SOA::set_weighting(48., test_particle);
+    value_weighting_2 = SOA::get_weighting(test_particle);
+    std::cout<<"test weight value (should be 48.)  : "<< value_weighting_2<<std::endl;
+
+    double new_value_x = 64.;
+    component::set<component::Name::x, record::Name::momentum, particle_type, double>(new_weighting, test_particle);
+    value_x = component::get<component::Name::x, record::Name::momentum, particle_type>(test_particle);
+    std::cout<<" test momentum  x value (should be 64)  : "<<value_x<<std::endl;
+
+
+    double new_value_y = 78.;
+    component::set<component::Name::y, record::Name::momentum, particle_type, double>(new_weighting, test_particle);
+    value_y = component::get<component::Name::y, record::Name::momentum, particle_type>(test_particle);
+    std::cout<<" test momentum  y value (should be 78)  : "<<value_y<<std::endl;
+
+    double new_value_z = 51.;
+    component::set<component::Name::z, record::Name::momentum, particle_type, double>(new_weighting, test_particle);
+    value_y = component::get<component::Name::z, record::Name::momentum, particle_type>(test_particle);
+    std::cout<<" test momentum  z value (should be 51)  : "<<value_z<<std::endl;
 }
 
 

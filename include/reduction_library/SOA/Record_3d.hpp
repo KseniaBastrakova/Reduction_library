@@ -12,6 +12,7 @@ namespace SOA{
 
     template<typename T_X_Value_type, typename T_Y_Value_type, typename T_Z_Value_type>
     struct Record_3d{
+        using This = Record_3d<T_X_Value_type, T_Y_Value_type, T_Z_Value_type>;
         using Component_X = Component<T_X_Value_type>;
         using Component_Y = Component<T_Y_Value_type>;
         using Component_Z = Component<T_Z_Value_type>;

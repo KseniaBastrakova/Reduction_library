@@ -13,7 +13,7 @@ namespace SOA{
     template<typename T_Value_type>
     struct Scalar_record{
     public:
-       // using Dataset_current = Dataset<T_Value_type>;
+        using This = Scalar_record<T_Value_type>;
         using Component_current = Component<T_Value_type>;
 
     private:

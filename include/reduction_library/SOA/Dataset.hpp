@@ -7,21 +7,23 @@ namespace SOA{
 
 template<typename T_Value>
 struct Dataset{
+public:
+    using Value_type = T_Value;
 private:
-    std::vector<T_Value> values;
+    std::vector<Value_type> values;
 public:
     Dataset(){}
-    Dataset(std::vector<T_Value> values):
+    Dataset(std::vector<Value_type> values):
         values(values){}
 
-    std::vector<T_Value> get_values(){
+    std::vector<Value_type> get_values(){
         return values;
     }
-    void set_values(const std::vector<T_Value>& new_values){
+    void set_values(const std::vector<Value_type>& new_values){
         values = new_values;
     }
 
-    T_Value& operator[](int idx)
+    Value_type& operator[](int idx)
     {
         return values[idx];
     }
