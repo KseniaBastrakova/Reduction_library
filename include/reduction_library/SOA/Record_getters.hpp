@@ -3,61 +3,88 @@
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Particle.hpp"
 #include "reduction_library/record/Name.hpp"
-#include "reduction_library/component/Interfaces.hpp"
+
+#include "reduction_library/record/Interfaces.hpp"
+#include "reduction_library/particle_species/Interfaces.hpp"
+#include "reduction_library/Base_particle.hpp"
+
 
 namespace reduction_library{
+namespace particle{
+
+template<typename Component_name, typename Record_name, class T_Particle_species>
+struct Getting_value<Component_name, Record_name, Particle<T_Particle_species>>
+{
+public:
+    auto operator() (Particle<T_Particle_species>& particle)
+    {
+        auto& base_particles = particle.baseParticles; // record
+        auto record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
+        auto& component = record::get<Component_name>(record_value);
+        int idx = particle.idx;
+        double value = component[idx];
+        return value;
+    }
+
+};
+
+template<typename Component_name, typename Record_name, class T_Particle_species, typename T_Dataset>
+struct Setting_value<Component_name, Record_name, Particle<T_Particle_species>, T_Dataset>
+{
+public:
+    void operator() (T_Dataset value, Particle<T_Particle_species>& particle)
+    {
+        auto& base_particles = particle.baseParticles; // record
+        auto& record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
+        auto& component = record::get<Component_name>(record_value);
+        int idx = particle.idx;
+        component[idx] = value;
+    }
+
+};
+
+} // namespace particle
+
 namespace SOA{
 
 template <typename T_Particle_species>
 auto get_weighting(Particle<T_Particle_species>& particle){
-    using Particle_type = Particle<T_Particle_species>;
-    auto value_weighting = component::get<component::Name::SCALAR, record::Name::weighting, Particle_type>(particle);
-    return value_weighting;
+    return particle::get<component::Name::SCALAR, record::Name::Weighting>(particle);
 }
 
 template <typename T_Particle_species>
 void set_weighting(double weighting, Particle<T_Particle_species>& particle){
-    using Particle_type = Particle<T_Particle_species>;
-    component::set<component::Name::SCALAR, record::Name::weighting, Particle_type, double>(weighting, particle);
+    particle::set<component::Name::SCALAR, record::Name::Weighting>(weighting, particle);
 }
 
 template <typename T_Particle_species>
 auto get_momentum_x(Particle<T_Particle_species>& particle){
-    using Particle_type = Particle<T_Particle_species>;
-    auto value = component::get<component::Name::x, record::Name::momentum, Particle_type>(particle);
-    return value;
+    return particle::get<component::Name::X, record::Name::Momentum>(particle);
 }
 
 template <typename T_Particle_species>
 auto get_momentum_y(Particle<T_Particle_species>& particle){
-    using Particle_type = Particle<T_Particle_species>;
-    auto value = component::get<component::Name::y, record::Name::momentum, Particle_type>(particle);
-    return value;
+    return particle::get<component::Name::Y, record::Name::Momentum>(particle);
 }
 
 template <typename T_Particle_species>
 auto get_momentum_z(Particle<T_Particle_species>& particle){
-    using Particle_type = Particle<T_Particle_species>;
-    auto value = component::get<component::Name::z, record::Name::momentum, Particle_type>(particle);
-    return value;
+    return particle::get<component::Name::Z, record::Name::Momentum>(particle);
 }
 
 template <typename T_Particle_species, typename T_Value>
 void set_momentum_x(T_Value value, Particle<T_Particle_species>& particle){
-    using Particle_type = Particle<T_Particle_species>;
-    component::set<component::Name::x, record::Name::momentum, Particle_type>(value, particle);
+    particle::set<component::Name::X, record::Name::Momentum>(value, particle);
 }
 
 template <typename T_Particle_species, typename T_Value>
 void set_momentum_y(T_Value value, Particle<T_Particle_species>& particle){
-    using Particle_type = Particle<T_Particle_species>;
-    component::set<component::Name::y, record::Name::momentum, Particle_type>(value, particle);
+    particle::set<component::Name::Y, record::Name::Momentum>(value, particle);
 }
 
 template <typename T_Particle_species, typename T_Value>
-auto set_momentum_z(T_Value value, Particle<T_Particle_species>& particle){
-    using Particle_type = Particle<T_Particle_species>;
-    component::set<component::Name::z, record::Name::momentum, Particle_type>(value, particle);
+void set_momentum_z(T_Value value, Particle<T_Particle_species>& particle){
+    particle::set<component::Name::Z, record::Name::Momentum>(value, particle);
 }
 
 } // namespace SOA

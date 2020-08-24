@@ -3,11 +3,11 @@
 namespace reduction_library{
 namespace record{
 
-    enum class Name{
-        momentum,
-        weighting,
-        position,
-        charge
+    struct Name{
+        static struct Momentum {} momentum;
+        static struct Weighting {} weighting;
+        static struct Position {} position;
+        static struct Charge {} charge;
     };
 
 } // namespace record

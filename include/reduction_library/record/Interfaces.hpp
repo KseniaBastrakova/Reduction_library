@@ -42,10 +42,10 @@ namespace record{
         return ud_get_functor.operator ()(record);
     }
 
-    template<component::Name T_name_component, typename T_record>
+    template<typename T_name_component, typename T_record>
     struct Getting_value;
 
-    template<component::Name T_name_component, typename T_record>
+    template<typename T_name_component, typename T_record>
     HDNLINE typename traits::Type<T_name_component, T_record>::type & get(T_record& record){
         Getting_value<T_name_component, T_record> v_get_functor;
         return v_get_functor.operator() (record);

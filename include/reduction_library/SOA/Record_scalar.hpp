@@ -7,9 +7,9 @@
 #include "reduction_library/HDNLINE.hpp"
 #include "reduction_library/HINLINE.hpp"
 
-
 namespace reduction_library{
 namespace SOA{
+
     template<typename T_Value_type>
     struct Scalar_record{
     public:
@@ -19,21 +19,20 @@ namespace SOA{
     private:
         int macro_weighted;
         double weighting_power;
-        component::Name component_name;
-        record::Name record_name;
+       // component::Name component_name;
         Component_current component;
 
     public:
         Scalar_record():
                macro_weighted(7),
-               weighting_power(42.),
-               component_name(component::Name::SCALAR){}
+               weighting_power(42.)
+              // component_name(component::Name::scalar)
+            {}
         Scalar_record(record::Name record_name, Dataset<T_Value_type> values):
-               record_name(record_name),
                macro_weighted(7),
                weighting_power(42.),
-               component_name(component::Name::SCALAR),
-               component(component::Name::SCALAR, values) {}
+              // component_name(component::Name::scalar),
+               component(component::Name::scalar, values) {}
 
         double get_weighting_power(){
             return weighting_power;
@@ -41,13 +40,9 @@ namespace SOA{
         int get_macro_weighted(){
             return weighting_power;
         }
-        void set_component_name(component::Name new_component_name){
-            component_name = new_component_name;
-        }
-
-        void set_record_name(record::Name new_record_name){
-            record_name = new_record_name;
-        }
+     //   void set_component_name(component::Name new_component_name){
+     //       component_name = new_component_name;
+      //  }
 
         Component_current& get_component(){
             return component;
@@ -76,15 +71,12 @@ namespace traits{
 } //namespace traits
 
 
-
-
-    template<class T_Value_type>
+    template<class T_Value_type >
     SOA::Scalar_record<T_Value_type> make_scalar_record(SOA::Component<T_Value_type> input_component, record::Name new_record_name)
     {
         SOA::Scalar_record<T_Value_type> scalar_record;
         scalar_record.set_component(input_component);
-        scalar_record.set_component_name(component::Name::SCALAR);
-        scalar_record.set_record_name(new_record_name);
+      //  scalar_record.set_component_name(component::Name::scalar);
         return scalar_record;
     }
 

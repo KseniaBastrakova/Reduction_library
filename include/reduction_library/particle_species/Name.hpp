@@ -3,9 +3,9 @@
 namespace reduction_library{
 namespace particle_spicies{
 
-    enum class Name{
-        electrons,
-        test_particles
+    struct Name{
+        static struct Electrons{};
+        static struct Test_particles{};
     };
 
 } // namespace particle_spicies

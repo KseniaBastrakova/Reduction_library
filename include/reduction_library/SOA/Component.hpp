@@ -21,7 +21,7 @@ namespace SOA{
         double unit_SI;
 
     public:
-        component::Name component_name;
+        component::Name* component_name;
         Component(){}
         Component(component::Name component_name, datasetType dataset):
                 unit_SI(42.),
@@ -41,10 +41,6 @@ namespace SOA{
     {
         unit_SI = new_unit_SI;
     }
-    component::Name get_component_name()
-    {
-        return component_name;
-    }
     void set_dataset(datasetType new_dataset){
         dataset = new_dataset;
     }
@@ -52,11 +48,11 @@ namespace SOA{
         return dataset;
     }
     component::Name get_name(){
-        return component_name;
+        return *component_name;
     }
-    void set_name(component::Name new_component_name){
-        component_name = new_component_name;
-    }
+  //  void set_name(component::Name new_component_name){
+    //    component_name = new_component_name;
+ //   }
 
     /// We use this functions only for test
 
@@ -104,39 +100,7 @@ namespace traits{
 
     };
 
-    template<component::Name Component_name, record::Name Record_name, class T_Particle_species>
-    struct Getting_value<Component_name, Record_name, Particle<T_Particle_species>>
-    {
-    public:
-        auto operator() (Particle<T_Particle_species>& particle)
-        {
-            auto& base_particles = particle.baseParticles; // record
-            auto& record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
-            auto& component = record::get<Component_name>(record_value);
-            int idx = particle.idx;
-            double value = component[idx];
-            return value;
-        }
 
-    };
-
-    template<component::Name Component_name, record::Name Record_name, class T_Particle_species, typename T_Dataset>
-    struct Setting_value<Component_name, Record_name, Particle<T_Particle_species>, T_Dataset>
-    {
-    public:
-        void operator() (T_Dataset value, Particle<T_Particle_species>& particle)
-        {
-           // auto& base_particles = particle.baseParticles;
-           // auto& component = record::get<Component_name, T_Record>(base_particles);
-
-            auto& base_particles = particle.baseParticles; // record
-            auto& record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
-            auto& component = record::get<Component_name>(record_value);
-            int idx = particle.idx;
-            component[idx] = value;
-        }
-
-    };
 
 }// namespace component
 }// reduction_library

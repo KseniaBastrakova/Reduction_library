@@ -3,12 +3,12 @@
 namespace reduction_library{
 namespace component{
 
-    enum class Name{
-        x,
-        y,
-        z,
-        SCALAR
-    };
+struct Name{
+    static struct X {} x;
+    static struct Y {} y;
+    static struct Z {} z;
+    static struct SCALAR {} scalar;
+};
 
-} //component
-} //reduction_library
+} //namespace component
+} //namespace reduction_library

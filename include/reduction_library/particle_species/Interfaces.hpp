@@ -8,10 +8,10 @@
 namespace reduction_library{
 namespace particle_species{
 
-    template<record::Name T_record_name, typename T_Particle_species>
+    template<typename T_record_name, typename T_Particle_species>
     struct Getting_value;
 
-    template<record::Name T_record_name, typename T_Particle_species>
+    template<typename T_record_name, typename T_Particle_species>
     HDNLINE typename traits::Type<T_record_name, T_Particle_species>::type &
         get(T_Particle_species& particle_species)
     {
