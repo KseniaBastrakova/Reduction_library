@@ -1,5 +1,6 @@
 #pragma once
 
+#include "reduction_library/SOA/Record_getters.hpp"
 #include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Component.hpp"
@@ -86,6 +87,13 @@ namespace traits{
        using type = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Component_Z;
     };
 
+    template<class T_X_component, class T_Y_component, class T_Z_component>
+    struct Component_names<SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    {
+        using type = typename std::tuple<component::Name::X, component::Name::Y, component::Name::Y>;
+    };
+
+
 } //namespace traits
 
     template<class T_X_component, class T_Y_component, class T_Z_component>
@@ -95,21 +103,21 @@ namespace traits{
                            SOA::Component<T_X_component> z_component)
     {
         using Record_type = SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>;
-        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component> scalar_record();
+        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component> record_3d;
 
-        auto& value_x = get<component::Name::X, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(scalar_record);
+        auto& value_x = get<component::Name::X, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(record_3d);
         value_x.set_dataset(x_component.get_dataset());
      //   value_x.set_name(x_component.get_name());
 
-        auto& value_y = get<component::Name::Y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(scalar_record);
+        auto& value_y = get<component::Name::Y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(record_3d);
         value_y.set_dataset(y_component.get_dataset());
       //  value_y.set_name(y_component.get_name());
 
-        auto& value_z = get<component::Name::Z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(scalar_record);
+        auto& value_z = get<component::Name::Z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(record_3d);
         value_z.set_dataset(z_component.get_dataset());
       //  value_z.set_name(z_component.get_name());
 
-        return scalar_record;
+        return record_3d;
     }
 
     template<class T_X_component, class T_Y_component, class T_Z_component>

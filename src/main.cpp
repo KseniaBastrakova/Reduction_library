@@ -129,7 +129,10 @@ void testRawVectorsUseCase()
     // accessing
 
 
-    auto value_weighting = particle::get<component::Name::SCALAR, record::Name::Weighting, particle_type>(test_particle);
+    auto value_weighting = particle::get<component::Name::SCALAR, record::Name::Weighting>(test_particle);
+
+    auto value_momentum = particle::get<component::Name::X, record::Name::Momentum, particle_type>(test_particle);
+
     auto value_weighting_2 = SOA::get_weighting(test_particle);
 
     std::cout<<"test weight value (should be 12)  : "<< value_weighting_2<<std::endl;
@@ -174,6 +177,7 @@ void testRawVectorsUseCase()
   //  component::set<component::Name::z, record::Name::momentum, particle_type, double>(new_weighting, test_particle);
     value_y = SOA::get_momentum_z(test_particle); //component::get<component::Name::z, record::Name::momentum, particle_type>(test_particle);
     std::cout<<" test momentum  z value (should be 51)  : "<<value_z<<std::endl;
+
 
 }
 

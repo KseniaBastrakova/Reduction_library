@@ -7,12 +7,12 @@
 namespace reduction_library{
 namespace particle{
 
-    template<typename Component_name, typename Record_name, typename T_particle>
+    template<typename Component_name, typename T_Record, typename T_particle>
     struct Getting_value;
 
-    template<typename Component_name, typename Record_name, typename T_particle>
+    template<typename Component_name, typename T_Record, typename T_particle>
     HDNLINE auto get(T_particle& particle){
-        Getting_value<Component_name, Record_name, T_particle> v_get_functor;
+        Getting_value<Component_name, T_Record, T_particle> v_get_functor;
         return v_get_functor.operator() (particle);
     }
 

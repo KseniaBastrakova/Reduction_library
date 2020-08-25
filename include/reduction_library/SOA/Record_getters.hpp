@@ -19,10 +19,10 @@ public:
     auto operator() (Particle<T_Particle_species>& particle)
     {
         auto& base_particles = particle.baseParticles; // record
-        auto record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
+        auto& record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
         auto& component = record::get<Component_name>(record_value);
         int idx = particle.idx;
-        double value = component[idx];
+        double& value = component[idx];
         return value;
     }
 

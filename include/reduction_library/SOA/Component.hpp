@@ -21,11 +21,9 @@ namespace SOA{
         double unit_SI;
 
     public:
-        component::Name* component_name;
         Component(){}
-        Component(component::Name component_name, datasetType dataset):
+        Component(datasetType dataset):
                 unit_SI(42.),
-                component_name(component_name),
                 dataset(dataset){}
 
     T_Dataset& operator[](int idx)
@@ -47,12 +45,6 @@ namespace SOA{
     datasetType get_dataset(){
         return dataset;
     }
-    component::Name get_name(){
-        return *component_name;
-    }
-  //  void set_name(component::Name new_component_name){
-    //    component_name = new_component_name;
- //   }
 
     /// We use this functions only for test
 

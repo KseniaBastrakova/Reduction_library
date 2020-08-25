@@ -68,11 +68,18 @@ namespace traits{
        using type = typename SOA::Scalar_record<T_Value_type>::Component_current;
     };
 
+    template<class T_Value_type>
+    struct Component_names<SOA::Scalar_record<T_Value_type>>
+    {
+        using type = typename std::tuple<component::Name::SCALAR>;
+    };
+
+
 } //namespace traits
 
 
     template<class T_Value_type >
-    SOA::Scalar_record<T_Value_type> make_scalar_record(SOA::Component<T_Value_type> input_component, record::Name new_record_name)
+    SOA::Scalar_record<T_Value_type> make_scalar_record(SOA::Component<T_Value_type> input_component)
     {
         SOA::Scalar_record<T_Value_type> scalar_record;
         scalar_record.set_component(input_component);
