@@ -55,7 +55,6 @@ void testRawVectorsUseCase()
     ////
     ///
 
-
     auto weights_record = record::make_scalar_record( weights_component);
     // we print before:
 
@@ -109,6 +108,7 @@ void testRawVectorsUseCase()
     auto pz_component = SOA::Component<double>{};
     pz_component.set_dataset(pz_dataset);
 
+    /*
     // we build momemntum record, with three components
     auto momentum_record = record::make_momentum_record<double, double, double>(px_component, py_component, pz_component);
 
@@ -177,7 +177,7 @@ void testRawVectorsUseCase()
   //  component::set<component::Name::z, record::Name::momentum, particle_type, double>(new_weighting, test_particle);
     value_y = SOA::get_momentum_z(test_particle); //component::get<component::Name::z, record::Name::momentum, particle_type>(test_particle);
     std::cout<<" test momentum  z value (should be 51)  : "<<value_z<<std::endl;
-
+*/
 
 }
 

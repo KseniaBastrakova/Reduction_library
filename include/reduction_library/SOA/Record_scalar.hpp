@@ -28,11 +28,10 @@ namespace SOA{
                weighting_power(42.)
               // component_name(component::Name::scalar)
             {}
-        Scalar_record(record::Name record_name, Dataset<T_Value_type> values):
+        Scalar_record(Dataset<T_Value_type> values):
                macro_weighted(7),
                weighting_power(42.),
-              // component_name(component::Name::scalar),
-               component(component::Name::scalar, values) {}
+               component(values) {}
 
         double get_weighting_power(){
             return weighting_power;
@@ -100,13 +99,13 @@ namespace traits{
 
     };
 
-    template<class T_Value_type>
-    HINLINE std::vector<component::Name> get_names(const SOA::Scalar_record<T_Value_type>& record)
-    {
-        std::vector<component::Name> component_names = {record.get_component_name()};
-        return component_names;
+  //  template<class T_Value_type>
+  //  HINLINE std::vector<component::Name> get_names(const SOA::Scalar_record<T_Value_type>& record)
+  //  {
+   //     std::vector<component::Name> component_names = {record.get_component_name()};
+   //     return component_names;
 
-    }
+  //  }
 
     template<class T_Value_type>
     struct Geting_weighting_power<SOA::Scalar_record<T_Value_type>>

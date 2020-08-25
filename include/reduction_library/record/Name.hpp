@@ -3,12 +3,12 @@
 namespace reduction_library{
 namespace record{
 
-    struct Name{
-        static struct Momentum {} momentum;
-        static struct Weighting {} weighting;
-        static struct Position {} position;
-        static struct Charge {} charge;
-    };
+namespace Name{
+    struct Momentum;
+    struct Weighting;
+    struct Position;
+    struct Charge;
+};
 
 } // namespace record
 } //namespace reduction_library

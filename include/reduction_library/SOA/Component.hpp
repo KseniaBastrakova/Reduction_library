@@ -75,8 +75,7 @@ namespace traits{
     public:
         double operator() (SOA::Component<T_Dataset>& component)
         {
-            double unit_si = component.get_unit_SI();
-            return unit_si;
+             return component.get_unit_SI();
         }
 
     };

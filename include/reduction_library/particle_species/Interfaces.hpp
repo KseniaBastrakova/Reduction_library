@@ -19,8 +19,8 @@ namespace particle_species{
         return v_get_functor.operator() (particle_species);
     }
 
-    template<typename T_particle_species>
-    HDNLINE std::vector<record::Name> get_names(const T_particle_species& record);
+  //  template<typename T_particle_species>
+  //  HDNLINE std::vector<record::Name> get_names(const T_particle_species& record);
 
 
 } // namespace particle_species

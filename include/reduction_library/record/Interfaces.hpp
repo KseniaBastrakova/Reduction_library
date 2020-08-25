@@ -52,8 +52,8 @@ namespace record{
 
     }
 
-    template<typename T_record>
-    HDNLINE std::vector<component::Name> get_names(const T_record& record);
+ //   template<typename T_record>
+  //  HDNLINE std::vector<component::Name> get_names(const T_record& record);
 
 
 } // namespace record
