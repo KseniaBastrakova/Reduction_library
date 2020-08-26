@@ -74,7 +74,6 @@ void testRawVectorsUseCase()
 
     using type_double_scalar_record = SOA::Scalar_record<double>;
     using type_3d_vector = SOA::Record_3d<double, double, double>;
-    using particle_species_type = SOA::Particle_species<type_3d_vector, type_double_scalar_record>;
     using test_particle_type = Particle<type_double_scalar_record>;
 
 
@@ -112,7 +111,16 @@ void testRawVectorsUseCase()
     // we build momemntum record, with three components
     auto momentum_record = record::make_momentum_record<double, double, double>(px_component, py_component, pz_component);
 
-    SOA::Particle_species<type_3d_vector, type_double_scalar_record> simple_species_two_records(momentum_record, weights_record);
+    using Records = typename std::tuple<type_double_scalar_record, type_3d_vector>;
+    using Names = typename std::tuple<record::Name::Weighting, record::Name::Momentum>;
+    Names test_names = std::make_tuple(record::Name::Weighting(), record::Name::Momentum());
+
+    Records test_records = std::make_tuple(weights_record, momentum_record);
+
+    SOA::Particle_species<Names, Records> simple_species_two_records(test_records);
+    auto electrons_test = particle_species::make_species<record::Name::Weighting, record::Name::Momentum>( weights_record, momentum_record );
+
+    using particle_species_type = SOA::Particle_species<Names, Records>;
 
     Particle<particle_species_type> test_particle(1, simple_species_two_records);
 
@@ -177,7 +185,6 @@ void testRawVectorsUseCase()
   //  component::set<component::Name::z, record::Name::momentum, particle_type, double>(new_weighting, test_particle);
     value_y = SOA::get_momentum_z(test_particle); //component::get<component::Name::z, record::Name::momentum, particle_type>(test_particle);
     std::cout<<" test momentum  z value (should be 51)  : "<<value_z<<std::endl;
-
 
 }
 
