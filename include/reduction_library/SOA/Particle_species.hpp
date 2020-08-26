@@ -6,16 +6,14 @@
 #include "reduction_library/SOA/Particle.hpp"
 #include "reduction_library/particle_species/Type.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"
+#include "reduction_library/helpers/Type_list.hpp"
+
 
 
 namespace reduction_library{
 namespace SOA{
 
-    template<class ... T>
-    using Type_list = std::tuple<T...>;
-
     template <typename T_Names_list, typename T_Record_type_list>
-
     class Particle_species{
     public:
         using My_particle = Particle<Particle_species>;
@@ -26,10 +24,7 @@ namespace SOA{
         Records records;
         Particle_species(){}
         Particle_species(T_Record_type_list records):
-            records(records)
-        {
-            size = 5.;
-        }
+            records(records){}
 
         My_particle getParticle(int idx){
             return MyParticle(idx, *this);
@@ -69,14 +64,13 @@ namespace traits{
         }
     };
 
-    template< typename ... T_Names, typename ... T_RecordTypes >
-    auto make_species( T_RecordTypes& ...  records )
+    template<typename ... T_Names, typename ... T_Record_types>
+    auto make_species(T_Record_types& ...  records)
     {
-        using Names = SOA::Type_list< T_Names ... >;
-        using Record_types = SOA::Type_list< T_RecordTypes ... >;
+        using Names = helpers::Type_list< T_Names ... >;
+        using Record_types = helpers::Type_list<T_Record_types ...>;
         using Species = SOA::Particle_species< Names, Record_types>;
         Record_types input_records(records...);
-
         Species species(input_records);
         return species;
     }
