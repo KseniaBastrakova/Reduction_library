@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tuple>
 #include "reduction_library/SOA/Record_getters.hpp"
 #include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/component/Name.hpp"
@@ -41,53 +42,29 @@ namespace SOA{
         record::unit_dimension_type get_unit_dimension() const{
             return unit_dimension;
         }
+        Components& get_components(){
+            return components;
+        }
 
-        // probaly, needs to be deleted:
-
-      //  Component_X& getting_x_component(){
-       //     return x_component;
-      //  }
-
-       // Component_Y& getting_y_component(){
-        //    return y_component;
-       // }
-
-       // Component_Z& getting_z_component(){
-        //    return z_component;
-       // }
     };
+
 
 }//SOA
 
-//  typename SOA::Scalar_record<T_Value_type>::Component_current;
+
 namespace record{
 namespace traits{
 
-    template<class T_component, class T_X_component, class T_Y_component, class T_Z_component>
-    struct Type< T_component, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    template<class T_component_name, class T_X_component, class T_Y_component, class T_Z_component>
+    struct Type< T_component_name, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
         using Names = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Names;
-        std::size_t idx = helpers::Index<Name::SCALAR, Names>::value;
-       using type = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Component_X;
+
+        using type = typename std::tuple_element_t<
+                helpers::Index<T_component_name, Names>::value,
+                typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Components
+               >;
     };
-
- //   template<class T_X_component, class T_Y_component, class T_Z_component>
-   // struct Type<component::Name::Y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
-   // {
-  //     using type = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Component_Y;
-  //  };
-
-   // template<class T_X_component, class T_Y_component, class T_Z_component>
-   // struct Type<component::Name::Z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
-   // {
-   //    using type = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Component_Z;
-   // };
-
-   // template<class T_X_component, class T_Y_component, class T_Z_component>
-   // struct Component_names<SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
-   // {
-    //    using type = typename std::tuple<component::Name::X, component::Name::Y, component::Name::Y>;
-   // };
 
 
 } //namespace traits
@@ -95,60 +72,35 @@ namespace traits{
     template<class T_X_component, class T_Y_component, class T_Z_component>
     SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>
         make_momentum_record(SOA::Component<T_X_component> x_component,
-                           SOA::Component<T_X_component> y_component,
-                           SOA::Component<T_X_component> z_component)
+                           SOA::Component<T_Y_component> y_component,
+                           SOA::Component<T_Z_component> z_component)
     {
         using Record_type = SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>;
-        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component> record_3d;
+        Record_type record_3d;
 
-        auto& value_x = get<component::Name::X, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(record_3d);
-        value_x.set_dataset(x_component.get_dataset());
+        SOA::Component<T_X_component> value_x(x_component.get_dataset());
+        get<component::Name::X, Record_type>(record_3d) = value_x;
 
-        auto& value_y = get<component::Name::Y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(record_3d);
-        value_y.set_dataset(y_component.get_dataset());
+        SOA::Component<T_Y_component> value_y(y_component.get_dataset());
+        get<component::Name::Y, Record_type>(record_3d) = value_y;
 
-        auto& value_z = get<component::Name::Z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>(record_3d);
-        value_z.set_dataset(z_component.get_dataset());
+        SOA::Component<T_Z_component> value_z(z_component.get_dataset());
+        get<component::Name::Z, Record_type>(record_3d) = value_z;
 
         return record_3d;
     }
 
-
-    template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct Getting_value<component::Name::X, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
+    template<class T_component_name, class T_X_component, class T_Y_component, class T_Z_component>
+    struct Getting_value<T_component_name, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
     {
     public:
-        typename traits::Type<component::Name::X,
+        typename traits::Type<T_component_name,
         SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type &
             operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
         {
-            return record.getting_x_component();
-        }
-
-    };
-
-    template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct Getting_value<component::Name::Y, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
-    {
-    public:
-        typename traits::Type<component::Name::Y,
-        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type &
-            operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
-        {
-            return record.getting_y_component();
-        }
-
-    };
-
-    template<class T_X_component, class T_Y_component, class T_Z_component>
-    struct Getting_value<component::Name::Z, SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>
-    {
-    public:
-        typename traits::Type<component::Name::Z,
-        SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>>::type &
-            operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
-        {
-            return record.getting_z_component();
+            using Names = typename SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>::Names;
+            constexpr auto idx = helpers::Index<T_component_name, Names>::value;
+            return std::get< idx >( record.get_components() );
         }
 
     };
@@ -159,8 +111,7 @@ namespace traits{
     public:
       double operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
       {
-          double weighting_power = record.get_weighting_power();
-          return weighting_power;
+          return record.get_weighting_power();
       }
 
     };
@@ -172,8 +123,7 @@ namespace traits{
     public:
       double operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>&& record)
       {
-          double weighting_power = record.get_macro_weighted();
-          return weighting_power;
+          return record.get_macro_weighted();
       }
 
     };
@@ -185,8 +135,7 @@ namespace traits{
     public:
       unit_dimension_type operator() (SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>& record)
       {
-          unit_dimension_type unit_dimension = record.get_unit_dimension();
-          return unit_dimension;
+          return record.get_unit_dimension();
       }
 
     };
