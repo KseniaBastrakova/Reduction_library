@@ -21,8 +21,9 @@ public:
         auto& base_particles = particle.baseParticles; // record
         auto& record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
         auto& component = record::get<Component_name>(record_value);
+        auto& dataset = component.get_dataset();
         int idx = particle.idx;
-        double& value = component[idx];
+        double& value = dataset[idx];
         return value;
     }
 
@@ -37,8 +38,9 @@ public:
         auto& base_particles = particle.baseParticles; // record
         auto& record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
         auto& component = record::get<Component_name>(record_value);
+        auto& dataset = component.get_dataset();
         int idx = particle.idx;
-        component[idx] = value;
+        component.get_dataset()[idx] = value;
     }
 
 };
@@ -72,6 +74,26 @@ auto get_momentum_z(Particle<T_Particle_species>& particle){
     return particle::get<component::Name::Z, record::Name::Momentum>(particle);
 }
 
+template <typename T_Particle_species>
+auto get_position_x(Particle<T_Particle_species>& particle){
+    return particle::get<component::Name::X, record::Name::Position>(particle);
+}
+
+template <typename T_Particle_species>
+auto get_position_y(Particle<T_Particle_species>& particle){
+    return particle::get<component::Name::Y, record::Name::Position>(particle);
+}
+
+template <typename T_Particle_species>
+auto get_position_z(Particle<T_Particle_species>& particle){
+    return particle::get<component::Name::Z, record::Name::Position>(particle);
+}
+
+template <typename T_Particle_species>
+auto get_charge(Particle<T_Particle_species>& particle){
+    return particle::get<component::Name::SCALAR, record::Name::Charge>(particle);
+}
+
 template <typename T_Particle_species, typename T_Value>
 void set_momentum_x(T_Value value, Particle<T_Particle_species>& particle){
     particle::set<component::Name::X, record::Name::Momentum>(value, particle);
@@ -85,6 +107,26 @@ void set_momentum_y(T_Value value, Particle<T_Particle_species>& particle){
 template <typename T_Particle_species, typename T_Value>
 void set_momentum_z(T_Value value, Particle<T_Particle_species>& particle){
     particle::set<component::Name::Z, record::Name::Momentum>(value, particle);
+}
+
+template <typename T_Particle_species, typename T_Value>
+void set_position_x(T_Value value, Particle<T_Particle_species>& particle){
+    particle::set<component::Name::X, record::Name::Position>(value, particle);
+}
+
+template <typename T_Particle_species, typename T_Value>
+void set_position_y(T_Value value, Particle<T_Particle_species>& particle){
+    particle::set<component::Name::Y, record::Name::Position>(value, particle);
+}
+
+template <typename T_Particle_species, typename T_Value>
+void set_position_z(T_Value value, Particle<T_Particle_species>& particle){
+    particle::set<component::Name::Z, record::Name::Position>(value, particle);
+}
+
+template <typename T_Particle_species, typename T_Value>
+void set_charge(T_Value value, Particle<T_Particle_species>& particle){
+    particle::set<component::Name::SCALAR, record::Name::Charge>(value, particle);
 }
 
 } // namespace SOA

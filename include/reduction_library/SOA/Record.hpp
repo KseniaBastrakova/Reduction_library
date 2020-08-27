@@ -31,7 +31,8 @@ namespace SOA{
         record::unit_dimension_type unit_dimension;
 
     public:
-        Record():
+        Record(T_Component_type_list components):
+                  components(components),
                   macroWeighted(7),
                   weightingPower(42.),
                   unit_dimension(unit_dimension){}
@@ -51,7 +52,6 @@ namespace SOA{
 
     };
 
-
 }//SOA
 
 
@@ -67,10 +67,26 @@ namespace traits{
 
         using type = typename std::tuple_element_t<
                 helpers::Index<T_component_name, Names>::value,
-                typename Components
+                Components
                >;
     };
 } //namespace traits
+
+
+    // single type
+    template<typename T_Component_type>
+    using Record_scalar = SOA::Record<helpers::Type_list<component::Name::SCALAR >, helpers::Type_list< T_Component_type>>;
+
+    // 3d
+    template<typename T_X_component, typename T_Y_component, typename T_Z_component>
+    using Record_XYZ = SOA::Record<helpers::Type_list<component::Name::X, component::Name::Y, component::Name::Z>,
+            helpers::Type_list<T_X_component, T_Y_component, T_Z_component>>;
+
+    // 2d
+    template<typename T_X_component, typename T_Y_component>
+    using Record_XY = SOA::Record<helpers::Type_list<component::Name::X, component::Name::Y>,
+            helpers::Type_list<T_X_component, T_Y_component>>;
+
 
 
     template<class T_component_name, typename T_Names_list, typename T_Component_type_list>
@@ -125,21 +141,42 @@ namespace traits{
 
 
     template<typename ... T_Names, typename ... T_Component_types>
-    auto make_species(T_Component_types& ...  records)
+    auto make_record(T_Component_types& ...  components)
     {
         using Names = helpers::Type_list< T_Names ... >;
-        using Record_types = helpers::Type_list<T_Component_types ... >;
-        using Record = SOA::Record< Names, Record_types>;
-        Record_types input_records(records...);
-        Species species(input_records);
-        return species;
+        using Component_types = helpers::Type_list<T_Component_types ... >;
+        using Record = SOA::Record< Names, Component_types>;
+        Component_types input_components(components...);
+        Record record(input_components);
+        return record;
     }
-  //  SOA::Record_3d<T_X_component, T_Y_component, T_Z_component>
-   //     make_momentum_record(SOA::Component<T_X_component> x_component,
-    //                       SOA::Component<T_Y_component> y_component,
-     //                      SOA::Component<T_Z_component> z_component)
-   // {
-     //     }
+
+
+    template<class T_Scalar_component>
+    Record_scalar<T_Scalar_component> make_record_scalar(T_Scalar_component scalar_component)
+    {
+        auto scalar_record = make_record<component::Name::SCALAR>(scalar_component);
+        return scalar_record;
+    }
+
+    template<class T_X_component, class T_Y_component, class T_Z_component>
+    Record_XYZ<T_X_component, T_Y_component, T_Z_component> make_record_XYZ(T_X_component x_component,
+                                                                            T_Y_component y_component,
+                                                                            T_Z_component z_component)
+    {
+        auto result_3d_record = make_record<component::Name::X,
+                component::Name::Y, component::Name::Z>(x_component, y_component, z_component);
+        return result_3d_record;
+    }
+
+    template<class T_X_component, class T_Y_component>
+    Record_XY<T_X_component, T_Y_component> make_record_XY(T_X_component x_component,
+                                                           T_Y_component y_component)
+    {
+        auto result_2d_record = make_record<component::Name::X,
+                component::Name::Y>(x_component, y_component);
+        return result_2d_record;
+    }
 
 
 } // namespace record

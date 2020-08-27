@@ -14,19 +14,19 @@ namespace SOA{
 
     template<typename T_Dataset>
     struct Component {
-    public:
-        using datasetType = Dataset<T_Dataset>;
+    //public:
+    //    using datasetType = Dataset<T_Dataset>;
     private:
-        datasetType dataset;
+        T_Dataset dataset;
         double unit_SI;
 
     public:
         Component(){}
-        Component(datasetType dataset):
+        Component(T_Dataset dataset):
                 unit_SI(42.),
                 dataset(dataset){}
 
-    T_Dataset& operator[](int idx)
+    auto& operator[](int idx)
     {
         return dataset[idx];
     }
@@ -39,10 +39,10 @@ namespace SOA{
     {
         unit_SI = new_unit_SI;
     }
-    void set_dataset(datasetType new_dataset){
+    void set_dataset(T_Dataset new_dataset){
         dataset = new_dataset;
     }
-    datasetType get_dataset(){
+    T_Dataset& get_dataset(){
         return dataset;
     }
 
@@ -68,6 +68,16 @@ namespace traits{
 
     };
 }
+
+    template<typename T_Value>
+    auto make_component(std::vector<T_Value> values)
+    {
+        using Double_dataset_type = typename SOA::Dataset<double>;
+        auto dataset = SOA::Dataset<double>(values);
+        auto component = SOA::Component<Double_dataset_type>(dataset);
+        return component;
+    }
+
 
     template<typename T_Dataset>
     struct Geting_unit_SI<SOA::Component<T_Dataset>>

@@ -16,6 +16,7 @@
 
 #include "reduction_library/SOA/Dataset.hpp"
 #include "reduction_library/SOA/Particle_species.hpp"
+#include "reduction_library/SOA/Record.hpp"
 
 
 
@@ -46,8 +47,10 @@ void testRawVectorsUseCase()
     auto weights_dataset = SOA::Dataset<double>{};
     weights_dataset.set_values(weights_raw);
 
+    using Double_dataset_type = typename SOA::Dataset<double>;
+
     // make a component for weights
-    auto weights_component = SOA::Component<double>{};
+    auto weights_component = SOA::Component<Double_dataset_type>{};
 
     weights_component.set_dataset(weights_dataset);
 
@@ -89,6 +92,7 @@ void testRawVectorsUseCase()
 
     // make a data set out of a raw vector for 3d vector
 
+
     auto px_dataset = SOA::Dataset<double>{};
     px_dataset.set_values(px_values_raw);
 
@@ -98,33 +102,34 @@ void testRawVectorsUseCase()
     auto pz_dataset = SOA::Dataset<double>{};
     pz_dataset.set_values(pz_values_raw);
 
-    auto px_component = SOA::Component<double>{};
+    auto px_component = SOA::Component<Double_dataset_type>{};
     px_component.set_dataset(px_dataset);
 
-    auto py_component = SOA::Component<double>{};
+    auto py_component = SOA::Component<Double_dataset_type>{};
     py_component.set_dataset(py_dataset);
 
-    auto pz_component = SOA::Component<double>{};
+    auto pz_component = SOA::Component<Double_dataset_type>{};
     pz_component.set_dataset(pz_dataset);
 
 
     // we build momemntum record, with three components
-    auto momentum_record = record::make_momentum_record<double, double, double>(px_component, py_component, pz_component);
+    auto momentum_record = record::make_record_XYZ(px_component, py_component, pz_component);
 
-    using Records = typename std::tuple<type_double_scalar_record, type_3d_vector>;
-    using Names = typename std::tuple<record::Name::Weighting, record::Name::Momentum>;
-    Names test_names = std::make_tuple(record::Name::Weighting(), record::Name::Momentum());
 
-    Records test_records = std::make_tuple(weights_record, momentum_record);
+   // using Records = typename std::tuple<type_double_scalar_record, type_3d_vector>;
+   // using Names = typename std::tuple<record::Name::Weighting, record::Name::Momentum>;
+  //  Names test_names = std::make_tuple(record::Name::Weighting(), record::Name::Momentum());
 
-    SOA::Particle_species<Names, Records> simple_species_two_records(test_records);
+  //  Records test_records = std::make_tuple(weights_record, momentum_record);
+
+  //  SOA::Particle_species<Names, Records> simple_species_two_records(test_records);
     auto electrons_test = particle_species::make_species<record::Name::Weighting, record::Name::Momentum>( weights_record, momentum_record );
 
-    using particle_species_type = SOA::Particle_species<Names, Records>;
+//    using particle_species_type = SOA::Particle_species<Names, Records>;
+    using particle_species_type = decltype(electrons_test);
+    Particle<particle_species_type> test_particle(1, electrons_test);
 
-    Particle<particle_species_type> test_particle(1, simple_species_two_records);
-
-    using particle_type = Particle<particle_species_type>;
+ //   using particle_type = Particle<particle_species_type>;
 
 
     // we check that we can get value form particle, for both records:
@@ -139,7 +144,7 @@ void testRawVectorsUseCase()
 
     auto value_weighting = particle::get<component::Name::SCALAR, record::Name::Weighting>(test_particle);
 
-    auto value_momentum = particle::get<component::Name::X, record::Name::Momentum, particle_type>(test_particle);
+    auto value_momentum = particle::get<component::Name::X, record::Name::Momentum>(test_particle);
 
     auto value_weighting_2 = SOA::get_weighting(test_particle);
 
@@ -186,6 +191,128 @@ void testRawVectorsUseCase()
     value_y = SOA::get_momentum_z(test_particle); //component::get<component::Name::z, record::Name::momentum, particle_type>(test_particle);
     std::cout<<" test momentum  z value (should be 51)  : "<<value_z<<std::endl;
 
+
+    /// test making of record
+
+
+    auto result_3d_record = record::make_record
+            <component::Name::X, component::Name::Y, component::Name::Z>(px_dataset, py_dataset, pz_dataset);
+
+}
+
+void test_all_factrories()
+{
+    using namespace reduction_library;
+
+    // Finaly, we build complete particle species
+
+    // we set arrays for 3-d momentum
+    auto px_values_raw = std::vector<double>{1., 2., 5., 6., 77., 6., 17., 18., 59.};
+    auto py_values_raw = std::vector<double>{1., 22., 35., 4., 5., 61., 77., 8., 98.};
+    auto pz_values_raw = std::vector<double>{1., 23., 3., 4., 5., 64., 75., 81., 9.};
+
+    // we build 3 components for 3-d momentum
+    auto px_component = component::make_component(px_values_raw);
+    auto py_component = component::make_component(py_values_raw);
+    auto pz_component = component::make_component(pz_values_raw);
+
+    // we build momentum record from 3 components
+    auto momentum_record = record::make_record_XYZ(px_component, py_component, pz_component);
+
+    // we set array for 2-d coordinates
+    auto x_values_raw = std::vector<double>{2., 46., 38., 1., 116., 14., 20., 15., 14.};
+    auto y_values_raw = std::vector<double>{21., 14., 0., 17., 2., 46., 38., 1., 116.};
+
+    // we build 2 components for 2-d coordinates
+    auto x_component = component::make_component(x_values_raw);
+    auto y_component = component::make_component(y_values_raw);
+
+    // we build position's record from 2 components
+    auto position_record = record::make_record_XY(x_component, y_component);
+
+    // we set arrays for weighting
+    auto weighting_values_raw = std::vector<double>{15., 20., 28., 16., 30., 29., 123., 120., 8.};
+
+    // we build 1 component for weighting
+    auto weighting_component = component::make_component(weighting_values_raw);
+
+    // we build weighting record
+    auto weighting_record = record::make_record_scalar(weighting_component);
+
+    // we set arrays for charge
+    auto charge_values_raw = std::vector<double>{15., 20., 28., 16., 30., 29., 123., 120., 8.};
+
+    // we build 1 component for charge
+    auto charge_component = component::make_component(charge_values_raw);
+
+    // we build charge record
+    auto charge_record = record::make_record_scalar(charge_component);
+
+    ////
+    /// and, finaly, we build particle species: electrons
+    ////
+
+    auto electrons = particle_species::make_species<record::Name::Momentum,
+                                                    record::Name::Position,
+                                                    record::Name::Weighting,
+                                                    record::Name::Charge>
+                    (momentum_record, position_record, weighting_record, charge_record);
+
+
+    /// we make point and check access
+    using particle_species_type = decltype(electrons);
+    Particle<particle_species_type> particle_3(2, electrons);
+
+    // now, we print all data for third particle
+
+    auto momentum_x = SOA::get_momentum_x(particle_3);
+    std::cout<<" momentum/x should be 5  "<<momentum_x<<std::endl;
+
+    auto momentum_y = SOA::get_momentum_y(particle_3);
+    std::cout<<" momentum/y should be 35  "<<momentum_y<<std::endl;
+
+    auto momentum_z = SOA::get_momentum_z(particle_3);
+    std::cout<<" momentum/z should be 3  "<<momentum_z<<std::endl;
+
+    auto position_x = SOA::get_position_x(particle_3);
+    std::cout<<" position/x should be 38  "<<position_x<<std::endl;
+
+    auto position_y = SOA::get_position_y(particle_3);
+    std::cout<<" position/y should be 0  "<<position_y<<std::endl;
+
+    auto weighting = SOA::get_weighting(particle_3);
+    std::cout<<" weighting should be 28  "<<weighting<<std::endl;
+
+    auto charge = SOA::get_charge(particle_3);
+    std::cout<<" charge should be 28  "<<charge<<std::endl;
+
+    // now, we set new values
+
+    SOA::set_momentum_x(46., particle_3);
+    std::cout<<" momentum/x should be 46.  "<<momentum_x<<std::endl;
+
+    SOA::set_momentum_y(28., particle_3);
+    std::cout<<" momentum/y should be 28  "<<momentum_y<<std::endl;
+
+    SOA::set_momentum_z(91., particle_3);
+    std::cout<<" momentum/z should be 91  "<<momentum_z<<std::endl;
+
+    SOA::set_position_x(24., particle_3);
+    std::cout<<" position/x should be 24  "<<position_x<<std::endl;
+
+    SOA::set_position_y(56., particle_3);
+    std::cout<<" position/y should be 56  "<<position_y<<std::endl;
+
+    SOA::set_weighting(81., particle_3);
+    std::cout<<" weighting should be 81  "<<weighting<<std::endl;
+
+    SOA::set_charge(64., particle_3);
+    std::cout<<" charge should be 64  "<<charge<<std::endl;
+
+
+
+
+
 }
 
 
@@ -194,7 +321,10 @@ void testRawVectorsUseCase()
 int main(){
     std::cout<<"start of reduction"<<std::endl;
 
-    testRawVectorsUseCase();
+   // testRawVectorsUseCase();
+    test_all_factrories();
+
+
 
 
 
@@ -203,54 +333,4 @@ int main(){
 	return 0;
 }
 
-/*
 
-
-std::vector<double> x_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
-std::vector<double> y_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
-std::vector<double> z_values = {1., 2., 3., 4., 5., 6., 7., 8., 9.};
-
-// **** we build record for scalar component ****
-
-std::vector<double> weights = {11., 12., 13., 14., 15., 16., 17., 18., 19.};
-reduction_library::SOA::Dataset<double> scalar_dataset;
-scalar_dataset.set_values(weights);
-reduction_library::SOA::Component<double> scalar_component;
-scalar_component.set_dataset(scalar_dataset);
-
-using type_double_scalar_record = reduction_library::SOA::Scalar_record<double>;
-using type_double_component = reduction_library::SOA::Component<double>;
-
-reduction_library::SOA::Scalar_record<double> weighting_record;
-
-
-auto record = reduction_library::SOA::Record_creation<type_double_component>::create(scalar_component);
-record.print_component();
-using test_particle_type = reduction_library::Particle<type_double_scalar_record>;
-reduction_library::Particle<type_double_scalar_record> test_particle_weighting(1, record);
-
-
-auto value = reduction_library::component::get<component::Name::SCALAR, record::Name::weighting, test_particle_type>(test_particle_weighting);
-std::cout<<"getting first values in weighting dataset : should be 12  "<<value<<std::endl;
-
-/// now, we change the value to 77.6
-double new_value = 77.6;
-// template<component::Name Component_name, record::Name Record_name, typename T_particle, typename T_dataset>
-reduction_library::component::set<component::Name::SCALAR, record::Name::weighting, test_particle_type, double>
-    (new_value, test_particle_weighting);
-
-value = reduction_library::component::get<component::Name::SCALAR, record::Name::weighting, test_particle_type>(test_particle_weighting);
-std::cout<<"getting first values in weighting dataset : should be 77.6  "<<value<<std::endl;
-
-// we check attributes for component: unit_SI
-double test_si = 42.;
-reduction_library::component::set_unit_SI<type_double_component>(scalar_component, test_si);
-auto unit_si_component = reduction_library::component::get_unit_SI<type_double_component>(scalar_component);
-std::cout<<" getting unit si for scalar component : the value sould be 42.  " <<unit_si_component<<std::endl;
-
-// we check attributes for scalar_record: macro weighted, weighting power
-
-auto macro_weighted_record = reduction_library::record::get_macro_weighted<type_double_scalar_record>(std::move(record));
-std::cout<<"getting macro weighted for record :: should be  "<<macro_weighted_record<< std::endl;
-
-*/
