@@ -1,12 +1,12 @@
 #pragma once
 
+#include "../Particle.hpp"
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Particle.hpp"
 #include "reduction_library/record/Name.hpp"
 
 #include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"
-#include "reduction_library/Base_particle.hpp"
 
 
 namespace reduction_library{
@@ -40,94 +40,11 @@ public:
         auto& component = record::get<Component_name>(record_value);
         auto& dataset = component.get_dataset();
         int idx = particle.idx;
-        component.get_dataset()[idx] = value;
+        dataset.set_value(value, idx);
     }
 
 };
 
 } // namespace particle
 
-namespace SOA{
-
-template <typename T_Particle_species>
-auto get_weighting(Particle<T_Particle_species>& particle){
-    return particle::get<component::Name::SCALAR, record::Name::Weighting>(particle);
-}
-
-template <typename T_Particle_species>
-void set_weighting(double weighting, Particle<T_Particle_species>& particle){
-    particle::set<component::Name::SCALAR, record::Name::Weighting>(weighting, particle);
-}
-
-template <typename T_Particle_species>
-auto get_momentum_x(Particle<T_Particle_species>& particle){
-    return particle::get<component::Name::X, record::Name::Momentum>(particle);
-}
-
-template <typename T_Particle_species>
-auto get_momentum_y(Particle<T_Particle_species>& particle){
-    return particle::get<component::Name::Y, record::Name::Momentum>(particle);
-}
-
-template <typename T_Particle_species>
-auto get_momentum_z(Particle<T_Particle_species>& particle){
-    return particle::get<component::Name::Z, record::Name::Momentum>(particle);
-}
-
-template <typename T_Particle_species>
-auto get_position_x(Particle<T_Particle_species>& particle){
-    return particle::get<component::Name::X, record::Name::Position>(particle);
-}
-
-template <typename T_Particle_species>
-auto get_position_y(Particle<T_Particle_species>& particle){
-    return particle::get<component::Name::Y, record::Name::Position>(particle);
-}
-
-template <typename T_Particle_species>
-auto get_position_z(Particle<T_Particle_species>& particle){
-    return particle::get<component::Name::Z, record::Name::Position>(particle);
-}
-
-template <typename T_Particle_species>
-auto get_charge(Particle<T_Particle_species>& particle){
-    return particle::get<component::Name::SCALAR, record::Name::Charge>(particle);
-}
-
-template <typename T_Particle_species, typename T_Value>
-void set_momentum_x(T_Value value, Particle<T_Particle_species>& particle){
-    particle::set<component::Name::X, record::Name::Momentum>(value, particle);
-}
-
-template <typename T_Particle_species, typename T_Value>
-void set_momentum_y(T_Value value, Particle<T_Particle_species>& particle){
-    particle::set<component::Name::Y, record::Name::Momentum>(value, particle);
-}
-
-template <typename T_Particle_species, typename T_Value>
-void set_momentum_z(T_Value value, Particle<T_Particle_species>& particle){
-    particle::set<component::Name::Z, record::Name::Momentum>(value, particle);
-}
-
-template <typename T_Particle_species, typename T_Value>
-void set_position_x(T_Value value, Particle<T_Particle_species>& particle){
-    particle::set<component::Name::X, record::Name::Position>(value, particle);
-}
-
-template <typename T_Particle_species, typename T_Value>
-void set_position_y(T_Value value, Particle<T_Particle_species>& particle){
-    particle::set<component::Name::Y, record::Name::Position>(value, particle);
-}
-
-template <typename T_Particle_species, typename T_Value>
-void set_position_z(T_Value value, Particle<T_Particle_species>& particle){
-    particle::set<component::Name::Z, record::Name::Position>(value, particle);
-}
-
-template <typename T_Particle_species, typename T_Value>
-void set_charge(T_Value value, Particle<T_Particle_species>& particle){
-    particle::set<component::Name::SCALAR, record::Name::Charge>(value, particle);
-}
-
-} // namespace SOA
 } // namespace reduction_library

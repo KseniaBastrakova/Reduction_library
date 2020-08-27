@@ -5,20 +5,47 @@
 #include <utility>
 #include <openPMD/openPMD.hpp>
 #include <openPMD/Datatype.hpp>
+#include "reduction_library/record/Name.hpp"
+#include "reduction_library/component/Name.hpp"
 
-#include "../../include/reduction_library/SOA/Particle_species.hpp"
+
 
 namespace reduction_library{
 namespace IO{
+using namespace openPMD;
+
+class Particle_reader{
+    std::string file_name;
+    openPMD::Series& series;
+
+public:
+    Particle_reader(std::string file_name, openPMD::Series& series):
+        file_name(file_name), series(series){}
+
+    std::vector<std::vector<double>> Read(){
+        std::vector<std::size_t> iterations;
+        for( auto const& i : series.iterations ){
+                iterations.push_back(i.first);
+                std::string s = typeid(i.first).name();
+        }
+
+        std::cout << '\n';
+        for( auto const& i : iterations )
+            std::cout<<i<<std::endl;
+
+        Iteration i = series.iterations[iterations[0]];
+        for( auto const& ps : i.particles ) {
+               cout << "\n\t" << ps.first;
+               for( auto const& r : ps.second ) {
+                   cout << "\n\t" << r.first;
+                   cout << '\n';
+               }
+           }
 
 
-    class Particle_reader{
-        std::string file_name;
-        openPMD::Series& series;
+    }
 
-    public:
-        Particle_reader(std::string file_name, openPMD::Series& series):
-            file_name(file_name), series(series){}
+
 
    /*     template<Scalar_records_names T_attribute, class T_Value>
         std::vector<double> Read_attribute(Scalar_records_names attribute, openPMD::ParticleSpecies particle_species){
@@ -40,10 +67,13 @@ namespace IO{
         }
     */
 
-    //    SOA::Particle_spicies Read()
-     //   {
+        std::vector<std::vector<double>> Read_record(std::string record_name){
+            std::vector<std::vector<double>> record_values;
+            return record_values;
+        }
+        std::vector<double> Read_component(std::string component_name){
 
-      //  }
+        }
 
     };
 } //IO

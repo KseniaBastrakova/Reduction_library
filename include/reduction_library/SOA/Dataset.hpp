@@ -27,6 +27,9 @@ public:
     {
         return values[idx];
     }
+    void set_value(Value_type value, int idx){
+        values[idx] = value;
+    }
 
     /// We use this functions only for test
     void print(){
