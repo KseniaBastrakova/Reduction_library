@@ -1,11 +1,12 @@
 #pragma once
 
+#include <alpaka/alpaka.hpp>
+
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
+#include "reduction_library/SOA/Particle.hpp"
 
-#include "../AOS/Particlest.hpp"
-#include "../SOA/Particle.hpp"
 
 namespace reduction_library{
 namespace thinning{
@@ -28,13 +29,11 @@ namespace thinning{
         void process(){
 
         }
+        void reduce(T_particle particle, double random_value){
 
-        void reduce(T_particle particle){
-            double random_value = ((double) rand() / (RAND_MAX));
             if (random_value < ratioDeletedPaticles)
             {
-               // auto& weihgting = set_attribute<T_particle, Attribute::momentum_x>(particle);
-                int weihgting = 0;
+                particle::set_weighting(0, particle);
             }
         }
     };

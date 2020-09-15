@@ -16,6 +16,12 @@
 #include "reduction_library/SOA/Particle_species.hpp"
 #include "reduction_library/SOA/Record.hpp"
 #include "IO/Particle_reader.hpp"
+#include "IO/Record_names.hpp"
+#include "openPMD-api/OpenPMD_reduction.hpp"
+#include "reduction_library/thinning/KernelThinning.hpp"
+
+#include <alpaka/alpaka.hpp>
+
 
 
 
@@ -23,6 +29,7 @@ using namespace std;
 using std::cout;
 using namespace openPMD;
 using namespace reduction_library;
+//using namespace alpaka;
 
 template <typename Enumeration>
 auto as_integer(Enumeration const value)
@@ -151,26 +158,192 @@ void test_all_factrories()
 
 }
 
+template<typename T_Value>
+auto make_vector_components_from_raw(std::vector<std::vector<T_Value>> raw_data){
+
+    using Dataset_type = typename SOA::Dataset<T_Value>;
+    using Components_type = typename SOA::Component<Dataset_type>;
+
+    std::vector<Components_type> components;
+    for (std::size_t i = 0; i < raw_data.size(); i++){
+        auto component = component::make_component(raw_data[0]);
+        components.push_back(component);
+
+    }
+    return components;
+}
+
+auto make_data_species_from_raw(std::map<std::string, std::vector<std::vector<double>>> data_chunk){
+
+    auto momentum_raw = data_chunk["momentum"];
+    auto momentum_components = make_vector_components_from_raw(momentum_raw);
+    std::shared_ptr<Record> momentum_record;
+
+    if (momentum_components.size() == 3)
+        momentum_record = record::make_record_XYZ(momentum_components[0], momentum_components[1], momentum_components[2]);
+    else
+        momentum_record = record::make_record_XY(momentum_components[0], momentum_components[1]);
+
+
+    auto position_raw = data_chunk["position"];
+    auto position_record = make_vector_components_from_raw(position_raw);
+
+    auto charge_raw = data_chunk["charge"];
+    auto charge_record = make_vector_components_from_raw(charge_raw);
+    auto weighting_raw = data_chunk["weighting"];
+    auto weighting_record = make_record_from_raw(weighting_raw);
+
+    auto electrons = particle_species::make_species<record::Name::Momentum,
+                                                        record::Name::Position,
+                                                        record::Name::Weighting,
+                                                        record::Name::Charge>
+                        (momentum_record, position_record, weighting_record, charge_record);
+    return electrons;
+
+}
+
 void raw_data_reader(){
 
-    std::string file_name("/home/kseniia/Documents/openPMD-example-datasets/example-3d/hdf5/data00000%T.h5");
+
     Series series = Series(
-            "/home/kseniia/Documents/openPMD-example-datasets/example-3d/hdf5/data00000%T.h5",
-            Access::READ_WRITE
+            "/home/kseniia/Documents/openPMD-example-datasets/example-2d/hdf5/data00000%T.h5",
+            Access::READ_ONLY
         );
 
-    IO::Particle_reader reader(file_name, series);
-    reader.Read();
+        // std::map<std::string, std::vector<std::vector<double>>> data_chunk
+    std::vector<std::string> record_names = {"charge", "momentum", "position", "weighting"};
+/*
+    IO::Particle_reader reader(record_names, series);
+    for( auto const& i : series.iterations){
+        std::size_t num_iteration = i.first;
+        Iteration current_iteration = i.second;
+        for( auto const& ps : current_iteration.particles) {
+            ParticleSpecies species = ps.second;
+            std::string name_species = ps.first;
+            IO::Particle_patches patch(series, species);
+            std::size_t num_patches = patch.num_patches();
+            for (int patch_idx = 0; patch_idx < num_patches; patch_idx++){
+                auto data_chunk = reader.get_data_chunk(num_iteration, name_species, patch_idx);
+            }
+        }
+
+    }
+    */
+
+
+    /*
+    std::cout<<"start of reduction"<<std::endl;
+    std::vector<std::string> records_names = {"charge", "momentum", "position", "weighting"};
+
+
+
+    Series series = Series(
+                "/home/kseniia/Documents/openPMD-example-datasets/example-3d/hdf5/data00000%T.h5",
+                Access::READ_ONLY
+            );
+
+
+    Iteration i = series.iterations[100];
+    openPMD::ParticleSpecies electrons = i.particles["electrons"];
+
+    int dimension_momentum = 3;
+    int dimension_position = 2;
+
+
+    IO::Particle_reader reader(records_names, series);
+    auto dimensions = reader.get_dimensions(electrons);
+    std::cout<<dimensions.first<<"   "<<dimensions.second<<std::endl;
+    std::cout<<"dimensions"<<std::endl;
+    if (dimensions.first == 3 && dimensions.second == 3)
+        process<3, 3>(reader, electrons, records_names);
+
+
+   // if (dimensions.first == 3 && dimensions.second == 2)
+   //     process<3,2>(reader, electrons, records_names);
+
+  //  if (dimensions.first == 2 && dimensions.second == 3)
+   //    process<2,3>(reader, electrons, records_names);
+
+  //  if (dimensions.first == 2 && dimensions.second == 2)
+   //     process<2,2>(reader, electrons, records_names);
+    * *
+    */
+
 
 }
 
 
+void test_alpaka(){
+
+    auto px_values_raw = std::vector<double>{1., 2., 5., 6., 77., 6., 17., 18., 59.};
+    auto py_values_raw = std::vector<double>{1., 22., 35., 4., 5., 61., 77., 8., 98.};
+    auto pz_values_raw = std::vector<double>{1., 23., 3., 4., 5., 64., 75., 81., 9.};
+
+    auto px_component = component::make_component(px_values_raw);
+    auto py_component = component::make_component(py_values_raw);
+    auto pz_component = component::make_component(pz_values_raw);
+
+    auto momentum_record = record::make_record_XYZ(px_component, py_component, pz_component);
+
+    auto x_values_raw = std::vector<double>{2., 46., 38., 1., 116., 14., 20., 15., 14.};
+    auto y_values_raw = std::vector<double>{21., 14., 0., 17., 2., 46., 38., 1., 116.};
+
+    auto x_component = component::make_component(x_values_raw);
+    auto y_component = component::make_component(y_values_raw);
+
+    auto position_record = record::make_record_XY(x_component, y_component);
+
+    auto weighting_values_raw = std::vector<double>{15., 20., 28., 16., 30., 29., 123., 120., 8.};
+
+    auto weighting_component = component::make_component(weighting_values_raw);
+
+    auto weighting_record = record::make_record_scalar(weighting_component);
+
+    auto charge_values_raw = std::vector<double>{15., 20., 28., 16., 30., 29., 123., 120., 8.};
+
+    auto charge_component = component::make_component(charge_values_raw);
+
+    auto charge_record = record::make_record_scalar(charge_component);
+
+    auto electrons = particle_species::make_species<record::Name::Momentum,
+                                                    record::Name::Position,
+                                                    record::Name::Weighting,
+                                                    record::Name::Charge>
+                    (momentum_record, position_record, weighting_record, charge_record);
+
+
+    using particle_species_type = decltype(electrons);
+    Particle<particle_species_type> particle_3(2, electrons);
+    using Dim = alpaka::dim::DimInt<3>;
+    using Idx = std::size_t;
+    using particle_type = typename Particle<particle_species_type>;
+
+
+    using Acc = alpaka::acc::AccCpuThreads<Dim, Idx>;
+    std::cout << "Using alpaka accelerator: " << alpaka::acc::getAccName<Acc>() << std::endl;
+
+    auto const device = pltf::getDevByIdx<Acc>(0u);
+
+    using Queue = queue::Queue<Acc, queue::Blocking>;
+    auto queue = Queue{device};
+
+    Idx blocksPerGrid = 8;
+    Idx threadsPerBlock = 1;
+    Idx elementsPerThread = 1;
+    using WorkDiv = workdiv::WorkDivMembers<Dim, Idx>;
+    auto workDiv = WorkDiv{blocksPerGrid, threadsPerBlock, elementsPerThread};
+
+    thinning::KernelThinning<particle_type> thinning_algorithm(0.1);
+
+    auto taskRunKernel = kernel::createTaskKernel<Acc>(workDiv, thinning_algorithm);
+
+    queue::enqueue(queue, taskRunKernel);
+
+    alpaka::wait::wait(queue);
+
+
+}
 int main(){
-    std::cout<<"start of reduction"<<std::endl;
-
-
-   // test_all_factrories();
-    raw_data_reader();
 
 
 
@@ -180,5 +353,7 @@ int main(){
 
 	return 0;
 }
+
+
 
 
