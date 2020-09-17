@@ -29,7 +29,11 @@ namespace thinning{
         void process(){
 
         }
-        void reduce(T_particle particle, double random_value){
+        template<typename Acc>
+        ALPAKA_FN_ACC void reduce(Acc const& acc, T_particle particle) const {
+
+            using namespace alpaka;
+            double random_value = 0;
 
             if (random_value < ratioDeletedPaticles)
             {

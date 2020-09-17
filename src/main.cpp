@@ -175,8 +175,10 @@ auto make_vector_components_from_raw(std::vector<std::vector<T_Value>> raw_data)
 
 auto make_data_species_from_raw(std::map<std::string, std::vector<std::vector<double>>> data_chunk){
 
+    /*
     auto momentum_raw = data_chunk["momentum"];
     auto momentum_components = make_vector_components_from_raw(momentum_raw);
+    /*
     std::shared_ptr<Record> momentum_record;
 
     if (momentum_components.size() == 3)
@@ -198,7 +200,8 @@ auto make_data_species_from_raw(std::map<std::string, std::vector<std::vector<do
                                                         record::Name::Weighting,
                                                         record::Name::Charge>
                         (momentum_record, position_record, weighting_record, charge_record);
-    return electrons;
+                        */
+    return 0;
 
 }
 
@@ -274,6 +277,7 @@ void raw_data_reader(){
 
 
 void test_alpaka(){
+    using namespace alpaka;
 
     auto px_values_raw = std::vector<double>{1., 2., 5., 6., 77., 6., 17., 18., 59.};
     auto py_values_raw = std::vector<double>{1., 22., 35., 4., 5., 61., 77., 8., 98.};
@@ -314,17 +318,72 @@ void test_alpaka(){
 
     using particle_species_type = decltype(electrons);
     Particle<particle_species_type> particle_3(2, electrons);
-    using Dim = alpaka::dim::DimInt<3>;
-    using Idx = std::size_t;
-    using particle_type = typename Particle<particle_species_type>;
 
 
-    using Acc = alpaka::acc::AccCpuThreads<Dim, Idx>;
+  //  using particle_type = Particle<particle_species_type>;
+    using Dim = dim::DimInt<1>;
+    using Idx = uint32_t;
+
+    using Acc = acc::AccCpuSerial<Dim, Idx>;
     std::cout << "Using alpaka accelerator: " << alpaka::acc::getAccName<Acc>() << std::endl;
+    auto const device = pltf::getDevByIdx<Acc>(0u);
+
+    using Queue = alpaka::queue::Queue<Acc, alpaka::queue::Blocking>;
+    auto queue = Queue{device};
+    Idx blocksPerGrid = 8;
+    Idx threadsPerBlock = 1;
+    Idx elementsPerThread = 1;
+    using WorkDiv = workdiv::WorkDivMembers<Dim, Idx>;
+    auto workDiv = WorkDiv{blocksPerGrid, threadsPerBlock, elementsPerThread};
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+struct Test_random_kernel {
+
+    template<typename Acc>
+    ALPAKA_FN_ACC void operator()(Acc const & acc) const {
+
+        using namespace alpaka;
+
+        uint32_t threadIdx = idx::getIdx<Grid, Threads>(acc)[0];
+
+        auto distribution = rand::distribution::createNormalReal<double>(acc);
+        auto seed = 1;
+        auto subsequence = 2;
+        auto generator = rand::generator::createDefault(acc, seed, subsequence);
+        auto random_value = distribution(generator);
+
+        printf("random_value  %u \n", random_value);
+
+    }
+};
+
+int main(){
+
+    using namespace alpaka;
+
+    using Dim = alpaka::dim::DimInt<1>;
+    using Idx = uint32_t;
+
+
+    using Acc = acc::AccCpuSerial<Dim, Idx>;
+
 
     auto const device = pltf::getDevByIdx<Acc>(0u);
 
-    using Queue = queue::Queue<Acc, queue::Blocking>;
+    using Queue = alpaka::queue::Queue<Acc, alpaka::queue::Blocking>;
     auto queue = Queue{device};
 
     Idx blocksPerGrid = 8;
@@ -333,22 +392,16 @@ void test_alpaka(){
     using WorkDiv = workdiv::WorkDivMembers<Dim, Idx>;
     auto workDiv = WorkDiv{blocksPerGrid, threadsPerBlock, elementsPerThread};
 
-    thinning::KernelThinning<particle_type> thinning_algorithm(0.1);
 
-    auto taskRunKernel = kernel::createTaskKernel<Acc>(workDiv, thinning_algorithm);
+    Test_random_kernel helloWorldKernel;
 
-    queue::enqueue(queue, taskRunKernel);
-
-    alpaka::wait::wait(queue);
+    auto taskRunKernel = kernel::createTaskKernel<Acc>(workDiv, helloWorldKernel);
 
 
-}
-int main(){
+  //  queue::enqueue(queue, taskRunKernel);
 
 
-
-
-
+  //  alpaka::wait::wait(queue);
 
 
 	return 0;

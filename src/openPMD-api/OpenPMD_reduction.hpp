@@ -84,7 +84,7 @@ void process(IO::Particle_reader& reader, ParticleSpecies species, std::vector<s
     for (int patch_idx = 1; patch_idx <= num_patches; patch_idx++){
         std::pair<int, int> range = patch.get(patch_idx);
         auto input_data = make_species_raw<Dim_momentum, Dim_position>(reader, species, range);
-     //   thinning::Thinning random_thinning(0.1);
+
 
     }
 
