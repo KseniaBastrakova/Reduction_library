@@ -1,19 +1,68 @@
-cmake_minimum_required(VERSION 3.1...3.16)
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+cmake_minimum_required(VERSION 3.12)
 
-set(_TARGET_NAME ReductionLibrary)
-project(${_TARGET_NAME} VERSION 1.0 LANGUAGES C;CXX)
-find_package(openPMD 0.9.0 CONFIG)
-find_package(alpaka REQUIRED)
+project(
+  "ReductionLibrary"
+  VERSION 1.7.6
+  DESCRIPTION
+    "A template only c++ particle reduction library."
+  HOMEPAGE_URL "https://github.com/KseniaBastrakova/Reduction_library_test.git"
+  LANGUAGES CXX)
 
+add_library(${PROJECT_NAME} INTERFACE)
+# add alias so the project can be uses with add_subdirectory
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-alpaka_add_executable(${_TARGET_NAME} src/main.cpp)
-if(openPMD_FOUND)
-    target_link_libraries(${_TARGET_NAME} PRIVATE openPMD::openPMD)
+include(GNUInstallDirs)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  set(IS_TOPLEVEL_PROJECT TRUE)
+else()
+  set(IS_TOPLEVEL_PROJECT FALSE)
 endif()
-target_include_directories(${_TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-message(${CMAKE_CURRENT_SOURCE_DIR}/include/)
-target_include_directories(${_TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/)
-target_link_libraries(
-  ${_TARGET_NAME}
-  PUBLIC alpaka::alpaka)
+
+option(ReductionLibrary_INSTALL_LIBRARY
+       "Enable installing of ReductionLibrary into default locations"
+       ${IS_TOPLEVEL_PROJECT})
+
+
+target_include_directories(
+  	     ${PROJECT_NAME}
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+
+if(ReductionLibrary_INSTALL_LIBRARY)
+  install(
+    TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}_Targets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+  include(CMakePackageConfigHelpers)
+  
+  write_basic_package_version_file(
+    "${PROJECT_NAME}ConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion)
+
+  configure_package_config_file(
+    "${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake" INSTALL_DESTINATION
+    ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+
+  install(
+    EXPORT ${PROJECT_NAME}_Targets
+    FILE ${PROJECT_NAME}Targets.cmake
+    NAMESPACE ${PROJECT_NAME}::
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+
+  install(
+    FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/reduction_library
+          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+endif()
+
