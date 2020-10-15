@@ -2,29 +2,33 @@
 
 #include "reduction_library/SOA/Particle_species.hpp"
 #include "reduction_library/thinning/Thinning.hpp"
+#include <alpaka/alpaka.hpp>
 
 namespace reduction_library{
 namespace thinning{
 
-/*
-template<class T_Names_list, class T_Record_type_list>
-class Thinning{
+
+template<typename Acc, typename T_Bufer, class T_particle>
+struct Thinning_alpaka_kernell{
 private:
     double ratioDeletedPaticles;
 public:
-    Thinning(double ratioDeletedPaticles):
-        ratioDeletedPaticles(ratioDeletedPaticles){}
+    void init (double ratioDeletedPaticles){
+        this->ratioDeletedPaticles = ratioDeletedPaticles;
+    }
 
-    template<class T_particle>
-    void operator()(std::vector<T_particle>& particles){
+    ALPAKA_FN_ACC void operator()(Acc const& acc, T_Bufer& particles) const{
+
         KernelThinning<T_particle> thinningKernell(ratioDeletedPaticles);
-         for (T_particle& particle : particles){
-             thinningKernell.collect(particle);
-         }
-         thinningKernell.process();
 
-         for (T_particle& particle : particles){
-             thinningKernell.reduce(particle);
+        for( int i=0; i< particles.size(); i++ ){
+        	thinningKernell.collect(particles[i]);
+        }
+
+        thinningKernell.process();
+
+        for( int i=0; i< particles.size(); i++ ){
+        	thinningKernell.reduce(particles[i]);
         }
     }
 

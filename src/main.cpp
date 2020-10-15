@@ -19,9 +19,9 @@
 #include "IO/Record_names.hpp"
 #include "openPMD-api/OpenPMD_reduction.hpp"
 #include "reduction_library/thinning/KernelThinning.hpp"
+#include "reduction_library/thinning/Thinning_particles_spicialization.hpp"
 
 #include <alpaka/alpaka.hpp>
-
 
 
 
@@ -105,55 +105,55 @@ void test_all_factrories()
 
     // now, we print all data for third particle
 
-    auto momentum_x = particle::get_momentum_x(particle_3);
+    auto momentum_x = particle_access::get_momentum_x(particle_3);
     std::cout<<" momentum/x should be 5  "<<momentum_x<<std::endl;
 
-    auto momentum_y = particle::get_momentum_y(particle_3);
+    auto momentum_y = particle_access::get_momentum_y(particle_3);
     std::cout<<" momentum/y should be 35  "<<momentum_y<<std::endl;
 
-    auto momentum_z = particle::get_momentum_z(particle_3);
+    auto momentum_z = particle_access::get_momentum_z(particle_3);
     std::cout<<" momentum/z should be 3  "<<momentum_z<<std::endl;
 
-    auto position_x = particle::get_position_x(particle_3);
+    auto position_x = particle_access::get_position_x(particle_3);
     std::cout<<" position/x should be 38  "<<position_x<<std::endl;
 
-    auto position_y = particle::get_position_y(particle_3);
+    auto position_y = particle_access::get_position_y(particle_3);
     std::cout<<" position/y should be 0  "<<position_y<<std::endl;
 
-    auto weighting = particle::get_weighting(particle_3);
+    auto weighting = particle_access::get_weighting(particle_3);
     std::cout<<" weighting should be 28  "<<weighting<<std::endl;
 
-    auto charge = particle::get_charge(particle_3);
+    auto charge = particle_access::get_charge(particle_3);
     std::cout<<" charge should be 28  "<<charge<<std::endl;
 
     // now, we set new values
 
-    particle::set_momentum_x(46., particle_3);
-    momentum_x = particle::get_momentum_x(particle_3);
+    particle_access::set_momentum_x(46., particle_3);
+    momentum_x = particle_access::get_momentum_x(particle_3);
     std::cout<<" momentum/x should be 46.  "<<momentum_x<<std::endl;
 
-    particle::set_momentum_y(28., particle_3);
-    momentum_y = particle::get_momentum_y(particle_3);
+    particle_access::set_momentum_y(28., particle_3);
+    momentum_y = particle_access::get_momentum_y(particle_3);
     std::cout<<" momentum/y should be 28  "<<momentum_y<<std::endl;
 
-    particle::set_momentum_z(91., particle_3);
-    momentum_z = particle::get_momentum_z(particle_3);
+    particle_access::set_momentum_z(91., particle_3);
+    momentum_z = particle_access::get_momentum_z(particle_3);
     std::cout<<" momentum/z should be 91  "<<momentum_z<<std::endl;
 
-    particle::set_position_x(24., particle_3);
-    position_x = particle::get_position_x(particle_3);
+    particle_access::set_position_x(24., particle_3);
+    position_x = particle_access::get_position_x(particle_3);
     std::cout<<" position/x should be 24  "<<position_x<<std::endl;
 
-    particle::set_position_y(56., particle_3);
-    position_y = particle::get_position_y(particle_3);
+    particle_access::set_position_y(56., particle_3);
+    position_y = particle_access::get_position_y(particle_3);
     std::cout<<" position/y should be 56  "<<position_y<<std::endl;
 
-    particle::set_weighting(81., particle_3);
-    weighting = particle::get_weighting(particle_3);
+    particle_access::set_weighting(81., particle_3);
+    weighting = particle_access::get_weighting(particle_3);
     std::cout<<" weighting should be 81  "<<weighting<<std::endl;
 
-    particle::set_charge(64., particle_3);
-    charge = particle::get_charge(particle_3);
+    particle_access::set_charge(64., particle_3);
+    charge = particle_access::get_charge(particle_3);
     std::cout<<" charge should be 64  "<<charge<<std::endl;
 
 }

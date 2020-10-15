@@ -10,7 +10,7 @@
 
 
 namespace reduction_library{
-namespace particle{
+namespace particle_access{
 
 template<typename Component_name, typename Record_name, class T_Particle_species>
 struct Getting_value<Component_name, Record_name, Particle<T_Particle_species>>

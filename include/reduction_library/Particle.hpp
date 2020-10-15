@@ -5,7 +5,7 @@
 #include "reduction_library/record/Name.hpp"
 
 namespace reduction_library{
-namespace particle{
+namespace particle_access{
 
     template<typename Component_name, typename T_Record, typename T_particle>
     struct Getting_value;

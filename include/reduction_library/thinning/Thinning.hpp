@@ -2,17 +2,17 @@
 
 #include <vector>
 
-#include "include/reduction_library/thinning/KernelThinning.hpp"
+#include "reduction_library/thinning/KernelThinning.hpp"
 
 namespace reduction_library{
 namespace thinning{
 
 template<class T_particles>
-class Thinning{
+class Thinning_alpaka_kernell{
 private:
     double ratioDeletedPaticles;
 public:
-    Thinning(double ratioDeletedPaticles):
+    Thinning_alpaka_kernell(double ratioDeletedPaticles):
         ratioDeletedPaticles(ratioDeletedPaticles){}
 
     template<class T_particle>
