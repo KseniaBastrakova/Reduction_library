@@ -26,26 +26,28 @@ namespace thinning{
 
         ALPAKA_FN_ACC void init(double ratioDeletedPaticles){
             this->ratioDeletedPaticles = ratioDeletedPaticles;
+            numOfParticles = 0;
         }
 
         template<typename Acc>
         ALPAKA_FN_ACC void collect(Acc const& acc, T_particle particle){
-            numOfParticles++;
+
+        	using namespace alpaka;
+        	atomic::atomicOp<atomic::op::Add>(acc, &numOfParticles, (int)1, hierarchy::Blocks{});
         }
 
         template<typename Acc>
         ALPAKA_FN_ACC void process(Acc const& acc){
-        	printf("numOfParticles %i \n", numOfParticles);
+
 
         }
-        template<typename Acc>
-        ALPAKA_FN_ACC void reduce(Acc const& acc, T_particle& particle, double random_value) const {
+        template<typename Acc, typename T_random_generator>
+        ALPAKA_FN_ACC void reduce(Acc const& acc, T_particle& particle, T_random_generator& generator) const {
 
             using namespace alpaka;
-           // double random_value = 0;
-         //   printf("random value  %f \n",  random_value);
-          //  printf("ratioDeletedPaticles  %f \n",  ratioDeletedPaticles);
-            if (random_value > ratioDeletedPaticles)
+            double random_value = generator();
+            printf("random_value %f \n", random_value);
+            if (random_value < ratioDeletedPaticles)
             {
                particle_access::set_weighting(0, particle);
             }
