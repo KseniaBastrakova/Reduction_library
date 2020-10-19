@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "reduction_library/thinning/KernelThinning.hpp"
+#include "InKernelThinning.hpp"
 
 namespace reduction_library{
 namespace thinning{
