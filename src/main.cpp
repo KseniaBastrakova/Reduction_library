@@ -18,10 +18,11 @@
 #include "IO/Particle_reader.hpp"
 #include "IO/Record_names.hpp"
 #include "openPMD-api/OpenPMD_reduction.hpp"
-#include "reduction_library/thinning/KernelThinning.hpp"
 #include "reduction_library/thinning/Thinning_particles_spicialization.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include "reduction_library/thinning/In_kernel_thinning.hpp"
+#include "reduction_library/thinning/Thinning_out_kernell.hpp"
 
 
 
@@ -97,7 +98,6 @@ void test_all_factrories()
                                                     record::Name::Weighting,
                                                     record::Name::Charge>
                     (momentum_record, position_record, weighting_record, charge_record);
-
 
     /// we make point and check access
     using particle_species_type = decltype(electrons);
@@ -324,17 +324,28 @@ void test_alpaka(){
     using Dim = dim::DimInt<1>;
     using Idx = uint32_t;
 
+
+    // Define dimensionality and type of indices to be used in kernels
+    using Dim = dim::DimInt<1>;
+    using Idx = uint32_t;
+
+    // Define alpaka accelerator type, which corresponds to the underlying programming model
     using Acc = acc::AccCpuSerial<Dim, Idx>;
+
+    /*
+    using Acc = alpaka::acc::Acc::AccCpuSerial<Dim, Idx>;
     std::cout << "Using alpaka accelerator: " << alpaka::acc::getAccName<Acc>() << std::endl;
     auto const device = pltf::getDevByIdx<Acc>(0u);
 
     using Queue = alpaka::queue::Queue<Acc, alpaka::queue::Blocking>;
+    /*
     auto queue = Queue{device};
     Idx blocksPerGrid = 8;
     Idx threadsPerBlock = 1;
     Idx elementsPerThread = 1;
     using WorkDiv = workdiv::WorkDivMembers<Dim, Idx>;
     auto workDiv = WorkDiv{blocksPerGrid, threadsPerBlock, elementsPerThread};
+    */
 
 
 
@@ -371,7 +382,7 @@ struct Test_random_kernel {
 };
 
 int main(){
-
+/*
     using namespace alpaka;
 
     using Dim = alpaka::dim::DimInt<1>;
@@ -403,7 +414,7 @@ int main(){
 
   //  alpaka::wait::wait(queue);
 
-
+*/
 	return 0;
 }
 

@@ -14,13 +14,13 @@ namespace reduction_library{
 namespace thinning{
 
     template<class T_particle>
-    class In_KernelThinning{
+    class In_kernel_thinning{
     private:
         double ratioDeletedPaticles;
         int numOfParticles;
 
     public:
-        ALPAKA_FN_ACC In_KernelThinning():
+        ALPAKA_FN_ACC In_kernel_thinning():
             ratioDeletedPaticles(0),
             numOfParticles(0){}
 
@@ -43,10 +43,8 @@ namespace thinning{
         }
         template<typename Acc, typename T_random_generator>
         ALPAKA_FN_ACC void reduce(Acc const& acc, T_particle& particle, T_random_generator& generator) const {
-
             using namespace alpaka;
             double random_value = generator();
-            printf("random_value %f \n", random_value);
             if (random_value < ratioDeletedPaticles)
             {
                particle_access::set_weighting(0, particle);

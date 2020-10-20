@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include "InKernelThinning.hpp"
+#include "reduction_library/thinning/In_kernel_thinning.hpp"
 
 namespace reduction_library{
 namespace thinning{
-
+/*
 template<class T_particles>
 class Thinning_alpaka_kernell{
 private:
@@ -18,7 +18,7 @@ public:
     template<class T_particle>
     void operator()(std::vector<T_particle>& particles) const{
 
-        KernelThinning<T_particle> thinningKernell(ratioDeletedPaticles);
+    	In_kernel_thinning<T_particle> thinningKernell(ratioDeletedPaticles);
 
          for (T_particle& particle : particles){
              thinningKernell.collect(particle);
@@ -32,6 +32,6 @@ public:
 
     void operator()(T_particles& particles){}
 
-};
+};*/
 } //thinning
 } //reduction_library
