@@ -10,7 +10,7 @@
 namespace reduction_library{
 namespace thinning{
 
-template<typename Acc, typename T_Particle_spicies>
+
 struct Thinning_alpaka_kernell{
 private:
     double ratioDeletedPaticles;
@@ -19,23 +19,27 @@ public:
         this->ratioDeletedPaticles = ratioDeletedPaticles;
     }
 
-    ALPAKA_FN_ACC void operator()(Acc const& acc, T_Particle_spicies& particles, std::size_t patch_size) const{
+    template<typename Acc, typename T_Particle_species>
+    ALPAKA_FN_ACC void operator()(Acc const& acc, T_Particle_species particles, std::size_t patch_size) const{
 
     	using namespace alpaka;
 
-    	uint32_t grid_block_idx = idx::getIdx<Grid, Blocks>(acc)[0];
-    	std::size_t start_block_idx = grid_block_idx * patch_size;
-    	std::size_t end_block_idx = std::min(grid_block_idx * patch_size, particles.size());
+    	auto grid_block_idx = idx::getIdx<Grid, Blocks>(acc)[0];
+    	auto start_particles_idx = grid_block_idx * patch_size;
+    	auto end_particles_idx = math::min(acc, grid_block_idx * patch_size, particles.size());
 
-    	std::size_t threadIdx = alpaka::idx::getIdx<alpaka::Grid, alpaka::Threads>(acc);
-    	if (threadIdx == 0)	{
-			PMACC_SMEM( acc, algorithm, In_kernel_thinning<T_Particle_spicies::Particle> );
-			algorithm.init();
-    	}
+    	auto threadIdx = alpaka::idx::getIdx<alpaka::Grid, alpaka::Threads>(acc);
 
+    	using T_Particle_type = typename T_Particle_species::Particle;
+    	auto &algorithm( alpaka::block::shared::st::allocVar<In_kernel_thinning<T_Particle_type>,
+    	                                                    __COUNTER__>(acc));
+
+    	algorithm.init();
     	block::sync::syncBlockThreads(acc);
 
-        for( int i = start_block_idx + grid_block_idx; i< end_block_idx; i=+patch_size){
+    	 auto const blockSize = alpaka::workdiv::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);
+
+        for(int i = start_particles_idx + grid_block_idx; i < end_particles_idx; i =+ blockSize.prod()){
         	algorithm.collect(particles[i]);
         }
 
@@ -47,12 +51,10 @@ public:
 
         block::sync::syncBlockThreads(acc);
 
-        for( int i=start_block_idx + grid_block_idx; i< end_block_idx; i=+patch_size){
+        for(int i = start_particles_idx + grid_block_idx; i< end_particles_idx; i =+ blockSize.prod()){
         	algorithm.reduce(particles[i]);
         }
 
-
-  //  void operator()(T_particles& particles){}
     }
 
 };

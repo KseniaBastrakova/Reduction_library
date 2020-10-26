@@ -37,6 +37,10 @@ public:
             std::cout<<values[i]<<"  ";
         std::cout<<std::endl;
     }
+    std::size_t get_size(){
+    	return values.size();
+
+    }
 };
 
 }  // namespace SOA

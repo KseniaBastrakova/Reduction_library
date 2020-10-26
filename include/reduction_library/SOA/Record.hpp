@@ -49,6 +49,10 @@ namespace SOA{
         Components& get_components(){
             return components;
         }
+        std::size_t get_size(){
+        	auto component = std::get< 0 >( components );
+        	return component.get_size();
+        }
 
     };
 

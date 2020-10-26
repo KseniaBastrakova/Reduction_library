@@ -23,6 +23,7 @@
 #include <alpaka/alpaka.hpp>
 #include "reduction_library/thinning/In_kernel_thinning.hpp"
 #include "reduction_library/thinning/Thinning_out_kernell.hpp"
+#include "reduction_library/thinning/Thinning_alpaka_kernell.hpp"
 
 
 
@@ -155,6 +156,8 @@ void test_all_factrories()
     particle_access::set_charge(64., particle_3);
     charge = particle_access::get_charge(particle_3);
     std::cout<<" charge should be 64  "<<charge<<std::endl;
+
+    std::cout<<"electron size == "<<electrons.get_size()<<std::endl;
 
 }
 
@@ -382,6 +385,7 @@ struct Test_random_kernel {
 };
 
 int main(){
+	test_all_factrories();
 /*
     using namespace alpaka;
 

@@ -23,7 +23,7 @@ public:
     void set_values(T_Bufer new_values){
         values = new_values;
     }
-    auto size(){
+    std::size_t get_size(){
     	return T_Bufer::Idx;
     }
     auto* start(){

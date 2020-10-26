@@ -54,6 +54,9 @@ namespace SOA{
     void print_dataset(){
         dataset.print();
     }
+    std::size_t get_size(){
+    	return dataset.get_size();
+    }
 
 };
 

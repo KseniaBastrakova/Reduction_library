@@ -3,6 +3,7 @@
 #include "reduction_library/SOA/Particle_species.hpp"
 #include "reduction_library/thinning/Thinning.hpp"
 #include "reduction_library/thinning/In_kernel_thinning.hpp"
+#include "reduction_library/thinning/Thinning_alpaka_kernell.hpp"
 #include <alpaka/alpaka.hpp>
 
 namespace reduction_library{
@@ -41,17 +42,32 @@ public:
             threadsPerBlock,
             elementsPerThread);
 
-        Thinning_alpaka_kernell<Acc,  T_Particle_spicies> thinningKernell(ratioDeletedPaticles);
+        using QueueProperty = alpaka::queue::Blocking;
+        using Queue = alpaka::queue::Queue<Acc, QueueProperty>;
 
-      //  for( int i=0; i< particles.size(); i++ ){
-       // 	thinningKernell.collect(particles[i]);
-       // }
+        auto const devAcc = alpaka::pltf::getDevByIdx<Acc>(0u);
+        using QueueProperty = alpaka::queue::Blocking;
+        using QueueAcc = alpaka::queue::Queue<Acc, QueueProperty>;
 
-       // thinningKernell.process();
+        QueueAcc queue(devAcc);
 
-       // for( int i=0; i< particles.size(); i++ ){
-        //	thinningKernell.reduce(particles[i]);
-        //}
+
+        // Попытка скопировать данные с хоста на девайс
+
+        using DevHost = alpaka::dev::DevCpu;
+        auto const devHost = alpaka::pltf::getDevByIdx<DevHost>(0u);
+
+        Thinning_alpaka_kernell kernel;
+        kernel.init(ratioDeletedPaticles);
+
+
+        auto const taskKernel(alpaka::kernel::createTaskKernel<Acc>(
+               workDiv,
+               kernel));
+
+
+       alpaka::queue::enqueue(queue, taskKernel);
+       alpaka::wait::wait(queue);
     }
 
 

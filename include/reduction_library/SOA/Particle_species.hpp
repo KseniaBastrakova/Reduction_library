@@ -1,6 +1,7 @@
 #pragma once
 
 #include <tuple>
+#include <alpaka/alpaka.hpp>
 #include "reduction_library/helpers/Tuple_idx_getters.hpp"
 #include "reduction_library/record/Name.hpp"
 #include "reduction_library/SOA/Particle.hpp"
@@ -26,11 +27,12 @@ namespace SOA{
         Particle_species(T_Record_type_list records):
             records(records){}
 
-        My_particle getParticle(int idx){
+        My_particle get_particle(int idx){
             return MyParticle(idx, *this);
         }
-        int getSize(){
-            return size;
+        ALPAKA_FN_HOST_ACC std::size_t get_size(){
+        	auto first_record = std::get< 0 >( records );
+            return first_record.get_size();
         }
 
     };
@@ -56,7 +58,7 @@ namespace traits{
     struct Getting_value<T_record_name, SOA::Particle_species<T_Names_list, T_Record_type_list>>
     {
     public:
-        auto& operator() (SOA::Particle_species<T_Names_list, T_Record_type_list>& particle_species)
+    	ALPAKA_FN_HOST_ACC auto& operator() (SOA::Particle_species<T_Names_list, T_Record_type_list>& particle_species)
         {
             using Names = typename SOA::Particle_species<T_Names_list, T_Record_type_list>::Names;
             constexpr auto idx = helpers::Index<T_record_name, Names>::value;
