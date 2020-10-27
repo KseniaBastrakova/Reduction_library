@@ -62,7 +62,7 @@ public:
 
 
         auto const taskKernel(alpaka::kernel::createTaskKernel<Acc>(
-               workDiv,
+               workdiv,
                kernel));
 
 

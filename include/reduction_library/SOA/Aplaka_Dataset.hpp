@@ -6,25 +6,28 @@
 namespace reduction_library{
 namespace SOA{
 
-template<typename T_Bufer, typename T_Value>
+template<typename Acc, typename T_Value>
 struct Aplaka_Dataset{
 public:
-    using Value_type = typename T_Bufer::Data;
+    using Dim = alpaka::dim::DimInt<1u>;
+    using Idx = std::size_t;
+    using BufAcc = alpaka::mem::buf::Buf<Acc, T_Value, Dim, Idx>;
+    using Value_type = T_Value;
 private:
-    T_Bufer values;
+    BufAcc values;
 public:
     Aplaka_Dataset(){}
-    Aplaka_Dataset(T_Bufer values):
+    Aplaka_Dataset(BufAcc values):
         values(values){}
 
-    std::vector<Value_type> get_values(){
+    BufAcc* get_values(){
         return values;
     }
-    void set_values(T_Bufer new_values){
+    void set_values(BufAcc new_values){
         values = new_values;
     }
     std::size_t get_size(){
-    	return T_Bufer::Idx;
+    	return Acc::Idx;
     }
     auto* start(){
     	return alpaka::mem::view::getPtrNative(values);
