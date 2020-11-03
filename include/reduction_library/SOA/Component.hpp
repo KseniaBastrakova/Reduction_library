@@ -4,7 +4,6 @@
 #include "reduction_library/component/Interfaces.hpp"
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Dataset.hpp"
-#include "reduction_library/record/Name.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"
 #include <vector>
 #include <iostream>
@@ -12,19 +11,23 @@
 namespace reduction_library{
 namespace SOA{
 
-    template<typename T_Dataset>
-    struct Component {
-    //public:
-    //    using datasetType = Dataset<T_Dataset>;
-    private:
-        T_Dataset dataset;
-        double unit_SI;
+template<typename T_Dataset>
+struct Component {
+private:
+    T_Dataset dataset;
+    double unit_SI;
 
-    public:
-        Component(){}
-        Component(T_Dataset dataset):
-                unit_SI(42.),
-                dataset(dataset){}
+public:
+    using Dataset_type = T_Dataset;
+    Component(){}
+
+    template<typename T_Another_Dataset>
+    Component(Component<T_Another_Dataset> const & component):
+        dataset(component.get_dataset()),
+        unit_SI(component.get_unit_SI()){}
+    Component(T_Dataset dataset):
+            unit_SI(42.),
+            dataset(dataset){}
 
     auto& operator[](int idx)
     {
@@ -39,10 +42,12 @@ namespace SOA{
     {
         unit_SI = new_unit_SI;
     }
-    void set_dataset(T_Dataset new_dataset){
+    void set_dataset(T_Dataset new_dataset)
+    {
         dataset = new_dataset;
     }
-    T_Dataset& get_dataset(){
+    T_Dataset& get_dataset()
+    {
         return dataset;
     }
 
@@ -55,7 +60,7 @@ namespace SOA{
         dataset.print();
     }
     std::size_t get_size(){
-    	return dataset.get_size();
+        return dataset.get_size();
     }
 
 };

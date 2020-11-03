@@ -10,34 +10,50 @@
 #include "reduction_library/helpers/Type_list.hpp"
 
 
-
 namespace reduction_library{
 namespace SOA{
 
-    template <typename T_Names_list, typename T_Record_type_list>
-    class Particle_species{
-    public:
-        using My_particle = Particle<Particle_species>;
-        using Records = T_Record_type_list;
-        using Names = T_Names_list;
-        int size;
-    public:
-        Records records;
-        Particle_species(){}
-        Particle_species(T_Record_type_list records):
-            records(records){}
+template<typename T_Names_list, typename T_Record_type_list>
+class Particle_species{
+public:
+    using My_particle = Particle<Particle_species>;
+    using Records = T_Record_type_list;
+    using Names = T_Names_list;
+    int size;
+public:
+    Records records;
+    Particle_species(){}
 
-        My_particle get_particle(int idx){
-            return MyParticle(idx, *this);
-        }
-        ALPAKA_FN_HOST_ACC std::size_t get_size(){
-        	auto first_record = std::get< 0 >( records );
-            return first_record.get_size();
-        }
+    template<typename T_Another_Names_List, typename T_Another_Record_Type_List>
+    Particle_species(Particle_species<T_Another_Names_List,T_Another_Record_Type_List> const & particle_species):
+        records(particle_species),
+        size(particle_species.get_size()){}
 
-    };
+    Particle_species(T_Record_type_list records):
+        records(records)
+    {
+        size = std::get< 0 >( records ).get_size();
+    }
+
+    Records& get_records()
+    {
+        return records;
+    }
+
+    My_particle get_particle(int idx)
+    {
+        return MyParticle(idx, *this);
+    }
+    ALPAKA_FN_HOST_ACC std::size_t get_size()
+    {
+        auto first_record = std::get< 0 >( records );
+        return first_record.get_size();
+    }
+
+};
 
 } // SOA
+
 
 namespace particle_species{
 namespace traits{
@@ -76,6 +92,8 @@ namespace traits{
         Species species(input_records);
         return species;
     }
+
+
 
 
 } // namespace particle_spicies

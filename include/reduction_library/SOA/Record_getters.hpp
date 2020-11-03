@@ -7,6 +7,7 @@
 
 #include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"
+#include "reduction_library/SOA/Particle_species_traits.hpp"
 
 
 namespace reduction_library{
@@ -44,6 +45,16 @@ public:
     }
 
 };
+
+
+template<typename T_Acc_New, typename T_Names_List, typename T_Record_Type_List>
+ALPAKA_FN_HOST_ACC auto make_species_different_acc(SOA::Particle_species<T_Names_List,
+        T_Record_Type_List> const & particle_species)
+{
+    using Particle_species_new_acc = SOA::Acc_species_t<T_Acc_New, T_Names_List, T_Record_Type_List>;
+    Particle_species_new_acc particle_species_acc_new(particle_species);
+    return particle_species_acc_new;
+}
 
 } // namespace particle
 
