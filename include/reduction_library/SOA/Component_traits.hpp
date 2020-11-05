@@ -13,7 +13,7 @@ namespace SOA{
  * \tparam T_Component componet type, follows concept Component
  */
 template<typename T_Acc_New, typename T_Component>
-struct Acc_Component{
+struct Acc_component{
      using type = T_Component;
 };
 
@@ -25,12 +25,12 @@ struct Acc_Component{
  * \tparam T_Dataset type of old dataset
  */
 template<typename T_Acc_New, typename T_Dataset>
-struct Acc_Component<T_Acc_New, Component<T_Dataset>> {
+struct Acc_component<T_Acc_New, Component<T_Dataset>> {
     using type = Component< Acc_dataset_t<T_Acc_New, T_Dataset>>;
 };
 
 template<typename T_Acc_New, typename T_Component>
-using Acc_Component_t = typename Acc_Component<T_Acc_New, T_Component>::type;
+using Acc_component_t = typename Acc_component<T_Acc_New, T_Component>::type;
 
 } // namespace SOA
 } // namespace reduction_library

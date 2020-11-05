@@ -22,13 +22,20 @@ public:
     Alpaka_dataset(){}
 
     template<typename Acc_new>
-    Alpaka_dataset(const Alpaka_dataset<Acc_new, T_Value>& dataset)
+    Alpaka_dataset(Alpaka_dataset<Acc_new, T_Value>& dataset)
     {
         size = dataset.get_size();
         auto const devAcc = alpaka::pltf::getDevByIdx<Acc>(0u);
         buffer = new BufAcc(alpaka::mem::buf::alloc<T_Value, Idx>(devAcc, size));
-        data = alpaka::mem::view::getPtrNative(buffer);
-        std::copy(dataset.get_values(), dataset.get_values() + size, data);
+        data = alpaka::mem::view::getPtrNative(*buffer);
+
+        using QueueProperty = alpaka::queue::Blocking;
+            using QueueAcc = alpaka::queue::Queue<
+                Acc,
+                QueueProperty
+            >;
+        QueueAcc queue { devAcc };
+        alpaka::mem::view::copy(queue, *buffer, *dataset.get_buffer(), size);
     }
 
     Alpaka_dataset(std::size_t size)
@@ -36,17 +43,25 @@ public:
         this->size = size;
         auto const devAcc = alpaka::pltf::getDevByIdx<Acc>(0u);
         buffer = new BufAcc(alpaka::mem::buf::alloc<T_Value, Idx>(devAcc, size));
-        data = alpaka::mem::view::getPtrNative(buffer);
+        data = alpaka::mem::view::getPtrNative(*buffer);
     }
 
-    ALPAKA_FN_HOST_ACC Value_type* get_values(){
+    ALPAKA_FN_HOST_ACC BufAcc* get_buffer()
+    {
+        return buffer;
+    }
+
+    ALPAKA_FN_HOST_ACC Value_type* get_values()
+    {
         return data;
     }
 
-    ALPAKA_FN_HOST_ACC std::size_t get_size(){
+    ALPAKA_FN_HOST_ACC std::size_t get_size() const
+    {
     	return size;
     }
-    ALPAKA_FN_HOST_ACC Value_type* start(){
+    ALPAKA_FN_HOST_ACC Value_type* start() const
+    {
     	return data;
     }
 

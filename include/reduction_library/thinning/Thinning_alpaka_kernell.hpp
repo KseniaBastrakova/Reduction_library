@@ -37,7 +37,7 @@ public:
     	algorithm.init();
     	block::sync::syncBlockThreads(acc);
 
-    	 auto const blockSize = alpaka::workdiv::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);
+    	auto const blockSize = alpaka::workdiv::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);
 
         for(int i = start_particles_idx + grid_block_idx; i < end_particles_idx; i =+ blockSize.prod()){
         	algorithm.collect(particles[i]);

@@ -28,7 +28,7 @@ struct Acc_record{
 template<typename T_Acc_New, typename T_Names_list, typename T_Component_type_list>
 struct Acc_record<T_Acc_New, Record<T_Names_list, T_Component_type_list>>{
     template< typename T_Component>
-    using Transform_component = Acc_Component_t<T_Acc_New, T_Component>;
+    using Transform_component = Acc_component_t<T_Acc_New, T_Component>;
     using New_components_type = typename helpers::apply_meta_t<Transform_component, T_Component_type_list>;
     using type = Record<T_Names_list, New_components_type>;
 };

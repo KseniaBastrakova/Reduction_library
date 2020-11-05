@@ -26,8 +26,10 @@ public:
 
     template<typename T_Another_Names_List, typename T_Another_Record_Type_List>
     Particle_species(Particle_species<T_Another_Names_List,T_Another_Record_Type_List> const & particle_species):
-        records(particle_species),
-        size(particle_species.get_size()){}
+        records(particle_species)
+    {
+        size = std::get< 0 >( records ).get_size();
+    }
 
     Particle_species(T_Record_type_list records):
         records(records)

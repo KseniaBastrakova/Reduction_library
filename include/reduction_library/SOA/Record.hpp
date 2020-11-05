@@ -27,15 +27,16 @@ private:
     int macroWeighted;
     double weightingPower;
     Names names;
-    Components components;
+   // Components components;
     record::unit_dimension_type unit_dimension;
 public:
+    Components components;
     template<typename T_Another_Names_List, typename T_Another_Component_Type_List>
-    Record(Record<T_Another_Names_List, T_Another_Component_Type_List> const & record):
-        components(record.get_components()),
-        macroWeighted(record.get_macro_weighted()),
-        weightingPower(record.get_weighting_power()),
-        unit_dimension(record.get_unit_dimension()){}
+    Record(Record<T_Another_Names_List, T_Another_Component_Type_List> & record):
+        components(record.components){}
+     //   macroWeighted(record.get_macro_weighted()),
+       // weightingPower(record.get_weighting_power()),
+       // unit_dimension(record.get_unit_dimension()){}
 
     Record(T_Component_Type_List components):
               components(components),

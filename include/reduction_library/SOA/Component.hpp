@@ -12,7 +12,7 @@ namespace reduction_library{
 namespace SOA{
 
 template<typename T_Dataset>
-struct Component {
+struct Component{
 private:
     T_Dataset dataset;
     double unit_SI;
@@ -22,9 +22,10 @@ public:
     Component(){}
 
     template<typename T_Another_Dataset>
-    Component(Component<T_Another_Dataset> const & component):
+    Component(Component<T_Another_Dataset> & component):
         dataset(component.get_dataset()),
-        unit_SI(component.get_unit_SI()){}
+        unit_SI(42.){}
+
     Component(T_Dataset dataset):
             unit_SI(42.),
             dataset(dataset){}
@@ -34,7 +35,7 @@ public:
         return dataset[idx];
     }
 
-    double get_unit_SI()
+    double get_unit_SI() const
     {
         return unit_SI;
     }

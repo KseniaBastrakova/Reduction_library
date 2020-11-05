@@ -24,6 +24,16 @@
 #include "reduction_library/thinning/In_kernel_thinning.hpp"
 #include "reduction_library/thinning/Thinning_out_kernell.hpp"
 #include "reduction_library/thinning/Thinning_alpaka_kernell.hpp"
+#include "reduction_library/SOA/Dataset_traits.hpp"
+#include "reduction_library/SOA/Component_traits.hpp"
+#include "reduction_library/helpers/Type_list.hpp"
+#include "reduction_library/SOA/Record_traits.hpp"
+#include "reduction_library/SOA/Particle_species_traits.hpp"
+#include "reduction_library/SOA/Record_getters.hpp"
+#include "reduction_library/SOA/Dataset_traits.hpp"
+#include "reduction_library/SOA/Record.hpp"
+#include "reduction_library/helpers/Type_list.hpp"
+#include <tuple>
 
 
 
@@ -31,7 +41,7 @@ using namespace std;
 using std::cout;
 using namespace openPMD;
 using namespace reduction_library;
-//using namespace alpaka;
+using namespace alpaka;
 
 template <typename Enumeration>
 auto as_integer(Enumeration const value)
@@ -40,7 +50,7 @@ auto as_integer(Enumeration const value)
     return static_cast<typename std::underlying_type<Enumeration>::type>(value);
 }
 
-
+/*
 
 void test_all_factrories()
 {
@@ -203,11 +213,11 @@ auto make_data_species_from_raw(std::map<std::string, std::vector<std::vector<do
                                                         record::Name::Weighting,
                                                         record::Name::Charge>
                         (momentum_record, position_record, weighting_record, charge_record);
-                        */
+
     return 0;
 
 }
-
+*/
 void raw_data_reader(){
 
 
@@ -324,17 +334,6 @@ void test_alpaka(){
 
 
   //  using particle_type = Particle<particle_species_type>;
-    using Dim = dim::DimInt<1>;
-    using Idx = uint32_t;
-
-
-    // Define dimensionality and type of indices to be used in kernels
-    using Dim = dim::DimInt<1>;
-    using Idx = uint32_t;
-
-    // Define alpaka accelerator type, which corresponds to the underlying programming model
-    using Acc = acc::AccCpuSerial<Dim, Idx>;
-
     /*
     using Acc = alpaka::acc::Acc::AccCpuSerial<Dim, Idx>;
     std::cout << "Using alpaka accelerator: " << alpaka::acc::getAccName<Acc>() << std::endl;
@@ -384,8 +383,152 @@ struct Test_random_kernel {
     }
 };
 
+double get_random()
+{
+    double r = ((double) std::rand() / (RAND_MAX)) + 1;
+    return r;
+}
+template<typename Acc>
+void initialize_with_random_values(reduction_library::SOA::Alpaka_dataset<Acc, double>& dataset)
+{
+    for (int i = 0; i < dataset.get_size(); i++){
+         dataset[i] = get_random();
+     }
+}
+
+void test_species_copy()
+{
+    using namespace alpaka;
+    using namespace SOA;
+    using Dim = alpaka::dim::DimInt<1>;
+    using Idx = uint32_t;
+
+    std::size_t test_size = 10;
+    using Acc = acc::AccCpuSerial<Dim, Idx>;
+
+    Alpaka_dataset<Acc, double> test_dataset_x(test_size);
+    Alpaka_dataset<Acc, double> test_dataset_y(test_size);
+    Alpaka_dataset<Acc, double> test_dataset_z(test_size);
+    using T_dataset = Alpaka_dataset<Acc, double>;
+
+    initialize_with_random_values<Acc>(test_dataset_x);
+    initialize_with_random_values<Acc>(test_dataset_y);
+    initialize_with_random_values<Acc>(test_dataset_z);
+
+    Component<T_dataset> component_x(test_dataset_x);
+    Component<T_dataset> component_y(test_dataset_y);
+    Component<T_dataset> component_z(test_dataset_z);
+
+    Alpaka_dataset<Acc, double> test_dataset_bx(test_size);
+    Alpaka_dataset<Acc, double> test_dataset_by(test_size);
+    Alpaka_dataset<Acc, double> test_dataset_bz(test_size);
+
+    initialize_with_random_values<Acc>(test_dataset_bx);
+    initialize_with_random_values<Acc>(test_dataset_by);
+    initialize_with_random_values<Acc>(test_dataset_bz);
+
+    Component<T_dataset> component_bx(test_dataset_bx);
+    Component<T_dataset> component_by(test_dataset_by);
+    Component<T_dataset> component_bz(test_dataset_bz);
+
+    Alpaka_dataset<Acc, double> charge_dataset(test_size);
+    initialize_with_random_values<Acc>(charge_dataset);
+    Component<T_dataset> component_charge(charge_dataset);
+
+    Alpaka_dataset<Acc, double> weighting_dataset(test_size);
+    initialize_with_random_values<Acc>(weighting_dataset);
+    Component<T_dataset> component_weighting(weighting_dataset);
+
+
+    auto weighting_record = record::make_record_scalar(component_weighting);
+    auto coords = record::make_record_XYZ(component_x, component_y, component_z);
+    auto momentums = record::make_record_XYZ(component_bx, component_by, component_bz);
+
+    auto charge = record::make_record_scalar(component_charge);
+
+    auto electrons = particle_species::make_species<record::Name::Momentum,
+                                                       record::Name::Position,
+                                                       record::Name::Weighting,
+                                                       record::Name::Charge>
+                       (momentums, coords, weighting_record, charge);
+
+    using Acc_new = acc::AccCpuThreads<Dim, Idx>;
+    using Old_dataset_type = Alpaka_dataset<Acc, double>;
+    using Dataset_new_acc = SOA::Acc_dataset_t<Acc_new, Old_dataset_type>;
+    Dataset_new_acc new_dataset(test_dataset_x);
+    std::cout<<"first type == "<<typeid(test_dataset_x).name()<<std::endl;
+    std::cout<<"second type == "<<typeid(new_dataset).name()<<std::endl;
+
+    using Old_component_type = Component<T_dataset>;
+    using Component_new_acc = SOA::Acc_component_t<Acc_new, Old_component_type>;
+
+    Component_new_acc new_component(component_x);
+    std::cout<<"first type == "<<typeid(component_x).name()<<std::endl;
+    std::cout<<"second type == "<<typeid(new_component).name()<<std::endl;
+    using T_Names_List = helpers::Type_list<component::Name::SCALAR>;
+
+    using Old_component_type = Component<T_dataset>;
+    using T_Components_Types_List = helpers::Type_list<Old_component_type>;
+
+    using Old_Record_type = SOA::Record<T_Names_List, T_Components_Types_List>;
+    using Record_new_acc = SOA::Acc_record_t<Acc_new, Old_Record_type>;
+
+    T_Components_Types_List old_type_list(component_x);
+    Old_Record_type::Components old_components(old_type_list);
+    Record_new_acc::Components new_components(old_type_list);
+//  std::cout<<"second type == "<<typeid(new_components).name()<<std::endl;
+
+//    Record_new_acc new_record(weighting_record);
+
+ //   std::cout<<"first type == "<<typeid(coords).name()<<std::endl;
+ //   std::cout<<"second type == "<<typeid(new_record).name()<<std::endl;
+
+ //   reduction_library::particle_access::make_species_different_acc<Acc_new>(electrons);
+
+}
+
 int main(){
+    test_species_copy();
+    /*
 	test_all_factrories();
+	using namespace reduction_library;
+	using namespace alpaka;
+
+    using Dim = alpaka::dim::DimInt<1>;
+    using Idx = uint32_t;
+
+	using Acc = acc::AccCpuSerial<Dim, Idx>;
+	using Acc_new = acc::AccCpuThreads<Dim, Idx>;
+	std::cout<<typeid(int).name();
+
+
+
+    using tuple_type = typename std::tuple< double*, double*>;
+    using result_type = typename helpers::apply_meta<std::decay_t, tuple_type>;
+    result_type result;
+    std::cout<<"result name "<<std::endl;
+    std::cout<<typeid(result).name();
+
+    test_species_copy();
+
+
+
+
+
+	/*using old_dataset = typename SOA::Dataset<double>;
+	using alpaka_dataset = typename SOA::Aplaka_dataset<Acc, double>;
+	using old_non_alpaka = SOA::Acc_dataset_t< Acc, old_dataset>;
+	auto px_values_raw = std::vector<double>{1., 2., 5., 6., 77., 6., 17., 18., 59.};
+	old_dataset test(px_values_raw);
+	alpaka_dataset(8);
+
+	std::cout << typeid(old_non_alpaka).name() << '\n';
+	using old_alpaka = SOA::Acc_dataset_t<alpaka_dataset, Acc>;
+	std::cout << typeid(old_alpaka).name() << '\n';
+	using new_alpaka = SOA::Acc_dataset_t<alpaka_dataset, Acc_new>;
+	std::cout << typeid(new_alpaka).name() << '\n';
+*/
+
 /*
     using namespace alpaka;
 
