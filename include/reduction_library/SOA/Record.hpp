@@ -31,24 +31,31 @@ private:
     record::unit_dimension_type unit_dimension;
 public:
     Components components;
+    Record(const Record& record):
+        components(record.components),
+        macroWeighted(record.get_macro_weighted()),
+        weightingPower(record.get_weighting_power()),
+        unit_dimension(record.get_unit_dimension()){}
+
     template<typename T_Another_Names_List, typename T_Another_Component_Type_List>
-    Record(Record<T_Another_Names_List, T_Another_Component_Type_List> & record):
-        components(record.components){}
-     //   macroWeighted(record.get_macro_weighted()),
-       // weightingPower(record.get_weighting_power()),
-       // unit_dimension(record.get_unit_dimension()){}
+    Record(const Record<T_Another_Names_List, T_Another_Component_Type_List>& record):
+        components(record.components),
+        macroWeighted(record.get_macro_weighted()),
+        weightingPower(record.get_weighting_power()),
+        unit_dimension(record.get_unit_dimension()){}
 
     Record(T_Component_Type_List components):
-              components(components),
-              macroWeighted(7),
-              weightingPower(42.),
-              unit_dimension(unit_dimension){}
+        components(components),
+        macroWeighted(7),
+        weightingPower(42.),
+        unit_dimension(unit_dimension){}
 
-    double get_weighting_power()
+    double get_weighting_power() const
     {
         return weightingPower;
     }
-    int get_macro_weighted(){
+    int get_macro_weighted() const
+    {
         return weightingPower;
     }
     record::unit_dimension_type get_unit_dimension() const
@@ -59,7 +66,8 @@ public:
     {
         return components;
     }
-    std::size_t get_size(){
+    std::size_t get_size()
+    {
         auto component = std::get< 0 >( components );
         return component.get_size();
     }

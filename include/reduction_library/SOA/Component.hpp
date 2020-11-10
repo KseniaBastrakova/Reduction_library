@@ -21,8 +21,12 @@ public:
     using Dataset_type = T_Dataset;
     Component(){}
 
+    Component(const Component& component):
+        dataset(component.get_dataset()),
+        unit_SI(component.get_unit_SI()){}
+
     template<typename T_Another_Dataset>
-    Component(Component<T_Another_Dataset> & component):
+    Component(const Component<T_Another_Dataset>& component):
         dataset(component.get_dataset()),
         unit_SI(42.){}
 
@@ -43,11 +47,11 @@ public:
     {
         unit_SI = new_unit_SI;
     }
-    void set_dataset(T_Dataset new_dataset)
+    T_Dataset& set_dataset()
     {
-        dataset = new_dataset;
+        return dataset;
     }
-    T_Dataset& get_dataset()
+    const T_Dataset& get_dataset() const
     {
         return dataset;
     }

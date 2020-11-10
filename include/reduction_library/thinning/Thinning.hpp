@@ -1,37 +1,29 @@
 #pragma once
 
-#include <vector>
-
-#include "reduction_library/thinning/In_kernel_thinning.hpp"
+#include <alpaka/alpaka.hpp>
 
 namespace reduction_library{
 namespace thinning{
-/*
-template<class T_particles>
-class Thinning_alpaka_kernell{
-private:
-    double ratioDeletedPaticles;
+
+class Thinning{
+
 public:
-    Thinning_alpaka_kernell(double ratioDeletedPaticles):
-        ratioDeletedPaticles(ratioDeletedPaticles){}
+    ALPAKA_FN_ACC Thinning(){}
 
-    template<class T_particle>
-    void operator()(std::vector<T_particle>& particles) const{
+    ALPAKA_FN_ACC void init(){}
+    template<typename Acc, typename T_Particle, typename T_Random_Generator>
+    ALPAKA_FN_ACC void collect(Acc const& acc, T_Particle particle, T_Random_Generator& generator)
+    {}
 
-    	In_kernel_thinning<T_particle> thinningKernell(ratioDeletedPaticles);
+    template<typename Acc>
+    ALPAKA_FN_ACC void process(Acc const& acc) const
+    {}
 
-         for (T_particle& particle : particles){
-             thinningKernell.collect(particle);
-         }
-         thinningKernell.process();
+    template<typename Acc, typename T_Particle>
+    ALPAKA_FN_ACC void reduce(Acc const& acc, T_Particle& particle) const
+    {}
 
-         for (T_particle& particle : particles){
-             thinningKernell.reduce(particle);
-        }
-    }
+};
 
-    void operator()(T_particles& particles){}
-
-};*/
 } //thinning
 } //reduction_library

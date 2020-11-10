@@ -1,7 +1,6 @@
 #pragma once
 
 #include "reduction_library/SOA/Particle_species.hpp"
-#include "reduction_library/thinning/Thinning.hpp"
 #include "reduction_library/thinning/In_kernel_thinning.hpp"
 #include "reduction_library/thinning/Thinning_alpaka_kernell.hpp"
 #include <alpaka/alpaka.hpp>
@@ -9,21 +8,21 @@
 namespace reduction_library{
 namespace thinning{
 
-
-template<typename Acc, typename T_Particle_spicies, typename T_particle>
+template<typename Acc, typename T_Particle_Spicies>
 struct Thinning_out_kernell{
 private:
     double ratioDeletedPaticles;
 public:
-    void init (double ratioDeletedPaticles){
+    void init(double ratioDeletedPaticles)
+    {
         this->ratioDeletedPaticles = ratioDeletedPaticles;
     }
 
-    void operator()(T_Particle_spicies& particles, std::size_t patch_size) const{
+    void operator()(T_Particle_Spicies& particles, std::size_t patch_size) const
+    {
+        std::cout<<"  operator()"<<std::endl;
+    	std::size_t num_particles = particles.get_size();
 
-    	// TODO : copy data -- host/device
-
-    	std::size_t num_particles = particles.size();
     	std::size_t num_patches = std::ceil(num_particles / patch_size);
 
 
@@ -51,23 +50,30 @@ public:
 
         QueueAcc queue(devAcc);
 
-
-        // Попытка скопировать данные с хоста на девайс
-
         using DevHost = alpaka::dev::DevCpu;
         auto const devHost = alpaka::pltf::getDevByIdx<DevHost>(0u);
 
         Thinning_alpaka_kernell kernel;
         kernel.init(ratioDeletedPaticles);
-
+        auto particles_device = reduction_library::particle_access::make_species_different_acc<Acc>(particles);
 
         auto const taskKernel(alpaka::kernel::createTaskKernel<Acc>(
                workdiv,
-               kernel));
-
+               kernel,
+               particles_device,
+               patch_size));
 
        alpaka::queue::enqueue(queue, taskKernel);
        alpaka::wait::wait(queue);
+       auto particles_result = reduction_library::particle_access::make_species_different_acc<DevHost>(particles_device);
+
+       for (int i = 0; i < particles_result.get_size(); i++)
+          {
+              auto particle = particles_result.get_particle(i);
+              auto weighting = particle_access::get_weighting(particle);
+              std::cout<<" weighting[i] == "<<weighting<<"  ";
+          }
+
     }
 
 

@@ -22,7 +22,7 @@ public:
         auto& base_particles = particle.baseParticles; // record
         auto& record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
         auto& component = record::get<Component_name>(record_value);
-        auto& dataset = component.get_dataset();
+        auto& dataset = component.set_dataset();
         int idx = particle.idx;
         double& value = dataset[idx];
         return value;
@@ -39,7 +39,7 @@ public:
         auto& base_particles = particle.baseParticles; // record
         auto& record_value = particle_species::get<Record_name, T_Particle_species>(base_particles);
         auto& component = record::get<Component_name>(record_value);
-        auto& dataset = component.get_dataset();
+        auto& dataset = component.set_dataset();
         int idx = particle.idx;
         dataset.set_value(value, idx);
     }

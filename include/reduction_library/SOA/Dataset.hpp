@@ -13,13 +13,24 @@ private:
     std::vector<Value_type> values;
 public:
     Dataset(){}
+    Dataset(const Dataset<T_Value>& dataset):
+        values(dataset.get_values()){}
+
+    auto operator=(const Dataset<T_Value>& dataset)
+    {
+        values = dataset.get_values();
+        return *this;
+    }
+
     Dataset(std::vector<Value_type> values):
         values(values){}
 
-    std::vector<Value_type> get_values(){
+    std::vector<Value_type> get_values() const
+    {
         return values;
     }
-    void set_values(const std::vector<Value_type>& new_values){
+    void set_values(const std::vector<Value_type>& new_values)
+    {
         values = new_values;
     }
 
@@ -27,7 +38,8 @@ public:
     {
         return values[idx];
     }
-    void set_value(Value_type value, int idx){
+    void set_value(Value_type value, int idx)
+    {
         values[idx] = value;
     }
 

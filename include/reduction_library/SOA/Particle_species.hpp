@@ -23,10 +23,12 @@ public:
 public:
     Records records;
     Particle_species(){}
+    Particle_species(const Particle_species& particle_species):
+        records(particle_species.get_records()){}
 
     template<typename T_Another_Names_List, typename T_Another_Record_Type_List>
     Particle_species(Particle_species<T_Another_Names_List,T_Another_Record_Type_List> const & particle_species):
-        records(particle_species)
+        records(particle_species.get_records())
     {
         size = std::get< 0 >( records ).get_size();
     }
@@ -37,16 +39,16 @@ public:
         size = std::get< 0 >( records ).get_size();
     }
 
-    Records& get_records()
+    auto get_records() const
     {
         return records;
     }
 
     My_particle get_particle(int idx)
     {
-        return MyParticle(idx, *this);
+        return My_particle(idx, *this);
     }
-    ALPAKA_FN_HOST_ACC std::size_t get_size()
+    ALPAKA_FN_HOST_ACC std::size_t get_size() const
     {
         auto first_record = std::get< 0 >( records );
         return first_record.get_size();
