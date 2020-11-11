@@ -9,7 +9,7 @@
 namespace reduction_library{
 namespace thinning{
 
-
+template<typename T_Alorithm>
 struct Thinning_alpaka_kernell{
 private:
     double ratioDeletedPaticles;
@@ -33,8 +33,7 @@ public:
 
     	using T_Particle_type = typename T_Particle_Species::My_particle;
 
-    	auto &algorithm( alpaka::block::shared::st::allocVar<In_kernel_thinning<T_Particle_type>,
-    	                                                    __COUNTER__>(acc));
+    	auto &algorithm( alpaka::block::shared::st::allocVar<T_Alorithm, __COUNTER__>(acc));
 
     	algorithm.init(ratioDeletedPaticles);
     	block::sync::syncBlockThreads(acc);
@@ -48,19 +47,13 @@ public:
     	auto distribution(alpaka::rand::distribution::createUniformReal<float>(acc));
 
     	auto random_value_generator = [&]{ return distribution(generator); };
-    	//std::cout<<"blockSize.prod()"<<blockSize.prod();
-    	//КОСТЫЛЬ
     	T_Particle_Species& current_particles = const_cast<T_Particle_Species&>(particles);
 
         for(int i = start_particles_idx + grid_block_idx; i < end_particles_idx; i = i + blockSize.prod())
         {
-          //  std::cout<<"i =="<<i;
             auto particle = current_particles.get_particle(i);
 
         	algorithm.collect(acc, particle, random_value_generator);
-        	//auto p2 =current_particles.get_particle(i);
-        	//auto weighting = particle_access::get_weighting(p2);
-        	//std::cout<<"particle weight "<<weighting<<std::endl;
         }
 
         block::sync::syncBlockThreads(acc);
@@ -75,9 +68,8 @@ public:
         for(int i = start_particles_idx + grid_block_idx; i< end_particles_idx; i = i + blockSize.prod())
         {
             auto particle = current_particles.get_particle(i);
-        	algorithm.reduce(acc, particle);
+        	algorithm.reduce(acc, particle, random_value_generator);
         	auto weighting = particle_access::get_weighting(particle);
-            std::cout<<"particle weight "<<weighting<<std::endl;
         }
 
 

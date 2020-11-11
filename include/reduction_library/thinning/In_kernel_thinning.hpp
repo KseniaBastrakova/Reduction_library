@@ -8,12 +8,12 @@
 #include <vector>
 #include <iostream>
 #include "reduction_library/Particle.hpp"
+#include "reduction_library/particle_species/Interfaces.hpp"
 
 
 namespace reduction_library{
 namespace thinning{
 
-template<class T_Particle>
 class In_kernel_thinning{
 private:
     double ratioDeletedPaticles;
@@ -36,18 +36,15 @@ public:
         part_of_additional_weight = 0.;
     }
 
-    template<typename Acc, typename T_Random_Generator>
+    template<typename Acc, typename T_Particle, typename T_Random_Generator>
     ALPAKA_FN_ACC void collect(Acc const& acc, T_Particle& particle, const T_Random_Generator& generator)
     {
         using namespace alpaka;
         double random_value = generator();
-    //    printf(" random %f \n", random_value);
         if (random_value < ratioDeletedPaticles)
         {
-         //   printf("random_value < ratioDeletedPaticles\n");
            particle_access::set_weighting(0, particle);
            auto weight = particle_access::get_weighting(particle);
-         //  printf("weighting %f \n",weight);
            atomic::atomicOp<atomic::op::Add>(acc, &sum_reduced_weights, (double)weight, hierarchy::Blocks{});
         }
         else
@@ -63,7 +60,7 @@ public:
         part_of_additional_weight = sum_reduced_weights / num_of_left_particles;
     }
 
-    template<typename Acc>
+    template<typename Acc, typename T_Particle>
     ALPAKA_FN_ACC void reduce(Acc const& acc, T_Particle& particle) const
     {
         double weight = particle_access::get_weighting(particle);

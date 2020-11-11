@@ -6,8 +6,11 @@ namespace reduction_library{
 namespace particle_species{
 namespace traits{
 
-template<typename T_record_name, typename T_Particle_species>
+template<typename T_Record_name, typename T_Particle_species>
     struct Type;
+
+template<typename T_Particle_Species>
+    struct Particle_Type;
 
 template<typename T_Particle_species>
     struct Record_names;
@@ -17,6 +20,12 @@ template<typename T_Particle_species>
 template<typename T_record_name, typename T_Particle_species>
 struct Type{
     using type = typename particle_species::traits::Type<T_record_name, T_Particle_species>::type;
+
+};
+
+template<typename T_Particle_Species>
+struct Particle_Type{
+    using type = typename particle_species::traits::Type<Particle_Type, T_Particle_Species>::type;
 
 };
 

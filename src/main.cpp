@@ -18,7 +18,6 @@
 #include "IO/Particle_reader.hpp"
 #include "IO/Record_names.hpp"
 #include "openPMD-api/OpenPMD_reduction.hpp"
-#include "reduction_library/thinning/Thinning_particles_spicialization.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include "reduction_library/thinning/In_kernel_thinning.hpp"
@@ -34,7 +33,10 @@
 #include "reduction_library/SOA/Record.hpp"
 #include "reduction_library/helpers/Type_list.hpp"
 #include <tuple>
-
+#include "../include/reduction_library/thinning/Thinning.hpp"
+#include "reduction_library/thinning/Thinning_out_kernell.hpp"
+#include "reduction_library/thinning/Random_thinning.hpp"
+#include "reduction_library/thinning/Leveling_thinning.hpp"
 
 
 using namespace std;
@@ -290,6 +292,7 @@ void raw_data_reader(){
 
 
 void test_alpaka(){
+
     using namespace alpaka;
 
     auto px_values_raw = std::vector<double>{1., 2., 5., 6., 77., 6., 17., 18., 59.};
@@ -322,15 +325,11 @@ void test_alpaka(){
 
     auto charge_record = record::make_record_scalar(charge_component);
 
-    auto electrons = particle_species::make_species<record::Name::Momentum,
-                                                    record::Name::Position,
-                                                    record::Name::Weighting,
-                                                    record::Name::Charge>
-                    (momentum_record, position_record, weighting_record, charge_record);
+     particle_species::make_species<record::Name::Charge>(charge_record);
 
 
-    using particle_species_type = decltype(electrons);
-    Particle<particle_species_type> particle_3(2, electrons);
+   // using particle_species_type = decltype(electrons);
+   // Particle<particle_species_type> particle_3(2, electrons);
 
 
   //  using particle_type = Particle<particle_species_type>;
@@ -366,7 +365,8 @@ void test_alpaka(){
 struct Test_random_kernel {
 
     template<typename Acc>
-    ALPAKA_FN_ACC void operator()(Acc const & acc) const {
+    ALPAKA_FN_ACC void operator()(Acc const & acc) const
+    {
 
         using namespace alpaka;
 
@@ -374,11 +374,11 @@ struct Test_random_kernel {
 
         auto distribution = rand::distribution::createNormalReal<double>(acc);
         auto seed = 1;
-        auto subsequence = 2;
+        auto subsequence = 3;
         auto generator = rand::generator::createDefault(acc, seed, subsequence);
         auto random_value = distribution(generator);
 
-        printf("random_value  %u \n", random_value);
+        printf("random_value  %f \n", random_value);
 
     }
 };
@@ -398,13 +398,14 @@ void initialize_with_random_values(reduction_library::SOA::Alpaka_dataset<Acc, d
 
 void test_species_copy()
 {
-    using namespace alpaka;
     using namespace SOA;
-    using Dim = alpaka::dim::DimInt<1>;
-    using Idx = uint32_t;
 
+    using namespace alpaka;
+
+    using Dim = alpaka::dim::DimInt<1>;
+    using Idx = std::size_t;
+    using Acc = alpaka::acc::AccCpuSerial<Dim, Idx>;
     std::size_t test_size = 10;
-    using Acc = acc::AccCpuSerial<Dim, Idx>;
 
     Alpaka_dataset<Acc, double> test_dataset_x(test_size);
     Alpaka_dataset<Acc, double> test_dataset_y(test_size);
@@ -456,15 +457,15 @@ void test_species_copy()
     using Old_dataset_type = Alpaka_dataset<Acc, double>;
     using Dataset_new_acc = SOA::Acc_dataset_t<Acc_new, Old_dataset_type>;
     Dataset_new_acc new_dataset(test_dataset_x);
-    std::cout<<"first type == "<<typeid(test_dataset_x).name()<<std::endl;
-    std::cout<<"second type == "<<typeid(new_dataset).name()<<std::endl;
+  //  std::cout<<"first type == "<<typeid(test_dataset_x).name()<<std::endl;
+  //  std::cout<<"second type == "<<typeid(new_dataset).name()<<std::endl;
 
     using Old_component_type = Component<T_dataset>;
     using Component_new_acc = SOA::Acc_component_t<Acc_new, Old_component_type>;
 
     Component_new_acc new_component(component_x);
-    std::cout<<"first type == "<<typeid(component_x).name()<<std::endl;
-    std::cout<<"second type == "<<typeid(new_component).name()<<std::endl;
+  //  std::cout<<"first type == "<<typeid(component_x).name()<<std::endl;
+//    std::cout<<"second type == "<<typeid(new_component).name()<<std::endl;
     using T_Names_List = helpers::Type_list<component::Name::SCALAR>;
 
     using Old_component_type = Component<T_dataset>;
@@ -476,16 +477,54 @@ void test_species_copy()
     T_Components_Types_List old_type_list(component_x);
     Old_Record_type::Components old_components(old_type_list);
     Record_new_acc::Components new_components(old_type_list);
-//  std::cout<<"second type == "<<typeid(new_components).name()<<std::endl;
+  //  std::cout<<"second type == "<<typeid(new_components).name()<<std::endl;
 
-//    Record_new_acc new_record(weighting_record);
+    Record_new_acc new_record(weighting_record);
 
- //   std::cout<<"first type == "<<typeid(coords).name()<<std::endl;
+  //  std::cout<<"first type == "<<typeid(coords).name()<<std::endl;
  //   std::cout<<"second type == "<<typeid(new_record).name()<<std::endl;
 
- //   reduction_library::particle_access::make_species_different_acc<Acc_new>(electrons);
+    auto electrons_diff_acc = reduction_library::particle_access::make_species_different_acc<Acc_new>(electrons);
+ //   std::cout<<std::endl<<std::endl;
+  //  std::cout<<"first type == "<<typeid(electrons_diff_acc).name()<<std::endl;
+  //  std::cout<<"second type == "<<typeid(electrons).name()<<std::endl;
+    std::cout<<std::endl<<std::endl;
+    for (int i = 0; i < electrons.get_size(); i++)
+    {
+        auto particle = electrons.get_particle(i);
+        auto weighting = particle_access::get_weighting(particle);
+        std::cout<<" weighting[i] == "<<weighting<<"  ";
+    }
+    std::cout<<"SIZE "<<electrons.get_size()<<std::endl;
+
+    double ratio_deleted_particles = 0.5;
+    using T_Particle_Species = decltype(electrons);
+
+    std::cout<<"Test random out of kernel<"<<std::endl;
+
+    thinning::Thinning_out_kernell<Acc, T_Particle_Species, thinning::Random_thinning> test_random;
+    test_random.init(ratio_deleted_particles);
+    test_random(electrons, 5);
+    std::cout<<std::endl<<std::endl;
+
+
+    //Test_random_kernel helloWorldKernel;
+
+     //  auto taskRunKernel = kernel::createTaskKernel<Acc>(workDiv, helloWorldKernel);
+
+
+       //queue::enqueue(queue, taskRunKernel);
+
+
+   //    alpaka::wait::wait(queue);
+
+
+ // * */
+
 
 }
+
+
 
 int main(){
     test_species_copy();
@@ -529,8 +568,8 @@ int main(){
 	std::cout << typeid(new_alpaka).name() << '\n';
 */
 
-/*
-    using namespace alpaka;
+
+   /* using namespace alpaka;
 
     using Dim = alpaka::dim::DimInt<1>;
     using Idx = uint32_t;
@@ -556,13 +595,13 @@ int main(){
     auto taskRunKernel = kernel::createTaskKernel<Acc>(workDiv, helloWorldKernel);
 
 
-  //  queue::enqueue(queue, taskRunKernel);
+    alpaka::queue::enqueue(queue, taskRunKernel);
 
 
-  //  alpaka::wait::wait(queue);
-
+    alpaka::wait::wait(queue);
 */
-	return 0;
+
+    return 0;
 }
 
 

@@ -6,7 +6,12 @@
 
 namespace reduction_library{
 namespace SOA{
-
+/** Base structure for Dataset type with given alpaka accelerator
+ *
+ *  represent set of values with type T_Value, alpaka accelerator Acc
+ *  allows setting and getting values
+ *
+ */
 template<typename Acc, typename T_Value>
 struct Alpaka_dataset{
 public:
@@ -24,16 +29,18 @@ public:
     {
         size = dataset.get_size();
         auto const devAcc = alpaka::pltf::getDevByIdx<Acc>(0u);
-        buffer = new BufAcc(alpaka::mem::buf::alloc<T_Value, Idx>(devAcc, size));
-        data = alpaka::mem::view::getPtrNative(*buffer);
+        buffer = dataset.get_buffer();
+        data = dataset.start();
+        //new BufAcc(alpaka::mem::buf::alloc<T_Value, Idx>(devAcc, size));
+       // data = //alpaka::mem::view::getPtrNative(*buffer);
 
-        using QueueProperty = alpaka::queue::Blocking;
-            using QueueAcc = alpaka::queue::Queue<
-                Acc,
-                QueueProperty
-            >;
-        QueueAcc queue { devAcc };
-        alpaka::mem::view::copy(queue, *buffer, *dataset.get_buffer(), size);
+       // using QueueProperty = alpaka::queue::Blocking;
+        //    using QueueAcc = alpaka::queue::Queue<
+         //       Acc,
+          //      QueueProperty
+          //  >;
+        //QueueAcc queue { devAcc };
+        //alpaka::mem::view::copy(queue, *buffer, *dataset.get_buffer(), size);
 
     }
 
@@ -62,7 +69,11 @@ public:
         data = alpaka::mem::view::getPtrNative(*buffer);
     }
 
-    ALPAKA_FN_HOST_ACC const BufAcc* get_buffer() const
+  //  ALPAKA_FN_HOST_ACC const BufAcc* get_buffer() const
+  //  {
+    //    return buffer;
+   // }
+    ALPAKA_FN_HOST_ACC BufAcc* get_buffer() const
     {
         return buffer;
     }
@@ -85,7 +96,7 @@ public:
     {
     	return *(data + idx);
     }
-    void set_value(Value_type value, int idx)
+    ALPAKA_FN_HOST_ACC void set_value(Value_type value, int idx)
     {
         data[idx] = value;
     }

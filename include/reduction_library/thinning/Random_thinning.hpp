@@ -7,8 +7,7 @@
 namespace reduction_library{
 namespace thinning{
 
-template<typename T_Particle>
-class Random_thinning: public Thinning{
+class Random_thinning{
 
 private:
     double ratio_deleted_paticles;
@@ -30,7 +29,7 @@ public:
           part_of_additional_weight = 0.;
       }
 
-      template<typename Acc, typename T_Random_Generator>
+      template<typename Acc, typename T_Particle, typename T_Random_Generator>
       ALPAKA_FN_ACC void collect(Acc const& acc, T_Particle particle, T_Random_Generator& generator)
       {
 
@@ -54,8 +53,8 @@ public:
           part_of_additional_weight = sum_reduced_weights / num_of_left_particles;
       }
 
-      template<typename Acc>
-      ALPAKA_FN_ACC void reduce(Acc const& acc, T_Particle& particle)
+      template<typename Acc, typename T_Particle, typename T_Random_Generator>
+      ALPAKA_FN_ACC void reduce(Acc const& acc, T_Particle& particle, T_Random_Generator& generator)
       {
           double weight = particle_access::get_weighting(particle);
           if ( weight > 0 )

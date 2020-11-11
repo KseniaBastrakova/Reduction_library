@@ -1,4 +1,4 @@
 #pragma once
 #ifndef HDNLINE
-#define HDNLINE inline
+#define HDNLINE ALPAKA_FN_HOST_ACC
 #endif

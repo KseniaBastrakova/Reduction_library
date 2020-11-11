@@ -5,6 +5,12 @@
 namespace reduction_library{
 namespace SOA{
 
+/** Base structure for Dataset type
+ *
+ *  represent set of values with type T_Value,
+ *  allows setting and getting values
+ *
+ */
 template<typename T_Value>
 struct Dataset{
 public:
@@ -24,11 +30,14 @@ public:
 
     Dataset(std::vector<Value_type> values):
         values(values){}
-
+    //-----------------------------------------------------------------------------
+    //! Get copy of values
     std::vector<Value_type> get_values() const
     {
         return values;
     }
+    //-----------------------------------------------------------------------------
+    //! Set values
     void set_values(const std::vector<Value_type>& new_values)
     {
         values = new_values;
@@ -42,14 +51,10 @@ public:
     {
         values[idx] = value;
     }
-
-    /// We use this functions only for test
-    void print(){
-        for (int i=0; i<values.size(); i++)
-            std::cout<<values[i]<<"  ";
-        std::cout<<std::endl;
-    }
-    std::size_t get_size(){
+    //-----------------------------------------------------------------------------
+    //! Get size of dataset
+    std::size_t get_size()
+    {
     	return values.size();
 
     }

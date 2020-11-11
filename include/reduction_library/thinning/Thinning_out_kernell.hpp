@@ -8,7 +8,7 @@
 namespace reduction_library{
 namespace thinning{
 
-template<typename Acc, typename T_Particle_Spicies>
+template<typename Acc, typename T_Particle_Spicies, typename T_Algorithm>
 struct Thinning_out_kernell{
 private:
     double ratioDeletedPaticles;
@@ -53,23 +53,24 @@ public:
         using DevHost = alpaka::dev::DevCpu;
         auto const devHost = alpaka::pltf::getDevByIdx<DevHost>(0u);
 
-        Thinning_alpaka_kernell kernel;
+        Thinning_alpaka_kernell<T_Algorithm> kernel;
         kernel.init(ratioDeletedPaticles);
-        auto particles_device = reduction_library::particle_access::make_species_different_acc<Acc>(particles);
+      //  auto particles_device = reduction_library::particle_access::make_species_different_acc<Acc>(pasrticles);
+
 
         auto const taskKernel(alpaka::kernel::createTaskKernel<Acc>(
                workdiv,
                kernel,
-               particles_device,
+               particles,
                patch_size));
 
        alpaka::queue::enqueue(queue, taskKernel);
        alpaka::wait::wait(queue);
-       auto particles_result = reduction_library::particle_access::make_species_different_acc<DevHost>(particles_device);
+  //     particles = reduction_library::particle_access::make_species_different_acc<Acc>(particles_device);
 
-       for (int i = 0; i < particles_result.get_size(); i++)
+       for (int i = 0; i < particles.get_size(); i++)
           {
-              auto particle = particles_result.get_particle(i);
+              auto particle = particles.get_particle(i);
               auto weighting = particle_access::get_weighting(particle);
               std::cout<<" weighting[i] == "<<weighting<<"  ";
           }

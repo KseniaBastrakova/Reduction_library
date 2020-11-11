@@ -4,8 +4,7 @@
 #include <openPMD/openPMD.hpp>
 #include "reduction_library/SOA/Record.hpp"
 #include "reduction_library/helpers/Type_list.hpp"
-#include "reduction_library/thinning/Thinning.hpp"
-#include "reduction_library/thinning/Thinning_particles_spicialization.hpp"
+
 
 using namespace reduction_library;
 

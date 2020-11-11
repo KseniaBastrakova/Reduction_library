@@ -86,6 +86,26 @@ namespace traits{
         }
     };
 
+    template<typename T_Names_list, typename T_Record_type_list>
+    struct Getiing_size<SOA::Particle_species<T_Names_list, T_Record_type_list>>
+    {
+    public:
+        ALPAKA_FN_HOST_ACC auto operator() (SOA::Particle_species<T_Names_list, T_Record_type_list>& particle_species)
+        {
+            return  particle_species.get_size();
+        }
+     };
+
+    template<typename T_Names_list, typename T_Record_type_list>
+    struct Getting_particle<SOA::Particle_species<T_Names_list, T_Record_type_list>>
+    {
+    public:
+        ALPAKA_FN_HOST_ACC auto operator() (SOA::Particle_species<T_Names_list, T_Record_type_list>& particle_species, int idx)
+        {
+            return particle_species.get_particle(idx);
+        }
+    };
+
     template<typename ... T_Names, typename ... T_Record_types>
     auto make_species(T_Record_types& ...  records)
     {
@@ -96,9 +116,6 @@ namespace traits{
         Species species(input_records);
         return species;
     }
-
-
-
 
 } // namespace particle_spicies
 } // reduction_library
