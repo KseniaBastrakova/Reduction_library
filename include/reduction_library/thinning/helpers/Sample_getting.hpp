@@ -52,13 +52,12 @@ private:
     }
 
 public:
-    std::vector<std::size_t> operator()(const std::vector<int>& values, const std::vector<double>& weights, int sample_size,
-            T_Random_Generator& generator)
+    std::vector<double> operator()(const std::vector<double>& weights, int sample_size, T_Random_Generator& generator)
     {
-        std::vector<std::size_t> number_of_includes(values.size(), 0);
+        std::vector<double> number_of_includes(weights.size(), 0);
         for (int i = 0; i < sample_size; i++)
         {
-            std::vector<int> num_inc_one_iteration = get_wrs(values, weights, sample_size, generator);
+            std::vector<int> num_inc_one_iteration = get_wrs(weights, sample_size, generator);
             for (int i = 0; i < num_inc_one_iteration.size(); i++)
             {
                 number_of_includes[num_inc_one_iteration[i]]++;

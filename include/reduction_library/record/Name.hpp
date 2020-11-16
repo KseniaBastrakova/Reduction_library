@@ -8,6 +8,8 @@ namespace Name{
     struct Weighting {};
     struct Position {};
     struct Charge {};
+    struct Mass {};
+    struct Idx {};
 };
 
 } // namespace record

@@ -16,21 +16,21 @@ namespace thinning{
 
 class In_kernel_thinning{
 private:
-    double ratioDeletedPaticles;
+    double ratio_deleted_paticles;
     int num_of_left_particles;
     double sum_reduced_weights;
     double part_of_additional_weight;
 
 public:
     ALPAKA_FN_ACC In_kernel_thinning():
-        ratioDeletedPaticles(0),
+        ratio_deleted_paticles(0),
         num_of_left_particles(0),
         sum_reduced_weights(0.),
         part_of_additional_weight(0.){}
 
     ALPAKA_FN_ACC void init(double ratioDeletedPaticles)
     {
-        this->ratioDeletedPaticles = ratioDeletedPaticles;
+        this->ratio_deleted_paticles = ratioDeletedPaticles;
         num_of_left_particles = 0;
         sum_reduced_weights = 0.;
         part_of_additional_weight = 0.;
@@ -41,7 +41,7 @@ public:
     {
         using namespace alpaka;
         double random_value = generator();
-        if (random_value < ratioDeletedPaticles)
+        if (random_value < ratio_deleted_paticles)
         {
            particle_access::set_weighting(0, particle);
            auto weight = particle_access::get_weighting(particle);
