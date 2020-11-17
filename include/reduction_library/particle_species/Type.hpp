@@ -25,7 +25,7 @@ struct Type{
 
 template<typename T_Particle_Species>
 struct Particle_Type{
-    using type = typename particle_species::traits::Type<Particle_Type, T_Particle_Species>::type;
+    using type = typename particle_species::traits::Particle_Type<T_Particle_Species>::type;
 
 };
 

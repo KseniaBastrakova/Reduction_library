@@ -2,16 +2,23 @@
 
 namespace reduction_library{
 namespace component{
+/** Component object traits
+ *  represent compile time type for given template component
+*/
 
 namespace traits{
 
-    template<typename T_component>
-    struct Type;
+//---------------------------------------------------------------------------------------
+//! Returns component's storage type
+template<typename T_Component>
+struct Type;
 
 } //traits
 
-    template<typename T_component>
-    using Type = typename traits::Type<T_component>::type;
+//---------------------------------------------------------------------------------------
+//! Returns typename of component's storage type
+template<typename T_Component>
+using Type = typename traits::Type<T_Component>::type;
 
 }//component
 }//reduction_library

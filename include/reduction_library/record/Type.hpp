@@ -6,7 +6,15 @@ namespace reduction_library{
 namespace record{
 namespace traits{
 
-template<typename T_component_name, typename T_Record>
+/** Record object traits
+ *  represent types for record's attributes
+*/
+
+
+/** Main
+ *  represent types for components's attributes
+*/
+template<typename T_Component_Name, typename T_Record>
     struct Type;
 
 template<typename T_Record>
