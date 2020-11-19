@@ -37,7 +37,7 @@ namespace traits{
   /** Functor for getting conversion unit to SI
    *
    * Expected interface:
-   *     double operator()() const;
+   *     HDINLINE double operator()() const;
    *
    * \tparam T_Component component type
    */
@@ -48,7 +48,7 @@ namespace traits{
   /** Functor for setting conversion unit to SI
    *
    * Expected interface:
-   *     void operator()( double newValue );
+   *     HDINLINE void operator()( double newValue );
    *
    * \tparam T_Component component type
    */
