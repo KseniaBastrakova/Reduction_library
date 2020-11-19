@@ -82,37 +82,37 @@ namespace traits{
     };
 }
 
-    template<typename T_Value>
-    auto make_component(std::vector<T_Value> values)
+template<typename T_Value>
+auto make_component(std::vector<T_Value> values)
+{
+    using Double_dataset_type = typename SOA::Dataset<double>;
+    auto dataset = SOA::Dataset<double>(values);
+    auto component = SOA::Component<Double_dataset_type>(dataset);
+    return component;
+}
+
+
+template<typename T_Dataset>
+struct Geting_unit_SI<SOA::Component<T_Dataset>>
+{
+public:
+    double operator() (SOA::Component<T_Dataset>& component)
     {
-        using Double_dataset_type = typename SOA::Dataset<double>;
-        auto dataset = SOA::Dataset<double>(values);
-        auto component = SOA::Component<Double_dataset_type>(dataset);
-        return component;
+         return component.get_unit_SI();
     }
 
+};
 
-    template<typename T_Dataset>
-    struct Geting_unit_SI<SOA::Component<T_Dataset>>
+template<typename T_Dataset>
+struct Setting_unit_SI<SOA::Component<T_Dataset>>
+{
+public:
+    void operator() (SOA::Component<T_Dataset>& component, double unit_si)
     {
-    public:
-        double operator() (SOA::Component<T_Dataset>& component)
-        {
-             return component.get_unit_SI();
-        }
+        component.set_unit_SI(unit_si);
+    }
 
-    };
-
-    template<typename T_Dataset>
-    struct Setting_unit_SI<SOA::Component<T_Dataset>>
-    {
-    public:
-        void operator() (SOA::Component<T_Dataset>& component, double unit_si)
-        {
-            component.set_unit_SI(unit_si);
-        }
-
-    };
+};
 
 
 

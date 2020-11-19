@@ -36,7 +36,8 @@ namespace particle_access{
     }
 
     template <typename T_Particle>
-    ALPAKA_FN_HOST_ACC void set_weighting(double weighting, T_Particle& particle){
+    ALPAKA_FN_HOST_ACC void set_weighting(double weighting, T_Particle& particle)
+    {
         set<component::Name::SCALAR, record::Name::Weighting>(weighting, particle);
     }
 
@@ -85,6 +86,11 @@ namespace particle_access{
     ALPAKA_FN_HOST_ACC auto get_mass(T_Particle& particle)
     {
         return get<component::Name::SCALAR, record::Name::Mass>(particle);
+    }
+    template <typename T_Particle>
+    ALPAKA_FN_HOST_ACC auto get_idx(T_Particle& particle)
+    {
+        return get<component::Name::SCALAR, record::Name::Idx>(particle);
     }
 
     template <typename T_Particle, typename T_Value>
