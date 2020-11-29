@@ -1,3 +1,12 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 #include <vector>
 #include <iostream>
@@ -31,18 +40,7 @@ public:
         auto const devAcc = alpaka::pltf::getDevByIdx<Acc>(0u);
         buffer = dataset.get_buffer();
         data = dataset.start();
-        //new BufAcc(alpaka::mem::buf::alloc<T_Value, Idx>(devAcc, size));
-       // data = //alpaka::mem::view::getPtrNative(*buffer);
-
-       // using QueueProperty = alpaka::queue::Blocking;
-        //    using QueueAcc = alpaka::queue::Queue<
-         //       Acc,
-          //      QueueProperty
-          //  >;
-        //QueueAcc queue { devAcc };
-        //alpaka::mem::view::copy(queue, *buffer, *dataset.get_buffer(), size);
-
-    }
+   }
 
     template<typename Acc_new>
     Alpaka_dataset(const Alpaka_dataset<Acc_new, T_Value>& dataset)
@@ -69,10 +67,22 @@ public:
         data = alpaka::mem::view::getPtrNative(*buffer);
     }
 
-  //  ALPAKA_FN_HOST_ACC const BufAcc* get_buffer() const
-  //  {
-    //    return buffer;
-   // }
+    void deep_copy(const Alpaka_dataset& dataset)
+    {
+      //  new BufAcc(alpaka::mem::buf::alloc<T_Value, Idx>(Acc, size));
+            // data = //alpaka::mem::view::getPtrNative(*buffer);
+
+            // using QueueProperty = alpaka::queue::Blocking;
+             //    using QueueAcc = alpaka::queue::Queue<
+              //       Acc,
+               //      QueueProperty
+               //  >;
+             //QueueAcc queue { devAcc };
+             //alpaka::mem::view::copy(queue, *buffer, *dataset.get_buffer(), size);
+
+    }
+
+
     ALPAKA_FN_HOST_ACC BufAcc* get_buffer() const
     {
         return buffer;
@@ -100,7 +110,6 @@ public:
     {
         data[idx] = value;
     }
-
 
 };
 

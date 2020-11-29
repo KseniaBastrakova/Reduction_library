@@ -1,11 +1,19 @@
-#pragma once
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
 #pragma once
 
 #include <tuple>
+
+#include "../record/Concept.hpp"
 #include "reduction_library/helpers/Type_list.hpp"
 #include "reduction_library/SOA/Record_getters.hpp"
-#include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Component.hpp"
 #include "reduction_library/SOA/Dataset.hpp"
@@ -92,21 +100,23 @@ namespace traits{
                 Components
                >;
     };
+
+
 } //namespace traits
 
 
     // single type
     template<typename T_Component_type>
-    using Record_scalar = SOA::Record<helpers::Type_list<component::Name::SCALAR >, helpers::Type_list< T_Component_type>>;
+    using Record_scalar = SOA::Record<helpers::Type_list<component::name::SCALAR >, helpers::Type_list< T_Component_type>>;
 
     // 3d
     template<typename T_X_component, typename T_Y_component, typename T_Z_component>
-    using Record_XYZ = SOA::Record<helpers::Type_list<component::Name::X, component::Name::Y, component::Name::Z>,
+    using Record_XYZ = SOA::Record<helpers::Type_list<component::name::X, component::name::Y, component::name::Z>,
             helpers::Type_list<T_X_component, T_Y_component, T_Z_component>>;
 
     // 2d
     template<typename T_X_component, typename T_Y_component>
-    using Record_XY = SOA::Record<helpers::Type_list<component::Name::X, component::Name::Y>,
+    using Record_XY = SOA::Record<helpers::Type_list<component::name::X, component::name::Y>,
             helpers::Type_list<T_X_component, T_Y_component>>;
 
 
@@ -177,7 +187,7 @@ namespace traits{
     template<class T_Scalar_component>
     Record_scalar<T_Scalar_component> make_record_scalar(T_Scalar_component scalar_component)
     {
-        auto scalar_record = make_record<component::Name::SCALAR>(scalar_component);
+        auto scalar_record = make_record<component::name::SCALAR>(scalar_component);
         return scalar_record;
     }
 
@@ -186,8 +196,8 @@ namespace traits{
                                                                             T_Y_component y_component,
                                                                             T_Z_component z_component)
     {
-        auto result_3d_record = make_record<component::Name::X,
-                component::Name::Y, component::Name::Z>(x_component, y_component, z_component);
+        auto result_3d_record = make_record<component::name::X,
+                component::name::Y, component::name::Z>(x_component, y_component, z_component);
         return result_3d_record;
     }
 
@@ -195,8 +205,8 @@ namespace traits{
     Record_XY<T_X_component, T_Y_component> make_record_XY(T_X_component x_component,
                                                            T_Y_component y_component)
     {
-        auto result_2d_record = make_record<component::Name::X,
-                component::Name::Y>(x_component, y_component);
+        auto result_2d_record = make_record<component::name::X,
+                component::name::Y>(x_component, y_component);
         return result_2d_record;
     }
 

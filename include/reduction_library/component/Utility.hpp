@@ -1,12 +1,20 @@
-#pragma once
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
+#pragma once
 
 #include "reduction_library/HDNLINE.hpp"
 #include "reduction_library/component/Concept.hpp"
 
 /** @file
  *
- * This file implementes utilities for components.
+ * This file implements utilities for components.
  * They build on top of component concept interface and do not pose additional requirements on component types.
  */
 
@@ -23,7 +31,7 @@ namespace component{
     template< typename T_Component >
     HDNLINE double get_unit_SI( T_Component & component )
     {
-        Geting_unit_SI< T_Component > si_get_functor;
+        Getting_unit_SI< T_Component > si_get_functor;
         return si_get_functor.operator()( component );
     }
     

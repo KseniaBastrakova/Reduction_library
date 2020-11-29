@@ -1,3 +1,12 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 
 #include <tuple>
@@ -24,8 +33,10 @@ public:
     Records records;
     Particle_species(){}
     Particle_species(const Particle_species& particle_species):
-        records(particle_species.get_records()){}
-
+        records(particle_species.get_records())
+    {
+        size = std::get< 0 >( records ).get_size();
+    }
     template<typename T_Another_Names_List, typename T_Another_Record_Type_List>
     Particle_species(Particle_species<T_Another_Names_List,T_Another_Record_Type_List> const & particle_species):
         records(particle_species.get_records())
@@ -48,7 +59,7 @@ public:
     {
         return My_particle(idx, *this);
     }
-    ALPAKA_FN_HOST_ACC std::size_t get_size() const
+    ALPAKA_FN_HOST_ACC int get_size() const
     {
         auto first_record = std::get< 0 >( records );
         return first_record.get_size();
@@ -72,6 +83,13 @@ namespace traits{
                 typename Species::Records
          >;
     };
+
+    template<typename T_Names_list, typename T_Record_type_list>
+    struct Particle_Type<SOA::Particle_species<T_Names_list, T_Record_type_list>>
+    {
+        using Particle_type = typename SOA::Particle_species<T_Names_list, T_Record_type_list>::My_particle;
+        using type = Particle_type;
+    };
 } // namespace traits
 
     template<typename T_record_name, typename T_Names_list, typename T_Record_type_list>
@@ -90,9 +108,9 @@ namespace traits{
     struct Getiing_size<SOA::Particle_species<T_Names_list, T_Record_type_list>>
     {
     public:
-        ALPAKA_FN_HOST_ACC auto operator() (SOA::Particle_species<T_Names_list, T_Record_type_list>& particle_species)
+        ALPAKA_FN_HOST_ACC auto operator() (const SOA::Particle_species<T_Names_list, T_Record_type_list>& particle_species)
         {
-            return  particle_species.get_size();
+            return particle_species.get_size();
         }
      };
 

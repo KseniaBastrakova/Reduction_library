@@ -1,3 +1,12 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 
 #include <alpaka/alpaka.hpp>
@@ -32,112 +41,112 @@ namespace particle_access{
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_weighting(T_Particle& particle)
     {
-        return get<component::Name::SCALAR, record::Name::Weighting>(particle);
+        return get<component::name::SCALAR, record::name::Weighting>(particle);
     }
 
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC void set_weighting(double weighting, T_Particle& particle)
     {
-        set<component::Name::SCALAR, record::Name::Weighting>(weighting, particle);
+        set<component::name::SCALAR, record::name::Weighting>(weighting, particle);
     }
 
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_momentum_x(T_Particle& particle)
     {
-        return get<component::Name::X, record::Name::Momentum>(particle);
+        return get<component::name::X, record::name::Momentum>(particle);
     }
 
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_momentum_y(T_Particle& particle)
     {
-        return get<component::Name::Y, record::Name::Momentum>(particle);
+        return get<component::name::Y, record::name::Momentum>(particle);
     }
 
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_momentum_z(T_Particle& particle)
     {
-        return get<component::Name::Z, record::Name::Momentum>(particle);
+        return get<component::name::Z, record::name::Momentum>(particle);
     }
 
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_position_x(T_Particle& particle)
     {
-        return get<component::Name::X, record::Name::Position>(particle);
+        return get<component::name::X, record::name::Position>(particle);
     }
 
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_position_y(T_Particle& particle)
     {
-        return get<component::Name::Y, record::Name::Position>(particle);
+        return get<component::name::Y, record::name::Position>(particle);
     }
 
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_position_z(T_Particle& particle)
     {
-        return get<component::Name::Z, record::Name::Position>(particle);
+        return get<component::name::Z, record::name::Position>(particle);
     }
 
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_charge(T_Particle& particle)
     {
-        return get<component::Name::SCALAR, record::Name::Charge>(particle);
+        return get<component::name::SCALAR, record::name::Charge>(particle);
     }
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_mass(T_Particle& particle)
     {
-        return get<component::Name::SCALAR, record::Name::Mass>(particle);
+        return get<component::name::SCALAR, record::name::Mass>(particle);
     }
     template <typename T_Particle>
     ALPAKA_FN_HOST_ACC auto get_idx(T_Particle& particle)
     {
-        return get<component::Name::SCALAR, record::Name::Idx>(particle);
+        return get<component::name::SCALAR, record::name::Idx>(particle);
     }
 
     template <typename T_Particle, typename T_Value>
     ALPAKA_FN_HOST_ACC void set_momentum_x(T_Value value, T_Particle& particle)
     {
-        set<component::Name::X, record::Name::Momentum>(value, particle);
+        set<component::name::X, record::name::Momentum>(value, particle);
     }
 
     template <typename T_Particle, typename T_Value>
     ALPAKA_FN_HOST_ACC void set_momentum_y(T_Value value, T_Particle& particle)
     {
-        set<component::Name::Y, record::Name::Momentum>(value, particle);
+        set<component::name::Y, record::name::Momentum>(value, particle);
     }
 
     template <typename T_Particle, typename T_Value>
     ALPAKA_FN_HOST_ACC void set_momentum_z(T_Value value, T_Particle& particle)
     {
-        set<component::Name::Z, record::Name::Momentum>(value, particle);
+        set<component::name::Z, record::name::Momentum>(value, particle);
     }
 
     template <typename T_Particle, typename T_Value>
     ALPAKA_FN_HOST_ACC void set_position_x(T_Value value, T_Particle& particle)
     {
-        set<component::Name::X, record::Name::Position>(value, particle);
+        set<component::name::X, record::name::Position>(value, particle);
     }
 
     template <typename T_Particle, typename T_Value>
     ALPAKA_FN_HOST_ACC void set_position_y(T_Value value, T_Particle& particle)
     {
-        set<component::Name::Y, record::Name::Position>(value, particle);
+        set<component::name::Y, record::name::Position>(value, particle);
     }
 
     template <typename T_Particle, typename T_Value>
     ALPAKA_FN_HOST_ACC void set_position_z(T_Value value, T_Particle& particle)
     {
-        set<component::Name::Z, record::Name::Position>(value, particle);
+        set<component::name::Z, record::name::Position>(value, particle);
     }
 
     template <typename T_Particle, typename T_Value>
     ALPAKA_FN_HOST_ACC void set_charge(T_Value value, T_Particle& particle)
     {
-        set<component::Name::SCALAR, record::Name::Charge>(value, particle);
+        set<component::name::SCALAR, record::name::Charge>(value, particle);
     }
     template <typename T_Particle, typename T_Value>
     ALPAKA_FN_HOST_ACC void set_mass(T_Value value, T_Particle& particle)
     {
-        set<component::Name::SCALAR, record::Name::Mass>(value, particle);
+        set<component::name::SCALAR, record::name::Mass>(value, particle);
     }
 
 } // namespace particle

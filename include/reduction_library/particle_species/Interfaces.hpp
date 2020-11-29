@@ -1,3 +1,12 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 
 #include "reduction_library/HDNLINE.hpp"
@@ -46,7 +55,7 @@ namespace particle_species{
     //-----------------------------------------------------------------------------
     //! Host device function for getting number of particles in given component
     template<typename T_Particle_Species>
-    HDNLINE int get_size(T_Particle_Species& particle_species)
+    HDNLINE auto get_size(const T_Particle_Species& particle_species)
     {
        Getiing_size<T_Particle_Species> size_get_functor;
        return size_get_functor.operator ()(particle_species);
@@ -61,10 +70,11 @@ namespace particle_species{
     //-----------------------------------------------------------------------------
     //! Host device function for getting particle with given idx. Return type define in  Particle_Type interface
     template<typename T_Particle_Species>
-    auto get_particle(T_Particle_Species& particle_species, int idx)
+    HDNLINE typename traits::Particle_Type<T_Particle_Species>::type
+        get_particle(T_Particle_Species& particle_species, int idx)
     {
        Getting_particle<T_Particle_Species> getting_functor;
-       getting_functor.operator ()(particle_species, idx);
+       return getting_functor.operator ()(particle_species, idx);
     }
 
     /** Functor for deletting particle in given particle species

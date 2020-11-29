@@ -1,7 +1,16 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 
-#include "reduction_library/component/Type.hpp"
-#include "reduction_library/component/Interfaces.hpp"
+#include "reduction_library/component/Utility.hpp"
+#include "reduction_library/component/Concept.hpp"
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Dataset.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"
@@ -76,7 +85,8 @@ public:
 namespace component{
 namespace traits{
     template<typename T_Dataset>
-    struct Type<SOA::Component<T_Dataset>>{
+    struct Value_type<SOA::Component<T_Dataset>>
+    {
         using type = T_Dataset;
 
     };
@@ -93,7 +103,7 @@ auto make_component(std::vector<T_Value> values)
 
 
 template<typename T_Dataset>
-struct Geting_unit_SI<SOA::Component<T_Dataset>>
+struct Getting_unit_SI<SOA::Component<T_Dataset>>
 {
 public:
     double operator() (SOA::Component<T_Dataset>& component)

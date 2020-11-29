@@ -1,3 +1,12 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 
 #include "reduction_library/record/Name.hpp"
@@ -47,7 +56,8 @@ namespace traits{
      * \tparam T_Particle_Species type of input particle species
      */
     template<typename T_Record_Name, typename T_Particle_Species>
-    struct Type{
+    struct Type
+    {
         using type = typename particle_species::traits::Type<T_Record_Name, T_Particle_Species>::type;
     };
 
@@ -56,7 +66,8 @@ namespace traits{
      * \tparam T_Particle_Species - type of input particle species
      */
     template<typename T_Particle_Species>
-    struct Particle_Type{
+    struct Particle_Type
+    {
         using type = typename particle_species::traits::Particle_Type<T_Particle_Species>::type;
     };
 
@@ -65,7 +76,8 @@ namespace traits{
      * \tparam T_Particle_Species type of input particle species
      */
     template<typename T_Particle_Species>
-    struct Record_names{
+    struct Record_names
+    {
         using type = typename particle_species::traits::Record_names<T_Particle_Species>::type;
     };
 } // namespace particle_species

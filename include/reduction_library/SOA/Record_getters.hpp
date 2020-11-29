@@ -1,11 +1,20 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 
 #include "../Particle.hpp"
+#include "../record/Concept.hpp"
 #include "reduction_library/component/Name.hpp"
 #include "reduction_library/SOA/Particle.hpp"
 #include "reduction_library/record/Name.hpp"
 
-#include "reduction_library/record/Interfaces.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"
 #include "reduction_library/SOA/Particle_species_traits.hpp"
 

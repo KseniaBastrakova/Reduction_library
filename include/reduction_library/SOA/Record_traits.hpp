@@ -1,3 +1,12 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 
 #include "reduction_library/SOA/Record.hpp"
@@ -27,7 +36,7 @@ struct Acc_record{
  */
 template<typename T_Acc_New, typename T_Names_list, typename T_Component_type_list>
 struct Acc_record<T_Acc_New, Record<T_Names_list, T_Component_type_list>>{
-    template< typename T_Component>
+    template<typename T_Component>
     using Transform_component = Acc_component_t<T_Acc_New, T_Component>;
     using New_components_type = typename helpers::apply_meta_t<Transform_component, T_Component_type_list>;
     using type = Record<T_Names_list, New_components_type>;

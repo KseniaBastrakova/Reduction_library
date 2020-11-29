@@ -1,7 +1,13 @@
-/// TODO: copyright
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
 #pragma once
-
 
 /** @file
  *
@@ -15,8 +21,7 @@
 
 namespace reduction_library{
 namespace component{
-/// TODO: why capitalized?
-namespace Name{
+namespace name{
         
     //! Tag for X Cartesian component
     struct X {};
