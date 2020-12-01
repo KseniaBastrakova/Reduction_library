@@ -1,8 +1,17 @@
-#pragma once
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
-#include "reduction_library/SOA/Particle_species.hpp"
-#include "reduction_library/thinning/In_kernel_thinning.hpp"
+#pragma once
+#include "reduction_library/particle_species/Interfaces.hpp"
 #include "reduction_library/thinning/Thinning_alpaka_kernell.hpp"
+
+
 #include <alpaka/alpaka.hpp>
 
 namespace reduction_library{
@@ -11,17 +20,17 @@ namespace thinning{
 template<typename Acc, typename T_Particle_Spicies, typename T_Algorithm>
 struct Thinning_out_kernell{
 private:
-    double ratioDeletedPaticles;
+    typename T_Algorithm::Parameters algorihtm_parameters;
 public:
-    void init(double ratioDeletedPaticles)
+    void init(typename T_Algorithm::Parameters parameters)
     {
-        this->ratioDeletedPaticles = ratioDeletedPaticles;
+        this->algorihtm_parameters = parameters;
     }
 
     void operator()(T_Particle_Spicies& particles, std::size_t patch_size) const
     {
         std::cout<<"  operator()"<<std::endl;
-    	std::size_t num_particles = particles.get_size();
+    	std::size_t num_particles = particle_species::get_size(particles);
 
     	std::size_t num_patches = std::ceil(num_particles / patch_size);
 
@@ -54,10 +63,9 @@ public:
         auto const devHost = alpaka::pltf::getDevByIdx<DevHost>(0u);
 
         Thinning_alpaka_kernell<T_Algorithm> kernel;
-        kernel.init(ratioDeletedPaticles);
-      //  auto particles_device = reduction_library::particle_access::make_species_different_acc<Acc>(pasrticles);
+        kernel.init(algorihtm_parameters);
 
-
+        auto particles_device = reduction_library::particle_species::make_species_different_acc<Acc>(particles);
         auto const taskKernel(alpaka::kernel::createTaskKernel<Acc>(
                workdiv,
                kernel,
@@ -66,13 +74,15 @@ public:
 
        alpaka::queue::enqueue(queue, taskKernel);
        alpaka::wait::wait(queue);
-  //     particles = reduction_library::particle_access::make_species_different_acc<Acc>(particles_device);
 
-       for (int i = 0; i < particles.get_size(); i++)
+       particles = reduction_library::particle_species::make_species_different_acc<Acc>(particles_device);
+
+       std::size_t particle_size = particle_species::get_size(particles);
+       for (int i = 0; i < particle_size; i++)
           {
-              auto particle = particles.get_particle(i);
-              auto weighting = particle_access::get_weighting(particle);
-              std::cout<<" weighting[i] == "<<weighting<<"  ";
+       //      auto particle = particle_species::get_particle(particles, i);
+         //     auto weighting = particle_access::get_weighting(particle);
+           //   std::cout<<" weighting[i] == "<<weighting<<"  ";
           }
 
     }

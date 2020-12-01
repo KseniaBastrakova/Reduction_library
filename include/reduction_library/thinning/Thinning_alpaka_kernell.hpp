@@ -1,22 +1,19 @@
 #pragma once
 
-#include "reduction_library/SOA/Particle_species.hpp"
-#include "reduction_library/thinning/In_kernel_thinning.hpp"
 #include <alpaka/alpaka.hpp>
 #include <algorithm>
-#include "In_kernel_thinning.hpp"
 
 namespace reduction_library{
 namespace thinning{
 
-template<typename T_Alorithm>
+template<typename T_Algorithm>
 struct Thinning_alpaka_kernell{
 private:
-    double ratioDeletedPaticles;
+    typename T_Algorithm::Parameters algorihtm_parameters;
 public:
-    void init (double ratioDeletedPaticles)
+    void init (typename T_Algorithm::Parameters algorihtm_parameters)
     {
-        this->ratioDeletedPaticles = ratioDeletedPaticles;
+        this->algorihtm_parameters = algorihtm_parameters;
     }
 
     template<typename Acc, typename T_Particle_Species>
@@ -24,18 +21,17 @@ public:
     {
     	using namespace alpaka;
     	auto grid_block_idx = idx::getIdx<Grid, Blocks>(acc)[0];
-    	auto start_particles_idx = grid_block_idx * patch_size;
-    	auto particles_size = particles.get_size();
-    	auto end_particles_idx = math::min(acc, start_particles_idx  + patch_size, particles_size);
-
+    	std::size_t start_particles_idx = grid_block_idx * patch_size;
+    	std::size_t particles_size = particle_species::get_size(particles);
+    	std::size_t end_particles_idx = math::min(acc, start_particles_idx  + patch_size, particles_size);
 
     	auto threadIdx = alpaka::idx::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
 
-    	using T_Particle_type = typename T_Particle_Species::My_particle;
+    	using T_Particle_type = typename particle_species::traits::Particle_Type<T_Particle_Species>::type;
 
-    	auto &algorithm( alpaka::block::shared::st::allocVar<T_Alorithm, __COUNTER__>(acc));
+    	auto &algorithm( alpaka::block::shared::st::allocVar<T_Algorithm, __COUNTER__>(acc));
 
-    	algorithm.init(ratioDeletedPaticles);
+    	algorithm.init(algorihtm_parameters);
     	block::sync::syncBlockThreads(acc);
 
     	auto const blockSize = alpaka::workdiv::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);
@@ -51,7 +47,7 @@ public:
 
         for(int i = start_particles_idx + grid_block_idx; i < end_particles_idx; i = i + blockSize.prod())
         {
-            auto particle = current_particles.get_particle(i);
+            auto& particle = particle_species::get_particle(current_particles, i);
 
         	algorithm.collect(acc, particle, random_value_generator);
         }
@@ -60,19 +56,16 @@ public:
 
         if (threadIdx == 0)
         {
-        	algorithm.process(acc);
+        	algorithm.process(acc, random_value_generator);
         }
 
         block::sync::syncBlockThreads(acc);
 
         for(int i = start_particles_idx + grid_block_idx; i< end_particles_idx; i = i + blockSize.prod())
         {
-            auto particle = current_particles.get_particle(i);
+            auto& particle = particle_species::get_particle(current_particles, i);
         	algorithm.reduce(acc, particle, random_value_generator);
-        	auto weighting = particle_access::get_weighting(particle);
         }
-
-
     }
 
 };

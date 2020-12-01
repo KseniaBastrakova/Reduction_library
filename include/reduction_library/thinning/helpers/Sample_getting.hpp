@@ -1,3 +1,12 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 
 #include <iostream>
@@ -23,7 +32,7 @@ private:
             max_values.push_back(current_probability);
         }
 
-        std::vector<int> result = find_n_max_elements(max_values, sample_size);
+        std::vector<int> result = find_n_max_elements(max_values, 1.);
         return result;
     }
 
@@ -59,7 +68,7 @@ public:
         {
             std::vector<int> num_inc_one_iteration = get_wrs(weights, sample_size, generator);
             for (int i = 0; i < num_inc_one_iteration.size(); i++)
-            {
+           {
                 number_of_includes[num_inc_one_iteration[i]]++;
             }
         }
