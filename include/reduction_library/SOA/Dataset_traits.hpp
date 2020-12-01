@@ -15,7 +15,8 @@
 
 
 namespace reduction_library{
-namespace SOA{
+namespace dataset{
+namespace traits{
 
 /** Derive a new dataset type based on the given dataset type using the given alpaka accelerator type
  *
@@ -38,12 +39,13 @@ struct Acc_dataset{
  * \tparam T_Value type of values in Alpaka dataset
  */
 template<typename T_Acc_New, typename T_Acc_Old, typename T_Value>
-struct Acc_dataset<T_Acc_New, Alpaka_dataset<T_Acc_Old, T_Value>>{
-    using type = Alpaka_dataset<T_Acc_New, T_Value>;
+struct Acc_dataset<T_Acc_New, SOA::Alpaka_dataset<T_Acc_Old, T_Value>>{
+    using type = SOA::Alpaka_dataset<T_Acc_New, T_Value>;
 };
 
 template<typename Acc_new, typename T_Dataset>
 using Acc_dataset_t = typename Acc_dataset<Acc_new, T_Dataset>::type;
 
 } // namespace SOA
+}
 } // namespace reduction_library

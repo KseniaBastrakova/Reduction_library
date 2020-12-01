@@ -14,7 +14,8 @@
 #include "reduction_library/SOA/Record_traits.hpp"
 
 namespace reduction_library{
-namespace SOA{
+namespace particle_species{
+namespace traits{
 
 /** Derive a new species type based on the given species type using alpaka-datasets
  *
@@ -27,6 +28,8 @@ struct Acc_species{
     using type = T_Particle_Species;
 };
 
+//template <typename T_Names_List, typename T_Record_Type_List>
+//class Particle_species;
 /** Partal specialization for species based on SOA::Record
 *
 *  return type of species based using alpaka datasets type, with new accelerator
@@ -36,15 +39,16 @@ struct Acc_species{
 * \tparam T_Record_Type_List typelist of record's types
 */
 template<typename T_Acc_New, typename T_Names_List, typename T_Record_Type_List>
-struct Acc_species<T_Acc_New, Particle_species<T_Names_List, T_Record_Type_List>>{
+struct Acc_species<T_Acc_New, SOA::Particle_species<T_Names_List, T_Record_Type_List>>{
     template<typename T_Record>
-    using Transform_record = Acc_record_t<T_Acc_New, T_Record>;
+    using Transform_record = record::traits::Acc_record_t<T_Acc_New, T_Record>;
     using New_records_type = typename helpers::apply_meta_t<Transform_record, T_Record_Type_List>;
-    using type = Particle_species<T_Names_List, New_records_type>;
+    using type = SOA::Particle_species<T_Names_List, New_records_type>;
 };
 
 template<typename T_Acc_New, typename T_Names_List, typename T_Record_type_list>
-using Acc_species_t = typename Acc_species<T_Acc_New, Particle_species<T_Names_List, T_Record_type_list>>::type;
+using Acc_species_t = typename Acc_species<T_Acc_New, SOA::Particle_species<T_Names_List, T_Record_type_list>>::type;
 
 } // namespace SOA
+}
 } // namespace reduction_library

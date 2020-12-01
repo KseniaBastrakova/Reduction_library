@@ -4,7 +4,8 @@
 #include "reduction_library/SOA/Component.hpp"
 
 namespace reduction_library{
-namespace SOA{
+namespace component{
+namespace traits{
 
 /** Derive a new component type based on the given component type using alpaka-dataset
  *
@@ -25,12 +26,13 @@ struct Acc_component{
  * \tparam T_Dataset type of old dataset
  */
 template<typename T_Acc_New, typename T_Dataset>
-struct Acc_component<T_Acc_New, Component<T_Dataset>> {
-    using type = Component< Acc_dataset_t<T_Acc_New, T_Dataset>>;
+struct Acc_component<T_Acc_New, SOA::Component<T_Dataset>> {
+    using type = SOA::Component< dataset::traits::Acc_dataset_t<T_Acc_New, T_Dataset>>;
 };
 
 template<typename T_Acc_New, typename T_Component>
 using Acc_component_t = typename Acc_component<T_Acc_New, T_Component>::type;
 
 } // namespace SOA
+}
 } // namespace reduction_library

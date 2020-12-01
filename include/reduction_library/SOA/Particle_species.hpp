@@ -16,8 +16,8 @@
 #include "reduction_library/SOA/Particle.hpp"
 #include "reduction_library/particle_species/Type.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"
+#include "reduction_library/SOA/Particle_species_traits.hpp"
 #include "reduction_library/helpers/Type_list.hpp"
-
 
 namespace reduction_library{
 namespace SOA{
@@ -118,7 +118,7 @@ namespace traits{
     struct Getting_particle<SOA::Particle_species<T_Names_list, T_Record_type_list>>
     {
     public:
-        ALPAKA_FN_HOST_ACC auto operator() (SOA::Particle_species<T_Names_list, T_Record_type_list>& particle_species, int idx)
+        ALPAKA_FN_HOST_ACC auto& operator() (SOA::Particle_species<T_Names_list, T_Record_type_list>& particle_species, int idx)
         {
             return particle_species.get_particle(idx);
         }
@@ -134,6 +134,7 @@ namespace traits{
         Species species(input_records);
         return species;
     }
+
 
 } // namespace particle_spicies
 } // reduction_library
