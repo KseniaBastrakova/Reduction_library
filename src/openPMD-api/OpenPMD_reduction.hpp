@@ -1,3 +1,12 @@
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
+ *
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #pragma once
 #include <iostream>
 #include <vector>
@@ -63,10 +72,10 @@ auto make_species_raw(IO::Particle_reader& reader, ParticleSpecies species, std:
     auto weighting_data = reader.Read_record(species, "weighting", range);
     auto weighting_record = make_record_raw_data<1>(weighting_data);
 
-    auto electrons = particle_species::make_species<record::Name::Momentum,
-                                                        record::Name::Position,
-                                                        record::Name::Weighting,
-                                                        record::Name::Charge>
+    auto electrons = particle_species::make_species<record::name::Momentum,
+                                                        record::name::Position,
+                                                        record::name::Weighting,
+                                                        record::name::Charge>
                         (momentum_record, position_record, weighting_record, charge_record);
 
     return electrons;

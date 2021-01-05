@@ -31,21 +31,24 @@ namespace traits{
      * \tparam T_Particle_Species type of input particle species
      */
     template<typename T_Record_Name, typename T_Particle_Species>
-        struct Type;
+    struct Type;
 
     /** Trait interface for getting particle type for given particle species
      *
      * \tparam T_Particle_Species type of input particle species
      */
     template<typename T_Particle_Species>
-        struct Particle_Type;
+    struct Particle_Type;
 
     /** Trait interface for type of storage of record names, contains in particle species
      *
      * \tparam T_Particle_Species type of input particle species
      */
     template<typename T_Particle_Species>
-        struct Record_names;
+    struct Record_names;
+
+    template<typename T_Acc_New, typename T_Particle_Species>
+    struct Acc_species;
 
 } // namespace traits
 
@@ -80,5 +83,15 @@ namespace traits{
     {
         using type = typename particle_species::traits::Record_names<T_Particle_Species>::type;
     };
+
+    template<typename T_Acc_New, typename T_Particle_Species>
+    struct Acc_species{
+        using type = typename particle_species::traits::Acc_species<T_Acc_New, T_Particle_Species>::type;
+    };
+
+    template<typename T_Acc_New, typename T_Particle_Species>
+    using Acc_species_t = typename Acc_species<T_Acc_New, T_Particle_Species>::type;
+
+
 } // namespace particle_species
 } // namespace reduction_library

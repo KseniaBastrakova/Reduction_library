@@ -27,7 +27,7 @@
 #include "reduction_library/SOA/Component_traits.hpp"
 #include "reduction_library/helpers/Type_list.hpp"
 #include "reduction_library/SOA/Record_traits.hpp"
-#include "reduction_library/SOA/Particle_species_traits.hpp"
+
 #include "reduction_library/SOA/Record_getters.hpp"
 #include "reduction_library/SOA/Dataset_traits.hpp"
 #include "reduction_library/SOA/Record.hpp"
@@ -37,6 +37,9 @@
 #include "reduction_library/thinning/Thinning_out_kernell.hpp"
 #include "reduction_library/thinning/Random_thinning.hpp"
 #include "reduction_library/thinning/Leveling_thinning.hpp"
+#include "reduction_library/thinning/Energy_conservative_thinning.hpp"
+#include "reduction_library/SOA/Particle_species_traits.hpp"
+#include "reduction_library/SOA/Species_make.hpp"
 
 
 using namespace std;
@@ -325,7 +328,7 @@ void test_alpaka(){
 
     auto charge_record = record::make_record_scalar(charge_component);
 
-     particle_species::make_species<record::Name::Charge>(charge_record);
+     particle_species::make_species<record::name::Charge>(charge_record);
 
 
    // using particle_species_type = decltype(electrons);
@@ -447,32 +450,32 @@ void test_species_copy()
 
     auto charge = record::make_record_scalar(component_charge);
 
-    auto electrons = particle_species::make_species<record::Name::Momentum,
-                                                       record::Name::Position,
-                                                       record::Name::Weighting,
-                                                       record::Name::Charge>
+    auto electrons = particle_species::make_species<record::name::Momentum,
+                                                       record::name::Position,
+                                                       record::name::Weighting,
+                                                       record::name::Charge>
                        (momentums, coords, weighting_record, charge);
 
     using Acc_new = acc::AccCpuThreads<Dim, Idx>;
     using Old_dataset_type = Alpaka_dataset<Acc, double>;
-    using Dataset_new_acc = SOA::Acc_dataset_t<Acc_new, Old_dataset_type>;
+    using Dataset_new_acc = dataset::traits::Acc_dataset_t<Acc_new, Old_dataset_type>;
     Dataset_new_acc new_dataset(test_dataset_x);
   //  std::cout<<"first type == "<<typeid(test_dataset_x).name()<<std::endl;
   //  std::cout<<"second type == "<<typeid(new_dataset).name()<<std::endl;
 
     using Old_component_type = Component<T_dataset>;
-    using Component_new_acc = SOA::Acc_component_t<Acc_new, Old_component_type>;
+    using Component_new_acc = component::traits::Acc_component_t<Acc_new, Old_component_type>;
 
     Component_new_acc new_component(component_x);
   //  std::cout<<"first type == "<<typeid(component_x).name()<<std::endl;
 //    std::cout<<"second type == "<<typeid(new_component).name()<<std::endl;
-    using T_Names_List = helpers::Type_list<component::Name::SCALAR>;
+    using T_Names_List = helpers::Type_list<component::name::SCALAR>;
 
     using Old_component_type = Component<T_dataset>;
     using T_Components_Types_List = helpers::Type_list<Old_component_type>;
 
     using Old_Record_type = SOA::Record<T_Names_List, T_Components_Types_List>;
-    using Record_new_acc = SOA::Acc_record_t<Acc_new, Old_Record_type>;
+    using Record_new_acc = record::traits::Acc_record_t<Acc_new, Old_Record_type>;
 
     T_Components_Types_List old_type_list(component_x);
     Old_Record_type::Components old_components(old_type_list);
@@ -483,12 +486,12 @@ void test_species_copy()
 
   //  std::cout<<"first type == "<<typeid(coords).name()<<std::endl;
  //   std::cout<<"second type == "<<typeid(new_record).name()<<std::endl;
-
-    auto electrons_diff_acc = reduction_library::particle_access::make_species_different_acc<Acc_new>(electrons);
+    //reduction_library::particle_species::make_species_different_acc<Acc>(particles_device);
+    auto electrons_diff_acc = reduction_library::particle_species::make_species_different_acc<Acc_new>(electrons);
  //   std::cout<<std::endl<<std::endl;
   //  std::cout<<"first type == "<<typeid(electrons_diff_acc).name()<<std::endl;
   //  std::cout<<"second type == "<<typeid(electrons).name()<<std::endl;
-    std::cout<<std::endl<<std::endl;
+ /*   std::cout<<std::endl<<std::endl;
     for (int i = 0; i < electrons.get_size(); i++)
     {
         auto particle = electrons.get_particle(i);

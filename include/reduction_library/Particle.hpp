@@ -17,10 +17,10 @@
 namespace reduction_library{
 namespace particle_access{
 
-    template<typename Component_name, typename T_Record, typename T_Particle>
+    template<typename Component_Name, typename T_Record, typename T_Particle>
     struct Getting_value;
 
-    template<typename Component_name, typename T_Record, typename T_Particle>
+    template<typename Component_name, typename T_Record, typename T_Particle>л
     ALPAKA_FN_HOST_ACC auto get(T_Particle& particle)
     {
         Getting_value<Component_name, T_Record, T_Particle> v_get_functor;

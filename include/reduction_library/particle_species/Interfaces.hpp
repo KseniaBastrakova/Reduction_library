@@ -70,7 +70,7 @@ namespace particle_species{
     //-----------------------------------------------------------------------------
     //! Host device function for getting particle with given idx. Return type define in  Particle_Type interface
     template<typename T_Particle_Species>
-    HDNLINE typename traits::Particle_Type<T_Particle_Species>::type
+    HDNLINE typename traits::Particle_Type<T_Particle_Species>::type&
         get_particle(T_Particle_Species& particle_species, int idx)
     {
        Getting_particle<T_Particle_Species> getting_functor;
@@ -90,6 +90,17 @@ namespace particle_species{
     {
        Deletting_particle<T_Particle_Species> deleting_functor;
        deleting_functor.operator ()(particle_species, idx);
+    }
+
+    template<typename T_Acc_New, typename T_Particle_Species>
+    struct Make_different_acc;
+
+    template<typename T_Acc_New, typename T_Particle_Species>
+    ALPAKA_FN_HOST_ACC typename Acc_species<T_Acc_New, T_Particle_Species>::type
+        make_species_different_acc(T_Particle_Species & particle_species)
+    {
+        Make_different_acc<T_Acc_New, T_Particle_Species> acc_functor;
+        return acc_functor.operator ()(particle_species);
     }
 
 } // namespace particle_species
