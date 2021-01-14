@@ -10,8 +10,8 @@
 #pragma once
 #include <alpaka/alpaka.hpp>
 
+#include "../Particle_getters.hpp"
 #include "reduction_library/thinning/Thinning.hpp"
-#include "reduction_library/Particle.hpp"
 
 namespace reduction_library{
 namespace thinning{

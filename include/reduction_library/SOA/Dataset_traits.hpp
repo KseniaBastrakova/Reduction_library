@@ -10,9 +10,7 @@
 #pragma once
 
 #include <alpaka/alpaka.hpp>
-
 #include "Alpaka_dataset.hpp"
-
 
 namespace reduction_library{
 namespace dataset{
@@ -46,6 +44,6 @@ struct Acc_dataset<T_Acc_New, SOA::Alpaka_dataset<T_Acc_Old, T_Value>>{
 template<typename Acc_new, typename T_Dataset>
 using Acc_dataset_t = typename Acc_dataset<Acc_new, T_Dataset>::type;
 
-} // namespace SOA
-}
+} // namespace traits
+} // namespace dataset
 } // namespace reduction_library

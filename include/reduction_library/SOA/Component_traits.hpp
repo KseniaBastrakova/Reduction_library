@@ -6,6 +6,11 @@
 namespace reduction_library{
 namespace component{
 namespace traits{
+/** @file
+ * Defining component traits, that returns new component type
+ * with changing accelerators from one to another
+ *
+ */
 
 /** Derive a new component type based on the given component type using alpaka-dataset
  *
@@ -34,5 +39,5 @@ template<typename T_Acc_New, typename T_Component>
 using Acc_component_t = typename Acc_component<T_Acc_New, T_Component>::type;
 
 } // namespace SOA
-}
+} // namespace component
 } // namespace reduction_library

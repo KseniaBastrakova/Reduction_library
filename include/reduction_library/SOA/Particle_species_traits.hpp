@@ -49,6 +49,6 @@ struct Acc_species<T_Acc_New, SOA::Particle_species<T_Names_List, T_Record_Type_
 template<typename T_Acc_New, typename T_Names_List, typename T_Record_type_list>
 using Acc_species_t = typename Acc_species<T_Acc_New, SOA::Particle_species<T_Names_List, T_Record_type_list>>::type;
 
-} // namespace SOA
-}
+} // namespace traits
+} // namespace particle_species
 } // namespace reduction_library

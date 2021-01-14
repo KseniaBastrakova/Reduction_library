@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <alpaka/alpaka.hpp>
+
 #pragma once
 #ifndef HDNLINE
 #define HDNLINE ALPAKA_FN_HOST_ACC

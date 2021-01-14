@@ -46,6 +46,6 @@ struct Acc_record<T_Acc_New, SOA::Record<T_Names_list, T_Component_type_list>>{
 template<typename T_Acc_New, typename T_Record>
 using Acc_record_t = typename Acc_record<T_Acc_New, T_Record>::type;
 
-} // namespace SOA
-}
+} // namespace traits
+} // namespace record
 } // namespace reduction_library

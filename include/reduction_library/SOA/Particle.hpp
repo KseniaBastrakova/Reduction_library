@@ -11,13 +11,25 @@
 
 namespace reduction_library{
 
-    template<class Particle_type>
+/** @file
+ * Auxiliary class for representing one particle
+ * We accume, that particle contains only
+ * index number of particle in particle species
+ * and link to base particle species that provides access to elements by idx
+ *
+ */
+
+    template<class Particle_Species_Type>
     class Particle{
     public:
+        //-----------------------------------------------------------------------------
+        //! Index number of particle in particle species. Should be unique
         int idx;
-        Particle_type &baseParticles;
-        Particle(int idx, Particle_type &baseParticles):
-            idx(idx), baseParticles(baseParticles){}
+        //-----------------------------------------------------------------------------
+        //! Link to base particle species, that contains this particle
+        Particle_Species_Type &particle_species;
+        Particle(int idx, Particle_Species_Type &particle_species):
+            idx(idx), particle_species(particle_species){}
     };
 
-}
+} // namespace reduction_library

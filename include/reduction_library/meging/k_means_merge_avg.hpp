@@ -1,15 +1,10 @@
-/*
- * k_means_merge_avg.hpp
+/* Copyright 2020 Kseniia Bastrakova, Sergei Bastrakov
  *
- *  Created on: Nov 16, 2020
- *      Author: kseniia
+ * This file is part of reduction library.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDE_REDUCTION_LIBRARY_MEGING_K_MEANS_MERGE_AVG_HPP_
-#define INCLUDE_REDUCTION_LIBRARY_MEGING_K_MEANS_MERGE_AVG_HPP_
-
-
-
-
-
-#endif /* INCLUDE_REDUCTION_LIBRARY_MEGING_K_MEANS_MERGE_AVG_HPP_ */
+#pragma once
