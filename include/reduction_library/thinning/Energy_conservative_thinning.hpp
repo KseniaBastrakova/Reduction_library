@@ -13,7 +13,7 @@
 #include <functional>
 #include <alpaka/alpaka.hpp>
 
-#include "../Particle_getters.hpp"
+#include "reduction_library/Particle_getters.hpp"
 #include "reduction_library/thinning/helpers/Sample_getting.hpp"
 #include "reduction_library/thinning/helpers/Energy_counting.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"

@@ -10,7 +10,7 @@
 #pragma once
 
 #include <math.h>
-#include "reduction_library/Particle.hpp"
+#include "reduction_library/Particle_getters.hpp"
 
 namespace reduction_library{
 namespace thinning{

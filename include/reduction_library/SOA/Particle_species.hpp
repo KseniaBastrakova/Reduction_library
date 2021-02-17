@@ -16,7 +16,7 @@
 #include "reduction_library/SOA/Particle.hpp"
 #include "reduction_library/particle_species/Type.hpp"
 #include "reduction_library/particle_species/Interfaces.hpp"
-#include "reduction_library/SOA/Particle_species_traits.hpp"
+//#include "reduction_library/SOA/Particle_species_traits.hpp"
 #include "reduction_library/helpers/Type_list.hpp"
 
 namespace reduction_library{
@@ -62,10 +62,10 @@ public:
     }
 
     template<typename T_Another_Names_List, typename T_Another_Record_Type_List>
-    Particle_species(Particle_species<T_Another_Names_List,T_Another_Record_Type_List> const & particle_species):
+    ALPAKA_FN_HOST_ACC Particle_species(Particle_species<T_Another_Names_List,T_Another_Record_Type_List> const & particle_species):
         records(particle_species.get_records())
     {
-        size = std::get< 0 >( records ).get_size();
+        size = std::get< 0 >(records).get_size();
     }
 
     Particle_species(T_Record_Type_List records):
@@ -75,7 +75,7 @@ public:
     }
 
     /** Read-only getting record collection */
-    auto get_records() const
+    ALPAKA_FN_HOST_ACC auto get_records() const
     {
         return records;
     }

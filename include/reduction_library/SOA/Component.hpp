@@ -99,7 +99,7 @@ namespace SOA{
 
         //-----------------------------------------------------------------------------
         //! Returns size of storage
-        std::size_t get_size()
+        ALPAKA_FN_HOST_ACC std::size_t get_size()
         {
             return dataset.get_size();
         }

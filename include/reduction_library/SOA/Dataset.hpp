@@ -62,7 +62,7 @@ public:
     }
     //-----------------------------------------------------------------------------
     //! Get size of dataset
-    std::size_t get_size()
+    ALPAKA_FN_HOST_ACC std::size_t get_size()
     {
     	return values.size();
 

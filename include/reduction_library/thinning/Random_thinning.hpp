@@ -9,7 +9,7 @@
 #pragma once
 #include <alpaka/alpaka.hpp>
 
-#include "../Particle_getters.hpp"
+#include "reduction_library/Particle_getters.hpp"
 #include "reduction_library/helpers/Type_list.hpp"
 #include "reduction_library/thinning/Thinning.hpp"
 

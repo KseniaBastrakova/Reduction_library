@@ -39,7 +39,7 @@ struct Getting_value<Component_Name, Record_Name, Particle<T_Particle_Species>>
 public:
     auto operator() (Particle<T_Particle_Species>& particle)
     {
-        auto& base_particles = particle.baseParticles; // record
+        auto& base_particles = particle.particle_species; // species
         auto& record_value = particle_species::get<Record_Name, T_Particle_Species>(base_particles);
         auto& component = record::get<Component_Name>(record_value);
         auto& dataset = component.set_dataset();
@@ -62,7 +62,7 @@ struct Setting_value<Component_Name, Record_Name, Particle<T_Particle_species>, 
 public:
     void operator() (T_Dataset value, Particle<T_Particle_species>& particle)
     {
-        auto& base_particles = particle.baseParticles; // record
+        auto& base_particles = particle.particle_species; // species
         auto& record_value = particle_species::get<Record_Name, T_Particle_species>(base_particles);
         auto& component = record::get<Component_Name>(record_value);
         auto& dataset = component.set_dataset();

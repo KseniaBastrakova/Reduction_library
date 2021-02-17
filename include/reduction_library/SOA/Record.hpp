@@ -84,14 +84,14 @@ private:
     record::unit_dimension_type unit_dimension;
 public:
     Record(const Record& record):
-        components(record.get_components()),
+        components(record.components_copy()),
         macro_weighted(record.get_macro_weighted()),
         weighting_power(record.get_weighting_power()),
         unit_dimension(record.get_unit_dimension()){}
 
     template<typename T_Another_Names_List, typename T_Another_Component_Type_List>
     Record(const Record<T_Another_Names_List, T_Another_Component_Type_List>& record):
-        components(record.get_components()),
+        components(record.components_copy()),
         macro_weighted(record.get_macro_weighted()),
         weighting_power(record.get_weighting_power()),
         unit_dimension(record.get_unit_dimension()){}
@@ -123,13 +123,19 @@ public:
     }
     //-----------------------------------------------------------------------------
     //! Returns set of components
-    const Components& get_components() const
+    Components& get_components()
     {
         return components;
     }
+
+    //-----------------------------------------------------------------------------
+    //! Returns set of components
+    Components components_copy() const
+    {
+    }
     //-----------------------------------------------------------------------------
     //! Returns number of values in each component
-    std::size_t get_size()
+    ALPAKA_FN_HOST_ACC std::size_t get_size()
     {
         auto component = std::get< 0 >( components );
         return component.get_size();
