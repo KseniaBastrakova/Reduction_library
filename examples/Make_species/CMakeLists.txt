@@ -1,6 +1,11 @@
 ################################################################################
 # Required CMake version.
 ################################################################################
+# CXX, CC
+
+#MAX_GCC_VERSION 8
+#export CC=/usr/bin/gcc-$MAX_GCC_VERSION
+
 
 cmake_minimum_required(VERSION 3.1...3.16)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -15,7 +20,7 @@ set(ReductionLibrary_DIR /home/kseniia/Documents/Reduction_library_install/share
 find_package(ReductionLibrary CONFIG REQUIRED)
 find_package(alpaka REQUIRED)
 
-add_executable(${_PROJECT_TARGET_NAME} src/main.cpp)
+alpaka_add_executable(${_PROJECT_TARGET_NAME} src/main.cpp)
 target_include_directories(${_PROJECT_TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 

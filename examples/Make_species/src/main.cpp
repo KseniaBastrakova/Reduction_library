@@ -1,5 +1,11 @@
-#include "reduction_library/SOA/Record_getters.hpp"
+
+#include "reduction_library/SOA/Particle_species.hpp"
+
+#include "reduction_library/SOA/Dataset.hpp"
+#include "reduction_library/SOA/Component.hpp"
+#include "reduction_library/SOA/Record.hpp"
 #include "reduction_library/SOA/Particle.hpp"
+#include "reduction_library/SOA/Record_getters.hpp"
 
 int main()
 {
@@ -58,5 +64,31 @@ int main()
                                                     record::name::Weighting,
                                                     record::name::Charge>
                     (momentum_record, position_record, weighting_record, charge_record);
+
+    /// we make point and check access
+    using particle_species_type = decltype(electrons);
+    Particle<particle_species_type> particle_3(2, electrons);
+
+
+    auto momentum_x = particle_access::get_momentum_x(particle_3);
+    std::cout<<" momentum/x should be 5  "<<momentum_x<<std::endl;
+
+    auto momentum_y = particle_access::get_momentum_y(particle_3);
+    std::cout<<" momentum/y should be 35  "<<momentum_y<<std::endl;
+
+    auto momentum_z = particle_access::get_momentum_z(particle_3);
+    std::cout<<" momentum/z should be 3  "<<momentum_z<<std::endl;
+
+    auto position_x = particle_access::get_position_x(particle_3);
+    std::cout<<" position/x should be 38  "<<position_x<<std::endl;
+
+    auto position_y = particle_access::get_position_y(particle_3);
+    std::cout<<" position/y should be 0  "<<position_y<<std::endl;
+
+    auto weighting = particle_access::get_weighting(particle_3);
+    std::cout<<" weighting should be 28  "<<weighting<<std::endl;
+
+    auto charge = particle_access::get_charge(particle_3);
+    std::cout<<" charge should be 28  "<<charge<<std::endl;
     return 0;
 }
